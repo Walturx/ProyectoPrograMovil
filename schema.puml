@@ -1,0 +1,233 @@
+@startuml
+!theme plain
+hide circle
+skinparam linetype ortho
+
+' --- ENTIDADES ---
+
+entity "locations" as L {
+  * id : UUID <<PK>>
+  --
+  country : TEXT
+  city : TEXT
+  state : TEXT
+}
+
+entity "hotels" as H {
+  * id : UUID <<PK>>
+  --
+  location_id : UUID <<FK>>
+  name : TEXT
+  description : TEXT
+  stars : INTEGER
+  phone : TEXT
+  email : TEXT
+  cover_image_url : TEXT
+  is_active : BOOLEAN
+}
+
+entity "room_types" as RT {
+  * id : UUID <<PK>>
+  --
+  name : TEXT
+  description : TEXT
+  base_price : NUMERIC
+  capacity : INTEGER
+}
+
+entity "rooms" as R {
+  * id : UUID <<PK>>
+  --
+  hotel_id : UUID <<FK>>
+  room_type_id : UUID <<FK>>
+  room_number : TEXT
+  floor : INTEGER
+  is_available : BOOLEAN
+  image_url : TEXT
+}
+
+entity "guests" as G {
+  * id : UUID <<PK>>
+  --
+  name : TEXT
+  lastname : TEXT
+  phone : TEXT
+  document_type : TEXT
+  document_number : TEXT
+  avatar_url : TEXT
+  nationality : TEXT
+}
+
+entity "loyalty_tiers" as LT {
+  * id : UUID <<PK>>
+  --
+  name : TEXT
+  min_stars : INTEGER
+  discount_pct : NUMERIC
+  description : TEXT
+  icon : TEXT
+}
+
+entity "loyalty_accounts" as LA {
+  * id : UUID <<PK>>
+  --
+  guest_id : UUID <<FK>> <<UNIQUE>>
+  tier_id : UUID <<FK>>
+  total_stars : INTEGER
+  available_stars : INTEGER
+  updated_at : TIMESTAMPTZ
+}
+
+entity "reservations" as RES {
+  * id : UUID <<PK>>
+  --
+  guest_id : UUID <<FK>>
+  room_id : UUID <<FK>>
+  check_in : DATE
+  check_out : DATE
+  total_price : NUMERIC
+  status : TEXT
+  adults : INTEGER
+  children : INTEGER
+  special_requests : TEXT
+  created_at : TIMESTAMPTZ
+}
+
+entity "payments" as P {
+  * id : UUID <<PK>>
+  --
+  reservation_id : UUID <<FK>>
+  amount : NUMERIC
+  method : TEXT
+  status : TEXT
+  paid_at : TIMESTAMPTZ
+  transaction_id : TEXT
+}
+
+entity "amenities" as AM {
+  * id : UUID <<PK>>
+  --
+  name : TEXT
+  icon : TEXT
+  category : TEXT
+}
+
+entity "hotel_amenities" as HA {
+  * hotel_id : UUID <<PK, FK>>
+  * amenity_id : UUID <<PK, FK>>
+}
+
+entity "room_amenities" as RA {
+  * room_id : UUID <<PK, FK>>
+  * amenity_id : UUID <<PK, FK>>
+}
+
+entity "services" as S {
+  * id : UUID <<PK>>
+  --
+  hotel_id : UUID <<FK>>
+  name : TEXT
+  price : NUMERIC
+  description : TEXT
+}
+
+entity "reservation_services" as RS {
+  * id : UUID <<PK>>
+  --
+  reservation_id : UUID <<FK>>
+  service_id : UUID <<FK>>
+  quantity : INTEGER
+  subtotal : NUMERIC
+}
+
+entity "loyalty_transactions" as LTX {
+  * id : UUID <<PK>>
+  --
+  guest_id : UUID <<FK>>
+  reservation_id : UUID <<FK>>
+  redemption_id : UUID <<FK>>
+  type : TEXT
+  stars : INTEGER
+  description : TEXT
+  created_at : TIMESTAMPTZ
+}
+
+entity "rewards" as RW {
+  * id : UUID <<PK>>
+  --
+  name : TEXT
+  description : TEXT
+  stars_cost : INTEGER
+  type : TEXT
+  is_active : BOOLEAN
+}
+
+entity "reward_redemptions" as RR {
+  * id : UUID <<PK>>
+  --
+  guest_id : UUID <<FK>>
+  reward_id : UUID <<FK>>
+  reservation_id : UUID <<FK>>
+  stars_spent : INTEGER
+  status : TEXT
+  created_at : TIMESTAMPTZ
+}
+
+entity "reviews" as REV {
+  * id : UUID <<PK>>
+  --
+  reservation_id : UUID <<FK>>
+  guest_id : UUID <<FK>>
+  hotel_id : UUID <<FK>>
+  rating : INTEGER
+  comment : TEXT
+  created_at : TIMESTAMPTZ
+}
+
+entity "notifications" as N {
+  * id : UUID <<PK>>
+  --
+  guest_id : UUID <<FK>>
+  reservation_id : UUID <<FK>>
+  title : TEXT
+  body : TEXT
+  type : TEXT
+  is_read : BOOLEAN
+  created_at : TIMESTAMPTZ
+}
+
+' --- RELACIONES ---
+
+L ||--o{ H
+H ||--o{ R
+RT ||--o{ R
+G ||--o{ RES
+R ||--o{ RES
+RES ||--o{ P
+RES ||--o{ RS
+S ||--o{ RS
+H ||--o{ S
+
+H ||--o{ HA
+AM ||--o{ HA
+R ||--o{ RA
+AM ||--o{ RA
+
+G ||--|| LA
+LT ||--o{ LA
+G ||--o{ LTX
+RES |o--o{ LTX
+RR |o--o{ LTX
+
+G ||--o{ RR
+RW ||--o{ RR
+RES |o--o{ RR
+
+RES ||--o{ REV
+G ||--o{ REV
+H ||--o{ REV
+
+G ||--o{ N
+RES |o--o{ N
+
+@enduml
