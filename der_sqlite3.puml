@@ -70,21 +70,10 @@ entity "guests" as G {
   nationality : TEXT
 }
 
-entity "loyalty_tiers" as LT {
-  * id : TEXT <<PK>>
-  --
-  name : TEXT
-  min_stars : INTEGER
-  discount_pct : REAL
-  description : TEXT
-  icon : TEXT
-}
-
 entity "loyalty_accounts" as LA {
   * id : TEXT <<PK>>
   --
   guest_id : TEXT <<FK>> <<UNIQUE>>
-  tier_id : TEXT <<FK>>
   total_stars : INTEGER
   available_stars : INTEGER
   updated_at : TEXT
@@ -224,7 +213,6 @@ AM ||--o{ HA
 R ||--o{ RA
 AM ||--o{ RA
 G ||--|| LA
-LT ||--o{ LA
 G ||--o{ LTX
 RES |o--o{ LTX
 RR |o--o{ LTX

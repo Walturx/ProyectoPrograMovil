@@ -2,12 +2,12 @@
 
 **Equipo:**
 
-| Nombre | GitHub |
-|---|---|
-| Walter Melendez | [@Walturx](https://github.com/Walturx) |
-| Jean Carlo Rado | [@JeanCarlo20235056](https://github.com/JeanCarlo20235056) |
-| Sebastian Candiotti | [@Sebastian-D-Candiotti](https://github.com/Sebastian-D-Candiotti) |
-| Joaquin Gonzales | [@Joaquin0804](https://github.com/Joaquin0804) |
+| Nombre | Código | GitHub |
+|---|---|---|
+| Walter Melendez | 20231805 | [@Walturx](https://github.com/Walturx) |
+| Jean Carlo Rado | 20235056 | [@AidenArcadia](https://github.com/AidenArcadia) |
+| Sebastian Candiotti | 20230977 | [@Sebastian-D-Candiotti](https://github.com/Sebastian-D-Candiotti) |
+| Joaquin Gonzales | 20231304 | [@Joaquin0804](https://github.com/Joaquin0804) |
 
 **Tema:** Reserva de Hotel
 
@@ -130,7 +130,7 @@ sys --> UC12
 | ID | Requerimiento | Tablas |
 |---|---|---|
 | RF-07 | Al completar una estancia, el sistema debe sumar estrellas automáticamente a la cuenta del huésped. | `loyalty_accounts`, `loyalty_transactions` |
-| RF-08 | El sistema debe subir de nivel al usuario (Bronze → Silver → Gold) cuando alcance el puntaje mínimo. | `loyalty_tiers`, `loyalty_accounts` |
+| RF-08 | El sistema debe subir de nivel al usuario (Bronze → Silver → Gold) cuando alcance el puntaje mínimo. | `loyalty_accounts` |
 | RF-09 | El huésped podrá canjear sus estrellas por recompensas activas (noches gratis, regalos). | `rewards`, `reward_redemptions` |
 
 ### 3.4. Módulo de Experiencia del Usuario
@@ -165,8 +165,8 @@ sys --> UC12
 | **Actor** | Huésped |
 | **Descripción** | El usuario consulta su nivel de socio (Bronze/Silver/Gold) y cuántas estrellas tiene disponibles para canjear. |
 | **Precondición** | El huésped debe tener al menos una reserva completada. |
-| **Flujo principal** | 1. El huésped accede a la sección "Mi Perfil". 2. El sistema consulta `loyalty_accounts` y `loyalty_tiers`. 3. Se muestra el nivel actual, estrellas totales y estrellas disponibles. 4. Se visualiza una barra de progreso hacia el siguiente nivel. |
-| **Tablas** | `loyalty_accounts`, `loyalty_tiers`, `guests` |
+| **Flujo principal** | 1. El huésped accede a la sección "Mi Perfil". 2. El sistema consulta `loyalty_accounts`. 3. Se muestra el nivel actual, estrellas totales y estrellas disponibles. 4. Se visualiza una barra de progreso hacia el siguiente nivel. |
+| **Tablas** | `loyalty_accounts`, `guests` |
 | **Mockup** | *(ver pantalla en Canva — pendiente)* |
 
 ---
@@ -249,21 +249,10 @@ entity "guests" as G {
   nationality : TEXT
 }
 
-entity "loyalty_tiers" as LT {
-  * id : TEXT <<PK>>
-  --
-  name : TEXT
-  min_stars : INTEGER
-  discount_pct : REAL
-  description : TEXT
-  icon : TEXT
-}
-
 entity "loyalty_accounts" as LA {
   * id : TEXT <<PK>>
   --
   guest_id : TEXT <<FK>> <<UNIQUE>>
-  tier_id : TEXT <<FK>>
   total_stars : INTEGER
   available_stars : INTEGER
   updated_at : TEXT
@@ -401,7 +390,6 @@ AM ||--o{ HA
 R ||--o{ RA
 AM ||--o{ RA
 G ||--|| LA
-LT ||--o{ LA
 G ||--o{ LTX
 RES |o--o{ LTX
 RR |o--o{ LTX
@@ -570,26 +558,14 @@ CREATE TABLE reservation_services (
     FOREIGN KEY (service_id)     REFERENCES services(id)
 );
 
--- 14. loyalty_tiers
-CREATE TABLE loyalty_tiers (
-    id           TEXT    PRIMARY KEY,
-    name         TEXT    NOT NULL UNIQUE,
-    min_stars    INTEGER NOT NULL,
-    discount_pct REAL    DEFAULT 0,
-    description  TEXT,
-    icon         TEXT
-);
-
--- 15. loyalty_accounts
+-- 14. loyalty_accounts
 CREATE TABLE loyalty_accounts (
-    id               TEXT    PRIMARY KEY,
-    guest_id         TEXT    UNIQUE NOT NULL,
-    tier_id          TEXT,
-    total_stars      INTEGER DEFAULT 0,
-    available_stars  INTEGER DEFAULT 0,
-    updated_at       TEXT    DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (guest_id) REFERENCES guests(id)        ON DELETE CASCADE,
-    FOREIGN KEY (tier_id)  REFERENCES loyalty_tiers(id)
+    id              TEXT    PRIMARY KEY,
+    guest_id        TEXT    UNIQUE NOT NULL,
+    total_stars     INTEGER DEFAULT 0,
+    available_stars INTEGER DEFAULT 0,
+    updated_at      TEXT    DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (guest_id) REFERENCES guests(id) ON DELETE CASCADE
 );
 
 -- 16. rewards
@@ -793,24 +769,12 @@ CREATE TABLE notifications (
 | quantity | INTEGER | DEFAULT 1 | Cantidad contratada |
 | subtotal | REAL | NOT NULL | Precio total del servicio |
 
-### loyalty_tiers
-
-| Columna | Tipo | Restricciones | Descripción |
-|---|---|---|---|
-| id | TEXT | PK | UUID identificador único |
-| name | TEXT | NOT NULL, UNIQUE | Bronze / Silver / Gold / Platinum |
-| min_stars | INTEGER | NOT NULL | Estrellas mínimas para el nivel |
-| discount_pct | REAL | DEFAULT 0 | Porcentaje de descuento del nivel |
-| description | TEXT | | Beneficios del nivel |
-| icon | TEXT | | Ícono del nivel |
-
 ### loyalty_accounts
 
 | Columna | Tipo | Restricciones | Descripción |
 |---|---|---|---|
 | id | TEXT | PK | UUID identificador único |
 | guest_id | TEXT | FK → guests, UNIQUE | Huésped (1 cuenta por huésped) |
-| tier_id | TEXT | FK → loyalty_tiers | Nivel actual |
 | total_stars | INTEGER | DEFAULT 0 | Estrellas acumuladas históricamente |
 | available_stars | INTEGER | DEFAULT 0 | Estrellas disponibles para canjear |
 | updated_at | TEXT | DEFAULT CURRENT_TIMESTAMP | Última actualización |

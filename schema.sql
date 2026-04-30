@@ -147,26 +147,14 @@ CREATE TABLE reservation_services (
     FOREIGN KEY (service_id) REFERENCES services(id)
 );
 
--- 14. loyalty_tiers
-CREATE TABLE loyalty_tiers (
-    id TEXT PRIMARY KEY,
-    name TEXT NOT NULL UNIQUE,
-    min_stars INTEGER NOT NULL,
-    discount_pct REAL DEFAULT 0.0,
-    description TEXT,
-    icon TEXT
-);
-
--- 15. loyalty_accounts
+-- 14. loyalty_accounts
 CREATE TABLE loyalty_accounts (
     id TEXT PRIMARY KEY,
     guest_id TEXT UNIQUE NOT NULL,
-    tier_id TEXT,
     total_stars INTEGER DEFAULT 0,
     available_stars INTEGER DEFAULT 0,
     updated_at TEXT DEFAULT (datetime('now')),
-    FOREIGN KEY (guest_id) REFERENCES guests(id) ON DELETE CASCADE,
-    FOREIGN KEY (tier_id) REFERENCES loyalty_tiers(id)
+    FOREIGN KEY (guest_id) REFERENCES guests(id) ON DELETE CASCADE
 );
 
 -- 16. rewards
