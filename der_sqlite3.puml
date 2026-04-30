@@ -1,0 +1,240 @@
+@startuml
+' ============================================================
+' DIAGRAMA ENTIDAD-RELACIÓN — SISTEMA RESERVA DE HOTELES
+' Base de datos: SQLite3
+' Tipos usados:
+'   TEXT     → cadenas, UUIDs,
+'              fechas ISO8601 (YYYY-MM-DD),
+'              datetimes ISO8601 (YYYY-MM-DD HH:MM:SS)
+'   check_in / check_out → TEXT (YYYY-MM-DD HH:MM:SS) incluye hora
+'   INTEGER  → enteros y booleanos (0=false, 1=true)
+'   REAL     → decimales (precios, porcentajes)
+' ============================================================
+
+!theme plain
+hide circle
+skinparam linetype ortho
+
+' --- ENTIDADES ---
+
+entity "locations" as L {
+  * id : TEXT <<PK>>
+  --
+  country : TEXT
+  city : TEXT
+  state : TEXT
+}
+
+entity "hotels" as H {
+  * id : TEXT <<PK>>
+  --
+  location_id : TEXT <<FK>>
+  name : TEXT
+  description : TEXT
+  stars : INTEGER
+  phone : TEXT
+  email : TEXT
+  cover_image_url : TEXT
+  is_active : INTEGER
+}
+
+entity "room_types" as RT {
+  * id : TEXT <<PK>>
+  --
+  name : TEXT
+  description : TEXT
+  base_price : REAL
+  capacity : INTEGER
+}
+
+entity "rooms" as R {
+  * id : TEXT <<PK>>
+  --
+  hotel_id : TEXT <<FK>>
+  room_type_id : TEXT <<FK>>
+  room_number : TEXT
+  floor : INTEGER
+  is_available : INTEGER
+  image_url : TEXT
+}
+
+entity "guests" as G {
+  * id : TEXT <<PK>>
+  --
+  name : TEXT
+  lastname : TEXT
+  phone : TEXT
+  document_type : TEXT
+  document_number : TEXT
+  avatar_url : TEXT
+  nationality : TEXT
+}
+
+entity "loyalty_tiers" as LT {
+  * id : TEXT <<PK>>
+  --
+  name : TEXT
+  min_stars : INTEGER
+  discount_pct : REAL
+  description : TEXT
+  icon : TEXT
+}
+
+entity "loyalty_accounts" as LA {
+  * id : TEXT <<PK>>
+  --
+  guest_id : TEXT <<FK>> <<UNIQUE>>
+  tier_id : TEXT <<FK>>
+  total_stars : INTEGER
+  available_stars : INTEGER
+  updated_at : TEXT
+}
+
+entity "reservations" as RES {
+  * id : TEXT <<PK>>
+  --
+  guest_id : TEXT <<FK>>
+  room_id : TEXT <<FK>>
+  check_in : TEXT
+  check_out : TEXT
+  total_price : REAL
+  status : TEXT
+  adults : INTEGER
+  children : INTEGER
+  special_requests : TEXT
+  created_at : TEXT
+}
+
+entity "payments" as P {
+  * id : TEXT <<PK>>
+  --
+  reservation_id : TEXT <<FK>>
+  amount : REAL
+  method : TEXT
+  status : TEXT
+  paid_at : TEXT
+  transaction_id : TEXT
+}
+
+entity "amenities" as AM {
+  * id : TEXT <<PK>>
+  --
+  name : TEXT
+  icon : TEXT
+  category : TEXT
+}
+
+entity "hotel_amenities" as HA {
+  * hotel_id : TEXT <<PK, FK>>
+  * amenity_id : TEXT <<PK, FK>>
+}
+
+entity "room_amenities" as RA {
+  * room_id : TEXT <<PK, FK>>
+  * amenity_id : TEXT <<PK, FK>>
+}
+
+entity "services" as S {
+  * id : TEXT <<PK>>
+  --
+  hotel_id : TEXT <<FK>>
+  name : TEXT
+  price : REAL
+  description : TEXT
+}
+
+entity "reservation_services" as RS {
+  * id : TEXT <<PK>>
+  --
+  reservation_id : TEXT <<FK>>
+  service_id : TEXT <<FK>>
+  quantity : INTEGER
+  subtotal : REAL
+}
+
+entity "loyalty_transactions" as LTX {
+  * id : TEXT <<PK>>
+  --
+  guest_id : TEXT <<FK>>
+  reservation_id : TEXT <<FK>>
+  redemption_id : TEXT <<FK>>
+  type : TEXT
+  stars : INTEGER
+  description : TEXT
+  created_at : TEXT
+}
+
+entity "rewards" as RW {
+  * id : TEXT <<PK>>
+  --
+  name : TEXT
+  description : TEXT
+  stars_cost : INTEGER
+  type : TEXT
+  is_active : INTEGER
+}
+
+entity "reward_redemptions" as RR {
+  * id : TEXT <<PK>>
+  --
+  guest_id : TEXT <<FK>>
+  reward_id : TEXT <<FK>>
+  reservation_id : TEXT <<FK>>
+  stars_spent : INTEGER
+  status : TEXT
+  created_at : TEXT
+}
+
+entity "reviews" as REV {
+  * id : TEXT <<PK>>
+  --
+  reservation_id : TEXT <<FK>>
+  guest_id : TEXT <<FK>>
+  hotel_id : TEXT <<FK>>
+  rating : INTEGER
+  comment : TEXT
+  created_at : TEXT
+}
+
+entity "notifications" as N {
+  * id : TEXT <<PK>>
+  --
+  guest_id : TEXT <<FK>>
+  reservation_id : TEXT <<FK>>
+  title : TEXT
+  body : TEXT
+  type : TEXT
+  is_read : INTEGER
+  created_at : TEXT
+}
+
+' --- RELACIONES ---
+
+L ||--o{ H
+H ||--o{ R
+RT ||--o{ R
+G ||--o{ RES
+R ||--o{ RES
+RES ||--o{ P
+RES ||--o{ RS
+S ||--o{ RS
+H ||--o{ S
+H ||--o{ HA
+AM ||--o{ HA
+R ||--o{ RA
+AM ||--o{ RA
+G ||--|| LA
+LT ||--o{ LA
+G ||--o{ LTX
+RES |o--o{ LTX
+RR |o--o{ LTX
+G ||--o{ RR
+RW ||--o{ RR
+RES |o--o{ RR
+RES ||--o{ REV
+G ||--o{ REV
+H ||--o{ REV
+G ||--o{ N
+RES |o--o{ N
+
+@enduml
