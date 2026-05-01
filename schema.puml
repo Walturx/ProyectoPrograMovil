@@ -58,14 +58,7 @@ entity "guests" as G {
   nationality : TEXT
 }
 
-entity "loyalty_accounts" as LA {
-  * id : UUID <<PK>>
-  --
-  guest_id : UUID <<FK>> <<UNIQUE>>
-  total_stars : INTEGER
-  available_stars : INTEGER
-  updated_at : TIMESTAMPTZ
-}
+
 
 entity "reservations" as RES {
   * id : UUID <<PK>>
@@ -202,7 +195,7 @@ AM ||--o{ HA
 R ||--o{ RA
 AM ||--o{ RA
 
-G ||--|| LA
+
 
 G ||--o{ LTX
 RES |o--o{ LTX

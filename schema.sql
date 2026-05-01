@@ -147,15 +147,6 @@ CREATE TABLE reservation_services (
     FOREIGN KEY (service_id) REFERENCES services(id)
 );
 
--- 14. loyalty_accounts
-CREATE TABLE loyalty_accounts (
-    id TEXT PRIMARY KEY,
-    guest_id TEXT UNIQUE NOT NULL,
-    total_stars INTEGER DEFAULT 0,
-    available_stars INTEGER DEFAULT 0,
-    updated_at TEXT DEFAULT (datetime('now')),
-    FOREIGN KEY (guest_id) REFERENCES guests(id) ON DELETE CASCADE
-);
 
 -- 16. rewards
 CREATE TABLE rewards (

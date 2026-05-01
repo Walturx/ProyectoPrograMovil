@@ -1,27 +1,29 @@
-# HOTELYA — Sistema de Reserva de Hoteles
+# Sistema de Reserva de Hoteles — App Móvil
 
-Aplicación móvil para la búsqueda, reserva y gestión de estadías en hoteles, con programa de fidelización por estrellas.
+**Equipo:**
 
-| Integrante | Código | GitHub |
+| Nombre | Código | GitHub |
 |---|---|---|
 | Walter Melendez | 20231805 | [@Walturx](https://github.com/Walturx) |
 | Jean Carlo Rado | 20235056 | [@AidenArcadia](https://github.com/AidenArcadia) |
 | Sebastian Candiotti | 20230977 | [@Sebastian-D-Candiotti](https://github.com/Sebastian-D-Candiotti) |
 | Joaquin Gonzales | 20231304 | [@Joaquin0804](https://github.com/Joaquin0804) |
 
+**Tema:** Reserva de Hotel
+
 ---
 
 ## 1. Entorno de Desarrollo
 
-Para el desarrollo de esta aplicación se utiliza un stack moderno que permite desarrollo multiplataforma con persistencia local.
+Para el desarrollo de esta aplicación móvil se utiliza un stack que permite alta disponibilidad, desarrollo multiplataforma y fácil despliegue local.
 
-| Herramienta | Descripción | Instalación |
+| Herramienta | Descripción | Proceso de instalación |
 |---|---|---|
-| **Google Antigravity** | IDE principal para escribir código Flutter/Dart | Descargar desde la web oficial de Google. Agregar las extensiones **Flutter** y **Dart** desde el marketplace integrado. |
-| **Flutter SDK** | Framework para el desarrollo de la app móvil Android | Descargar el SDK, extraerlo en una carpeta local (ej. `C:\flutter`) y agregar `C:\flutter\bin` al `PATH` del sistema. Ejecutar `flutter doctor` para verificar dependencias. |
-| **Android Studio** | Gestión de emuladores y Android SDK | Instalar desde la web oficial. Configurar un dispositivo virtual (AVD) con API 30+. |
-| **sqflite (SQLite3)** | Motor de base de datos local embebido en el dispositivo | Se integra como dependencia en `pubspec.yaml`. No requiere instalación externa en el sistema. |
-| **GitHub** | Control de versiones y publicación del proyecto | Crear repositorio en [github.com](https://github.com) y gestionar ramas con comandos `git`. |
+| **Google Antigravity** | IDE principal para escribir código Flutter/Dart | Descargar e instalar desde la web oficial de Google. Agregar las extensiones de **Flutter** y **Dart** desde el marketplace integrado. |
+| **Flutter SDK** | Framework para desarrollo de apps Android multiplataforma | Descargar el SDK, extraerlo en `C:\flutter`, agregar `C:\flutter\bin` al `PATH` del sistema. Ejecutar `flutter doctor` para verificar dependencias. |
+| **Android Studio** | Gestión de emuladores y Android SDK | Instalar desde la web oficial, configurar un dispositivo virtual (AVD) con API 30+. |
+| **sqflite (SQLite3)** | Motor de base de datos local embebido en el dispositivo | Se integra mediante la dependencia `sqflite` en `pubspec.yaml`. No requiere instalación externa. |
+| **GitHub** | Control de versiones y publicación del proyecto | Crear repositorio en [github.com](https://github.com) y usar comandos `git` para el manejo de ramas y commits. |
 
 ---
 
@@ -29,10 +31,10 @@ Para el desarrollo de esta aplicación se utiliza un stack moderno que permite d
 
 | ID | Requerimiento | Descripción |
 |---|---|---|
-| RNF-01 | **Disponibilidad offline** | El sistema permite acceder a la información de reservas locales sin conexión a internet. |
-| RNF-02 | **Seguridad** | Los datos sensibles del huésped (documentos) están protegidos con cifrado básico en la base de datos local. |
-| RNF-03 | **Rendimiento** | El tiempo de respuesta para la búsqueda de hoteles no supera los 2 segundos bajo condiciones normales. |
-| RNF-04 | **Usabilidad** | La interfaz sigue las guías de Material Design para garantizar una curva de aprendizaje mínima. |
+| RNF-01 | **Disponibilidad offline** | El sistema debe permitir acceder a la información de reservas locales incluso sin conexión a internet. |
+| RNF-02 | **Seguridad** | Los datos sensibles del huésped (documentos) deben estar protegidos con cifrado básico en la base de datos local. |
+| RNF-03 | **Rendimiento** | El tiempo de respuesta para la búsqueda de hoteles no debe superar los 2 segundos bajo condiciones normales. |
+| RNF-04 | **Usabilidad** | La interfaz debe seguir las guías de Material Design para asegurar una curva de aprendizaje mínima. |
 
 ### Diagrama de Despliegue
 
@@ -65,38 +67,6 @@ flutter --> osm : HTTPS (Map Tiles)
 
 ## 3. Requerimientos Funcionales
 
-### 3.1. Módulo de Gestión de Alojamiento
-
-| ID | Requerimiento | Tablas |
-|---|---|---|
-| RF-01 | El sistema permite filtrar hoteles por país, ciudad o provincia. | `hotels`, `locations` |
-| RF-02 | El sistema muestra la descripción, estrellas, teléfono y amenidades de un hotel seleccionado. | `hotels`, `amenities` |
-| RF-03 | El sistema lista solo las habitaciones con `is_available = 1` para las fechas seleccionadas. | `rooms` |
-
-### 3.2. Módulo de Reservas y Pagos
-
-| ID | Requerimiento | Tablas |
-|---|---|---|
-| RF-04 | El sistema permite al huésped crear una reserva indicando fechas de entrada/salida y cantidad de personas. | `reservations` |
-| RF-05 | El sistema calcula automáticamente el `total_price` (precio base × noches + servicios adicionales). | `room_types`, `reservation_services` |
-| RF-06 | El sistema registra el pago y actualiza el estado de la reserva a `confirmed`. | `payments` |
-
-### 3.3. Módulo de Fidelización
-
-| ID | Requerimiento | Tablas |
-|---|---|---|
-| RF-07 | Al completar una estancia, el sistema registra el movimiento de estrellas del huésped. | `loyalty_transactions` |
-| RF-08 | El sistema sube de nivel al usuario (Bronze → Silver → Gold) según sus estrellas acumuladas. | `loyalty_transactions` |
-| RF-09 | El huésped puede canjear estrellas por recompensas activas (noches gratis, regalos). | `rewards`, `reward_redemptions` |
-
-### 3.4. Módulo de Experiencia del Usuario
-
-| ID | Requerimiento | Tablas |
-|---|---|---|
-| RF-10 | El huésped puede calificar y comentar su experiencia solo después de completar su reserva. | `reviews` |
-| RF-11 | El sistema envía alertas automáticas sobre confirmación de reservas y promociones. | `notifications` |
-| RF-12 | El usuario puede actualizar sus datos personales, documento y foto de perfil. | `guests` |
-
 ### Diagrama de Casos de Uso
 
 ```plantuml
@@ -105,7 +75,7 @@ left to right direction
 actor "Huésped" as guest
 actor "Sistema" as sys
 
-rectangle "HOTELYA — App Reserva de Hoteles" {
+rectangle "App Reserva de Hoteles" {
   usecase "Buscar Hoteles" as UC1
   usecase "Ver Detalles del Hotel" as UC2
   usecase "Ver Disponibilidad" as UC3
@@ -139,39 +109,65 @@ sys --> UC12
 @enduml
 ```
 
+### 3.1. Módulo de Gestión de Alojamiento
+
+| ID | Requerimiento | Tablas |
+|---|---|---|
+| RF-01 | El sistema debe permitir al usuario filtrar hoteles por país, ciudad o provincia. | `hotels`, `locations` |
+| RF-02 | El sistema debe mostrar la descripción, estrellas, teléfono y amenidades de un hotel seleccionado. | `hotels`, `amenities` |
+| RF-03 | El sistema debe listar solo las habitaciones con `is_available = 1` para las fechas seleccionadas. | `rooms` |
+
+### 3.2. Módulo de Reservas y Pagos
+
+| ID | Requerimiento | Tablas |
+|---|---|---|
+| RF-04 | El sistema debe permitir al huésped crear una reserva indicando fechas de entrada/salida y cantidad de personas. | `reservations` |
+| RF-05 | El sistema debe calcular automáticamente el `total_price` (precio base × duración + servicios adicionales). | `room_types`, `reservation_services` |
+| RF-06 | El sistema debe registrar el pago (tarjeta, efectivo o transferencia) y actualizar el estado de la reserva a `confirmed`. | `payments` |
+
+### 3.3. Módulo de Fidelización (Loyalty Program)
+
+| ID | Requerimiento | Tablas |
+|---|---|---|
+| RF-07 | Al completar una estancia, el sistema debe registrar el movimiento de estrellas del huésped. | `loyalty_transactions` |
+| RF-08 | El sistema debe subir de nivel al usuario (Bronze → Silver → Gold) según sus estrellas acumuladas. | `loyalty_transactions` |
+| RF-09 | El huésped podrá canjear sus estrellas por recompensas activas (noches gratis, regalos). | `rewards`, `reward_redemptions` |
+
+### 3.4. Módulo de Experiencia del Usuario
+
+| ID | Requerimiento | Tablas |
+|---|---|---|
+| RF-10 | El huésped puede calificar y comentar su experiencia solo después de completar su reserva. | `reviews` |
+| RF-11 | El sistema debe enviar alertas automáticas sobre confirmación de reservas y promociones. | `notifications` |
+| RF-12 | El usuario puede actualizar sus datos personales, documento y foto de perfil. | `guests` |
+
 ---
 
 ## 4. Descripción de Casos de Uso
-
-> Mockups disponibles en [Canva — HOTELYA](https://www.canva.com/design/DAHHtTAWlk8/VaMFZz3pSj_ZO5uHSZcFGw/edit)
 
 ### CU01: Realizar Reserva
 
 | Campo | Detalle |
 |---|---|
 | **Actor** | Huésped |
-| **Descripción** | El huésped busca un hotel por ciudad, selecciona habitación y fechas (con hora), y confirma la reserva. |
+| **Descripción** | El huésped busca un hotel por ciudad, selecciona fechas de entrada y salida, elige una habitación disponible y confirma la reserva. |
 | **Precondición** | El huésped debe estar autenticado en la app. |
-| **Flujo principal** | 1. Ingresa destino en la búsqueda. 2. El sistema lista hoteles disponibles. 3. Selecciona hotel y ve habitaciones disponibles. 4. Elige habitación e ingresa fechas/hora de check-in y check-out y acompañantes. 5. El sistema calcula el `total_price`. 6. Se crea el registro en `reservations` con estado `pending`. |
+| **Flujo principal** | 1. Ingresa ciudad/país en la barra de búsqueda. 2. El sistema lista hoteles disponibles (`hotels`, `locations`). 3. Selecciona un hotel y ve sus habitaciones disponibles (`rooms`, `is_available = 1`). 4. Elige habitación e ingresa fechas y cantidad de personas. 5. El sistema calcula el `total_price`. 6. El huésped confirma y se crea el registro en `reservations` con estado `pending`. |
 | **Tablas** | `hotels`, `locations`, `rooms`, `room_types`, `reservations` |
-| **Mockups** | Pantallas 7 (Home), 8 (Búsqueda), 9 (Habitaciones), 14 (Detalle hab.), 15 (Fechas), 16 (Formulario reserva) |
-
-<!-- Mockup CU01 — agregar imagen exportada de Canva -->
+| **Mockup** | *(ver pantalla en Canva — pendiente)* |
 
 ---
 
-### CU02: Registrar Pago
+### CU02: Ver Perfil y Fidelidad
 
 | Campo | Detalle |
 |---|---|
 | **Actor** | Huésped |
-| **Descripción** | El huésped revisa el resumen de la reserva, ingresa datos de pago y confirma la compra. Al completar, recibe un QR y se acreditan estrellas. |
-| **Precondición** | Debe existir una reserva en estado `pending`. |
-| **Flujo principal** | 1. Se muestra el resumen (hotel, habitación, fechas, total). 2. El huésped ingresa datos de tarjeta. 3. Se registra el pago en `payments` con estado `approved`. 4. La reserva pasa a `confirmed`. 5. Se genera un QR y se registra el movimiento de estrellas en `loyalty_transactions`. |
-| **Tablas** | `reservations`, `payments`, `loyalty_transactions` |
-| **Mockups** | Pantallas 17 (Resumen de compra), 18 (Pago con tarjeta), 19 (QR + estrellas ganadas) |
-
-<!-- Mockup CU02 — agregar imagen exportada de Canva -->
+| **Descripción** | El usuario consulta su nivel de socio (Bronze/Silver/Gold) y cuántas estrellas tiene disponibles para canjear. |
+| **Precondición** | El huésped debe tener al menos una reserva completada. |
+| **Flujo principal** | 1. El huésped accede a la sección "Mi Perfil". 2. El sistema consulta `guests` y calcula las estrellas desde `loyalty_transactions`. 3. Se muestra el nivel actual y estrellas acumuladas. 4. Se visualiza una barra de progreso hacia el siguiente nivel. |
+| **Tablas** | `guests`, `loyalty_transactions` |
+| **Mockup** | *(ver pantalla en Canva — pendiente)* |
 
 ---
 
@@ -180,51 +176,19 @@ sys --> UC12
 | Campo | Detalle |
 |---|---|
 | **Actor** | Huésped |
-| **Descripción** | El huésped consulta su saldo de estrellas y canjea una recompensa activa de la tienda. |
-| **Precondición** | El huésped debe tener `available_stars >= stars_cost` de la recompensa elegida. |
-| **Flujo principal** | 1. El huésped accede a la tienda de estrellas. 2. El sistema lista recompensas activas (`rewards`, `is_active = 1`). 3. Selecciona una recompensa y confirma. 4. Se crea un registro en `reward_redemptions` y se registra el gasto en `loyalty_transactions`. |
+| **Descripción** | El huésped selecciona un beneficio activo (ej. Desayuno Gratis) y utiliza sus estrellas acumuladas para canjearlo. |
+| **Precondición** | El huésped debe tener estrellas disponibles suficientes (`available_stars >= stars_cost`). |
+| **Flujo principal** | 1. El huésped accede a "Recompensas". 2. El sistema lista las recompensas activas (`rewards`, `is_active = 1`). 3. El huésped selecciona una recompensa y confirma el canje. 4. Se crea un registro en `reward_redemptions` y se registra el gasto en `loyalty_transactions`. |
 | **Tablas** | `rewards`, `reward_redemptions`, `loyalty_transactions` |
-| **Mockups** | Pantalla 19 (Tienda de estrellas, canje, estrellas restantes) |
-
-<!-- Mockup CU03 — agregar imagen exportada de Canva -->
-
----
-
-### CU04: Gestionar Perfil
-
-| Campo | Detalle |
-|---|---|
-| **Actor** | Huésped |
-| **Descripción** | El usuario consulta y actualiza sus datos personales, foto de perfil y visualiza su nivel de fidelidad. |
-| **Precondición** | El huésped debe estar autenticado. |
-| **Flujo principal** | 1. Accede a "Mi Perfil". 2. El sistema consulta `guests` y calcula las estrellas desde `loyalty_transactions`. 3. Muestra nombre, correo, teléfono y estrellas acumuladas. 4. El usuario puede editar sus datos y guardar. |
-| **Tablas** | `guests`, `loyalty_transactions` |
-| **Mockups** | Pantalla 19 (Perfil de usuario) |
-
-<!-- Mockup CU04 — agregar imagen exportada de Canva -->
-
----
-
-### CU05: Escribir Reseña
-
-| Campo | Detalle |
-|---|---|
-| **Actor** | Huésped |
-| **Descripción** | El huésped califica (1–5 estrellas) y comenta su experiencia en el hotel, solo disponible después de una estancia completada. |
-| **Precondición** | La reserva debe estar en estado `completed`. |
-| **Flujo principal** | 1. El huésped accede a la sección de comentarios del hotel. 2. Ingresa calificación y comentario. 3. Se crea el registro en `reviews` vinculado a la reserva. |
-| **Tablas** | `reviews`, `reservations`, `hotels`, `guests` |
-| **Mockups** | Pantalla 12 (Comentarios del hotel) |
-
-<!-- Mockup CU05 — agregar imagen exportada de Canva -->
+| **Mockup** | *(ver pantalla en Canva — pendiente)* |
 
 ---
 
 ## 5. Modelo de Base de Datos
 
-### Diagrama Entidad-Relación
+> El diagrama completo se encuentra en [`der_sqlite3.puml`](./der_sqlite3.puml).
 
-> Archivo fuente: [`docs/der_sqlite3.puml`](./docs/der_sqlite3.puml)
+### Diagrama Entidad-Relación (SQLite3)
 
 ```plantuml
 @startuml
@@ -239,6 +203,7 @@ entity "locations" as L {
   city : TEXT
   state : TEXT
 }
+
 entity "hotels" as H {
   * id : TEXT <<PK>>
   --
@@ -251,6 +216,7 @@ entity "hotels" as H {
   cover_image_url : TEXT
   is_active : INTEGER
 }
+
 entity "room_types" as RT {
   * id : TEXT <<PK>>
   --
@@ -259,6 +225,7 @@ entity "room_types" as RT {
   base_price : REAL
   capacity : INTEGER
 }
+
 entity "rooms" as R {
   * id : TEXT <<PK>>
   --
@@ -269,6 +236,7 @@ entity "rooms" as R {
   is_available : INTEGER
   image_url : TEXT
 }
+
 entity "guests" as G {
   * id : TEXT <<PK>>
   --
@@ -280,6 +248,8 @@ entity "guests" as G {
   avatar_url : TEXT
   nationality : TEXT
 }
+
+
 
 entity "reservations" as RES {
   * id : TEXT <<PK>>
@@ -295,6 +265,7 @@ entity "reservations" as RES {
   special_requests : TEXT
   created_at : TEXT
 }
+
 entity "payments" as P {
   * id : TEXT <<PK>>
   --
@@ -305,6 +276,7 @@ entity "payments" as P {
   paid_at : TEXT
   transaction_id : TEXT
 }
+
 entity "amenities" as AM {
   * id : TEXT <<PK>>
   --
@@ -312,14 +284,17 @@ entity "amenities" as AM {
   icon : TEXT
   category : TEXT
 }
+
 entity "hotel_amenities" as HA {
   * hotel_id : TEXT <<PK, FK>>
   * amenity_id : TEXT <<PK, FK>>
 }
+
 entity "room_amenities" as RA {
   * room_id : TEXT <<PK, FK>>
   * amenity_id : TEXT <<PK, FK>>
 }
+
 entity "services" as S {
   * id : TEXT <<PK>>
   --
@@ -328,6 +303,7 @@ entity "services" as S {
   price : REAL
   description : TEXT
 }
+
 entity "reservation_services" as RS {
   * id : TEXT <<PK>>
   --
@@ -336,6 +312,7 @@ entity "reservation_services" as RS {
   quantity : INTEGER
   subtotal : REAL
 }
+
 entity "loyalty_transactions" as LTX {
   * id : TEXT <<PK>>
   --
@@ -347,6 +324,7 @@ entity "loyalty_transactions" as LTX {
   description : TEXT
   created_at : TEXT
 }
+
 entity "rewards" as RW {
   * id : TEXT <<PK>>
   --
@@ -356,6 +334,7 @@ entity "rewards" as RW {
   type : TEXT
   is_active : INTEGER
 }
+
 entity "reward_redemptions" as RR {
   * id : TEXT <<PK>>
   --
@@ -366,6 +345,7 @@ entity "reward_redemptions" as RR {
   status : TEXT
   created_at : TEXT
 }
+
 entity "reviews" as REV {
   * id : TEXT <<PK>>
   --
@@ -376,6 +356,7 @@ entity "reviews" as REV {
   comment : TEXT
   created_at : TEXT
 }
+
 entity "notifications" as N {
   * id : TEXT <<PK>>
   --
@@ -419,7 +400,7 @@ RES |o--o{ N
 
 ### DDL SQLite3
 
-> Tipos usados: `TEXT` para IDs (UUID), cadenas y fechas ISO8601 (`YYYY-MM-DD HH:MM:SS`). `INTEGER` para enteros y booleanos (0/1). `REAL` para decimales.
+> Todos los IDs son `TEXT` (UUID generado en app). Fechas como `TEXT` ISO8601. Booleanos como `INTEGER` (0/1).
 
 ```sql
 -- 1. locations
@@ -446,10 +427,10 @@ CREATE TABLE hotels (
 
 -- 3. room_types
 CREATE TABLE room_types (
-    id          TEXT    PRIMARY KEY,
-    name        TEXT    NOT NULL,
+    id          TEXT PRIMARY KEY,
+    name        TEXT NOT NULL,
     description TEXT,
-    base_price  REAL    NOT NULL DEFAULT 0,
+    base_price  REAL NOT NULL DEFAULT 0,
     capacity    INTEGER NOT NULL CHECK (capacity > 0)
 );
 
@@ -480,18 +461,18 @@ CREATE TABLE guests (
 
 -- 6. reservations
 CREATE TABLE reservations (
-    id               TEXT    PRIMARY KEY,
-    guest_id         TEXT    NOT NULL,
-    room_id          TEXT    NOT NULL,
-    check_in         TEXT    NOT NULL,  -- YYYY-MM-DD HH:MM:SS
-    check_out        TEXT    NOT NULL,  -- YYYY-MM-DD HH:MM:SS
-    total_price      REAL    NOT NULL,
-    status           TEXT    NOT NULL DEFAULT 'pending'
-                             CHECK (status IN ('pending','confirmed','cancelled','completed')),
+    id               TEXT PRIMARY KEY,
+    guest_id         TEXT NOT NULL,
+    room_id          TEXT NOT NULL,
+    check_in         TEXT NOT NULL,           -- YYYY-MM-DD HH:MM:SS
+    check_out        TEXT NOT NULL,           -- YYYY-MM-DD HH:MM:SS
+    total_price      REAL NOT NULL,
+    status           TEXT NOT NULL DEFAULT 'pending'
+                          CHECK (status IN ('pending','confirmed','cancelled','completed')),
     adults           INTEGER NOT NULL DEFAULT 1,
     children         INTEGER DEFAULT 0,
     special_requests TEXT,
-    created_at       TEXT    DEFAULT CURRENT_TIMESTAMP,
+    created_at       TEXT DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (guest_id) REFERENCES guests(id) ON DELETE CASCADE,
     FOREIGN KEY (room_id)  REFERENCES rooms(id)  ON DELETE RESTRICT
 );
@@ -504,7 +485,7 @@ CREATE TABLE payments (
     method         TEXT CHECK (method IN ('card','transfer','cash')),
     status         TEXT DEFAULT 'pending'
                         CHECK (status IN ('pending','approved','refunded')),
-    paid_at        TEXT,               -- YYYY-MM-DD HH:MM:SS
+    paid_at        TEXT,                      -- YYYY-MM-DD HH:MM:SS
     transaction_id TEXT,
     FOREIGN KEY (reservation_id) REFERENCES reservations(id) ON DELETE CASCADE
 );
@@ -703,7 +684,7 @@ CREATE TABLE notifications (
 | adults | INTEGER | DEFAULT 1 | Cantidad de adultos |
 | children | INTEGER | DEFAULT 0 | Cantidad de niños |
 | special_requests | TEXT | | Solicitudes especiales |
-| created_at | TEXT | DEFAULT CURRENT_TIMESTAMP | Fecha de creación |
+| created_at | TEXT | DEFAULT CURRENT_TIMESTAMP | Fecha de creación (YYYY-MM-DD HH:MM:SS) |
 
 ### payments
 
@@ -821,60 +802,3 @@ CREATE TABLE notifications (
 | type | TEXT | | confirmation / reminder / promo |
 | is_read | INTEGER | DEFAULT 0 | 0 = no leída, 1 = leída |
 | created_at | TEXT | DEFAULT CURRENT_TIMESTAMP | Fecha de creación |
-
-
-## Mockups
-
-### Sign In
-![Sign In](mockups_images/sign-in.png)
-
-### Sign In Error
-![Sign In Error](mockups_images/sign-in_error.png)
-
-### Register
-![Register](mockups_images/register.png)
-
-### New Password Email
-![New Password Email](mockups_images/new-passwordemail.png)
-
-### New Password Code
-![New Password Code](mockups_images/new-passwordcode.png)
-
-### New Password
-![New Password](mockups_images/new-password.png)
-
-### Home
-![Home](mockups_images/home.png)
-
-### Search
-![Search](mockups_images/search.png)
-
-### Hotel
-![Hotel](mockups_images/hotel.png)
-
-### Comments
-![Comments](mockups_images/comments.png)
-
-### Hotel Details
-![Hotel Details](mockups_images/hotel_details.png)
-
-### Hotel Check-in
-![Hotel Check-in](mockups_images/hotel_checkin.png)
-
-### Payment Details
-![Payment Details](mockups_images/payment_details.png)
-
-### Payment
-![Payment](mockups_images/payment.png)
-
-### QR
-![QR](mockups_images/QR.png)
-
-### User Details
-![User Details](mockups_images/user_details.png)
-
-### Star Shop
-![Star Shop](mockups_images/star_shop.png)
-
-### Star Buy
-![Star Buy](mockups_images/star_buy.png)
