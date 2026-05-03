@@ -71,7 +71,7 @@ flutter --> osm : HTTPS (Map Tiles)
 |---|---|---|
 | RF-01 | El sistema permite filtrar hoteles por país, ciudad o provincia. | `hotels`, `locations` |
 | RF-02 | El sistema muestra la descripción, estrellas, teléfono y amenidades de un hotel seleccionado. | `hotels`, `amenities` |
-| RF-03 | El sistema lista solo las habitaciones con `is_available = 1` para las fechas seleccionadas. | `rooms` |
+| RF-03 | El sistema lista solo las habitaciones con `is_available = true` para las fechas seleccionadas. | `rooms` |
 
 ### 3.2. Módulo de Reservas y Pagos
 
@@ -86,7 +86,7 @@ flutter --> osm : HTTPS (Map Tiles)
 | ID | Requerimiento | Tablas |
 |---|---|---|
 | RF-07 | Al completar una estancia, el sistema registra el movimiento de estrellas del huésped. | `loyalty_transactions` |
-| RF-08 | El sistema sube de nivel al usuario (Bronze → Silver → Gold) según sus estrellas acumuladas. | `loyalty_transactions` |
+| RF-08 | El sistema acumula las estrellas del usuario en cada reserva completada para que puedan ser canjeadas por recompensas. | `loyalty_transactions` |
 | RF-09 | El huésped puede canjear estrellas por recompensas activas (noches gratis, regalos). | `rewards`, `reward_redemptions` |
 
 ### 3.4. Módulo de Experiencia del Usuario
@@ -181,7 +181,7 @@ sys --> UC12
 |---|---|
 | **Actor** | Huésped |
 | **Descripción** | El huésped consulta su saldo de estrellas y canjea una recompensa activa de la tienda. |
-| **Precondición** | El huésped debe tener `available_stars >= stars_cost` de la recompensa elegida. |
+| **Precondición** | La suma de estrellas del usuario en `loyalty_transactions` debe ser mayor o igual al `stars_cost` de la recompensa elegida. |
 | **Flujo principal** | 1. El huésped accede a la tienda de estrellas. 2. El sistema lista recompensas activas (`rewards`, `is_active = 1`). 3. Selecciona una recompensa y confirma. 4. Se crea un registro en `reward_redemptions` y se registra el gasto en `loyalty_transactions`. |
 | **Tablas** | `rewards`, `reward_redemptions`, `loyalty_transactions` |
 | **Mockups** | Pantalla 19 (Tienda de estrellas, canje, estrellas restantes) |
@@ -493,18 +493,6 @@ CREATE TABLE users (
     nationality     TEXT
 );
 
--- 6. guests
-CREATE TABLE guests (
-    id              TEXT PRIMARY KEY,
-    reservation_id  TEXT NOT NULL,
-    name            TEXT NOT NULL,
-    lastname        TEXT NOT NULL,
-    document_type   TEXT,
-    document_number TEXT,
-    nationality     TEXT,
-    FOREIGN KEY (reservation_id) REFERENCES reservations(id) ON DELETE CASCADE
-);
-
 -- 6. reservations
 CREATE TABLE reservations (
     id               TEXT    PRIMARY KEY,
@@ -523,7 +511,19 @@ CREATE TABLE reservations (
     FOREIGN KEY (room_id)  REFERENCES rooms(id)  ON DELETE RESTRICT
 );
 
--- 7. payments
+-- 7. guests
+CREATE TABLE guests (
+    id              TEXT PRIMARY KEY,
+    reservation_id  TEXT NOT NULL,
+    name            TEXT NOT NULL,
+    lastname        TEXT NOT NULL,
+    document_type   TEXT,
+    document_number TEXT,
+    nationality     TEXT,
+    FOREIGN KEY (reservation_id) REFERENCES reservations(id) ON DELETE CASCADE
+);
+
+-- 8. payments
 CREATE TABLE payments (
     id             TEXT PRIMARY KEY,
     reservation_id TEXT NOT NULL,
@@ -536,7 +536,7 @@ CREATE TABLE payments (
     FOREIGN KEY (reservation_id) REFERENCES reservations(id) ON DELETE CASCADE
 );
 
--- 8. reviews
+-- 9. reviews
 CREATE TABLE reviews (
     id             TEXT PRIMARY KEY,
     reservation_id TEXT UNIQUE NOT NULL,
@@ -550,7 +550,7 @@ CREATE TABLE reviews (
     FOREIGN KEY (hotel_id)       REFERENCES hotels(id)
 );
 
--- 9. amenities
+-- 10. amenities
 CREATE TABLE amenities (
     id       TEXT PRIMARY KEY,
     name     TEXT NOT NULL,
@@ -558,7 +558,7 @@ CREATE TABLE amenities (
     category TEXT CHECK (category IN ('hotel','room'))
 );
 
--- 10. hotel_amenities
+-- 11. hotel_amenities
 CREATE TABLE hotel_amenities (
     hotel_id   TEXT NOT NULL,
     amenity_id TEXT NOT NULL,
@@ -567,7 +567,7 @@ CREATE TABLE hotel_amenities (
     FOREIGN KEY (amenity_id) REFERENCES amenities(id) ON DELETE CASCADE
 );
 
--- 11. room_amenities
+-- 12. room_amenities
 CREATE TABLE room_amenities (
     room_id    TEXT NOT NULL,
     amenity_id TEXT NOT NULL,
@@ -576,7 +576,7 @@ CREATE TABLE room_amenities (
     FOREIGN KEY (amenity_id) REFERENCES amenities(id) ON DELETE CASCADE
 );
 
--- 12. services
+-- 13. services
 CREATE TABLE services (
     id          TEXT PRIMARY KEY,
     hotel_id    TEXT NOT NULL,
@@ -586,7 +586,7 @@ CREATE TABLE services (
     FOREIGN KEY (hotel_id) REFERENCES hotels(id) ON DELETE CASCADE
 );
 
--- 13. reservation_services
+-- 14. reservation_services
 CREATE TABLE reservation_services (
     id             TEXT    PRIMARY KEY,
     reservation_id TEXT    NOT NULL,
@@ -598,7 +598,7 @@ CREATE TABLE reservation_services (
 );
 
 
--- 16. rewards
+-- 15. rewards
 CREATE TABLE rewards (
     id          TEXT    PRIMARY KEY,
     name        TEXT    NOT NULL,
@@ -608,7 +608,7 @@ CREATE TABLE rewards (
     is_active   INTEGER DEFAULT 1
 );
 
--- 17. reward_redemptions
+-- 16. reward_redemptions
 CREATE TABLE reward_redemptions (
     id             TEXT    PRIMARY KEY,
     user_id        TEXT    NOT NULL,
@@ -623,7 +623,7 @@ CREATE TABLE reward_redemptions (
     FOREIGN KEY (reservation_id) REFERENCES reservations(id)
 );
 
--- 18. loyalty_transactions
+-- 17. loyalty_transactions
 CREATE TABLE loyalty_transactions (
     id             TEXT    PRIMARY KEY,
     user_id        TEXT    NOT NULL,
@@ -639,7 +639,7 @@ CREATE TABLE loyalty_transactions (
     FOREIGN KEY (reward_redemption_id)  REFERENCES reward_redemptions(id)
 );
 
--- 19. notifications
+-- 18. notifications
 CREATE TABLE notifications (
     id             TEXT    PRIMARY KEY,
     user_id        TEXT    NOT NULL,
