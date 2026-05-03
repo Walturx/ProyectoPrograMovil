@@ -1,0 +1,22 @@
+@startuml
+'!theme plain
+skinparam linetype ortho
+
+node "Dispositivo Android" as mobile {
+  component "App Flutter" as flutter
+  database "SQLite3\n(sqflite)" as db
+  flutter -- db
+}
+
+node "Servidor Backend" as backend {
+  component "Ruby Sinatra\n(REST API)" as sinatra
+}
+
+cloud "Servicios Externos" as ext {
+  component "OpenStreetMap" as osm
+}
+
+flutter -----> sinatra : HTTP/REST (JSON)
+flutter ----> osm : HTTPS (Map Tiles)
+
+@enduml

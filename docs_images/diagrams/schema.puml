@@ -1,20 +1,18 @@
 @startuml
-!theme plain
+'!theme plain
 hide circle
 skinparam linetype ortho
 
-' --- ENTIDADES ---
-
-entity "locations" as L {
-  * id : TEXT <<PK>>
+entity "locations" as Locations {
+  * id_location : TEXT <<PK>>
   --
   country : TEXT
   city : TEXT
   state : TEXT
 }
 
-entity "hotels" as H {
-  * id : TEXT <<PK>>
+entity "hotels" as Hotels {
+  * id_hotel : TEXT <<PK>>
   --
   location_id : TEXT <<FK>>
   name : TEXT
@@ -26,8 +24,8 @@ entity "hotels" as H {
   is_active : BOOLEAN
 }
 
-entity "room_types" as RT {
-  * id : TEXT <<PK>>
+entity "room_types" as RoomTypes {
+  * id_room_type : TEXT <<PK>>
   --
   name : TEXT
   description : TEXT
@@ -35,8 +33,8 @@ entity "room_types" as RT {
   capacity : INTEGER
 }
 
-entity "rooms" as R {
-  * id : TEXT <<PK>>
+entity "rooms" as Rooms {
+  * id_room : TEXT <<PK>>
   --
   hotel_id : TEXT <<FK>>
   room_type_id : TEXT <<FK>>
@@ -46,8 +44,8 @@ entity "rooms" as R {
   image_url : TEXT
 }
 
-entity "users" as U {
-  * id : TEXT <<PK>>
+entity "users" as Users {
+  * id_user : TEXT <<PK>>
   --
   email : TEXT
   password_hash : TEXT
@@ -60,8 +58,8 @@ entity "users" as U {
   nationality : TEXT
 }
 
-entity "guests" as G {
-  * id : TEXT <<PK>>
+entity "guests" as Guests {
+  * id_guest : TEXT <<PK>>
   --
   reservation_id : TEXT <<FK>>
   name : TEXT
@@ -71,54 +69,52 @@ entity "guests" as G {
   nationality : TEXT
 }
 
-
-
-entity "reservations" as RES {
-  * id : TEXT <<PK>>
+entity "reservations" as Reservations {
+  * id_reservation : TEXT <<PK>>
   --
   user_id : TEXT <<FK>>
   room_id : TEXT <<FK>>
-  check_in : TIMESTAMP
-  check_out : TIMESTAMP
+  check_in : DATETIME
+  check_out : DATETIME
   total_price : FLOAT
   status : TEXT
   adults : INTEGER
   children : INTEGER
   special_requests : TEXT
-  created_at : TIMESTAMP
+  created_at : DATETIME
 }
 
-entity "payments" as P {
-  * id : TEXT <<PK>>
+entity "payments" as Payments {
+  * id_payment : TEXT <<PK>>
   --
   reservation_id : TEXT <<FK>>
   amount : FLOAT
   method : TEXT
   status : TEXT
-  paid_at : TIMESTAMP
+  paid_at : DATETIME
   transaction_id : TEXT
 }
 
-entity "amenities" as AM {
-  * id : TEXT <<PK>>
+entity "amenities" as Amenities {
+  * id_amenity : TEXT <<PK>>
   --
   name : TEXT
   icon : TEXT
   category : TEXT
 }
 
-entity "hotel_amenities" as HA {
+entity "hotel_amenities" as HotelAmenities {
   * hotel_id : TEXT <<PK, FK>>
   * amenity_id : TEXT <<PK, FK>>
 }
 
-entity "room_amenities" as RA {
+entity "room_amenities" as RoomAmenities {
   * room_id : TEXT <<PK, FK>>
   * amenity_id : TEXT <<PK, FK>>
 }
 
-entity "services" as S {
-  * id : TEXT <<PK>>
+entity "services" as Services {
+  * id_service : TEXT <<PK>>
   --
   hotel_id : TEXT <<FK>>
   name : TEXT
@@ -126,8 +122,8 @@ entity "services" as S {
   description : TEXT
 }
 
-entity "reservation_services" as RS {
-  * id : TEXT <<PK>>
+entity "reservation_services" as ReservationServices {
+  * id_reservation_service : TEXT <<PK>>
   --
   reservation_id : TEXT <<FK>>
   service_id : TEXT <<FK>>
@@ -135,8 +131,8 @@ entity "reservation_services" as RS {
   subtotal : FLOAT
 }
 
-entity "loyalty_transactions" as LTX {
-  * id : TEXT <<PK>>
+entity "loyalty_transactions" as LoyaltyTransactions {
+  * id_loyalty_transaction : TEXT <<PK>>
   --
   user_id : TEXT <<FK>>
   reservation_id : TEXT <<FK>>
@@ -144,11 +140,11 @@ entity "loyalty_transactions" as LTX {
   type : TEXT
   stars : INTEGER
   description : TEXT
-  created_at : TIMESTAMP
+  created_at : DATETIME
 }
 
-entity "rewards" as RW {
-  * id : TEXT <<PK>>
+entity "rewards" as Rewards {
+  * id_reward : TEXT <<PK>>
   --
   name : TEXT
   description : TEXT
@@ -157,30 +153,30 @@ entity "rewards" as RW {
   is_active : BOOLEAN
 }
 
-entity "reward_redemptions" as RR {
-  * id : TEXT <<PK>>
+entity "reward_redemptions" as RewardRedemptions {
+  * id_reward_redemption : TEXT <<PK>>
   --
   user_id : TEXT <<FK>>
   reward_id : TEXT <<FK>>
   reservation_id : TEXT <<FK>>
   stars_spent : INTEGER
   status : TEXT
-  created_at : TIMESTAMP
+  created_at : DATETIME
 }
 
-entity "reviews" as REV {
-  * id : TEXT <<PK>>
+entity "reviews" as Reviews {
+  * id_review : TEXT <<PK>>
   --
   reservation_id : TEXT <<FK>>
   user_id : TEXT <<FK>>
   hotel_id : TEXT <<FK>>
   rating : INTEGER
   comment : TEXT
-  created_at : TIMESTAMP
+  created_at : DATETIME
 }
 
-entity "notifications" as N {
-  * id : TEXT <<PK>>
+entity "notifications" as Notifications {
+  * id_notification : TEXT <<PK>>
   --
   user_id : TEXT <<FK>>
   reservation_id : TEXT <<FK>>
@@ -188,42 +184,34 @@ entity "notifications" as N {
   body : TEXT
   type : TEXT
   is_read : BOOLEAN
-  created_at : TIMESTAMP
+  created_at : DATETIME
 }
 
 ' --- RELACIONES ---
-
-L ||--o{ H
-H ||--o{ R
-RT ||--o{ R
-U ||--o{ RES
-R ||--o{ RES
-RES ||--o{ G
-RES ||--o{ P
-RES ||--o{ RS
-S ||--o{ RS
-H ||--o{ S
-
-H ||--o{ HA
-AM ||--o{ HA
-R ||--o{ RA
-AM ||--o{ RA
-
-
-
-U ||--o{ LTX
-RES |o--o{ LTX
-RR |o--o{ LTX
-
-U ||--o{ RR
-RW ||--o{ RR
-RES |o--o{ RR
-
-RES ||--o{ REV
-U ||--o{ REV
-H ||--o{ REV
-
-U ||--o{ N
-RES |o--o{ N
+Locations ||--o{ Hotels
+Hotels ||--o{ Rooms
+RoomTypes ||--o{ Rooms
+Users ||--o{ Reservations
+Rooms ||--o{ Reservations
+Reservations ||--o{ Guests
+Reservations ||--o{ Payments
+Reservations ||--o{ ReservationServices
+Services ||--o{ ReservationServices
+Hotels ||--o{ Services
+Hotels ||--o{ HotelAmenities
+Amenities ||--o{ HotelAmenities
+Rooms ||--o{ RoomAmenities
+Amenities ||--o{ RoomAmenities
+Users ||--o{ LoyaltyTransactions
+Reservations |o--o{ LoyaltyTransactions
+RewardRedemptions |o--o{ LoyaltyTransactions
+Users ||--o{ RewardRedemptions
+Rewards ||--o{ RewardRedemptions
+Reservations |o--o{ RewardRedemptions
+Reservations ||--o{ Reviews
+Users ||--o{ Reviews
+Hotels ||--o{ Reviews
+Users ||--o{ Notifications
+Reservations |o--o{ Notifications
 
 @enduml

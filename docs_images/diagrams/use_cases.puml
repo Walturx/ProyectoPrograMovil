@@ -1,0 +1,50 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Usuario" as user
+actor "Sistema" as sys
+
+rectangle "HOTELYA — App Reserva de Hoteles" {
+
+  usecase "Registrar Usuario" as CU0
+  usecase "Recuperar Contraseña" as CU1
+  usecase "Iniciar Sesión" as CU0a
+  usecase "Buscar Hoteles" as CU2
+  usecase "Ver Detalles del Hotel" as CU3
+  usecase "Ver Disponibilidad" as CU4
+  usecase "Realizar Reserva" as CU5
+  usecase "Calcular Tarifa" as CU6
+  usecase "Registrar Invitados" as CU5a
+  usecase "Registrar Pago" as CU7
+  usecase "Acumular Estrellas" as CU7a
+  usecase "Ver Perfil y Estrellas" as CU8
+  usecase "Modificar Perfil" as CU9
+  usecase "Canjear Recompensas" as CU10
+  usecase "Escribir Reseña" as CU11
+  usecase "Ver Notificaciones" as CU12
+}
+
+user --> CU0
+user --> CU1
+user --> CU0a
+user --> CU2
+user --> CU3
+user --> CU4
+user --> CU5
+user --> CU7
+user --> CU8
+user --> CU9
+user --> CU10
+user --> CU11
+user --> CU12
+
+CU5 ..> CU6 : <<include>> ' Calcula total_price
+CU5 ..> CU5a : <<include>> ' Registra invitados automáticamente
+CU7 ..> CU7a : <<include>> ' Acumula estrellas al pagar
+
+sys --> CU6
+sys --> CU7a
+sys --> CU1 : <<envía enlace o código>>
+
+@enduml
