@@ -58,9 +58,11 @@ entity "rooms" as R {
   image_url : TEXT
 }
 
-entity "guests" as G {
+entity "users" as U {
   * id : TEXT <<PK>>
   --
+  email : TEXT
+  password_hash : TEXT
   name : TEXT
   lastname : TEXT
   phone : TEXT
@@ -70,12 +72,23 @@ entity "guests" as G {
   nationality : TEXT
 }
 
+entity "guests" as G {
+  * id : TEXT <<PK>>
+  --
+  reservation_id : TEXT <<FK>>
+  name : TEXT
+  lastname : TEXT
+  document_type : TEXT
+  document_number : TEXT
+  nationality : TEXT
+}
+
 
 
 entity "reservations" as RES {
   * id : TEXT <<PK>>
   --
-  guest_id : TEXT <<FK>>
+  user_id : TEXT <<FK>>
   room_id : TEXT <<FK>>
   check_in : TEXT
   check_out : TEXT
@@ -137,9 +150,9 @@ entity "reservation_services" as RS {
 entity "loyalty_transactions" as LTX {
   * id : TEXT <<PK>>
   --
-  guest_id : TEXT <<FK>>
+  user_id : TEXT <<FK>>
   reservation_id : TEXT <<FK>>
-  redemption_id : TEXT <<FK>>
+  reward_redemption_id : TEXT <<FK>>
   type : TEXT
   stars : INTEGER
   description : TEXT
@@ -159,7 +172,7 @@ entity "rewards" as RW {
 entity "reward_redemptions" as RR {
   * id : TEXT <<PK>>
   --
-  guest_id : TEXT <<FK>>
+  user_id : TEXT <<FK>>
   reward_id : TEXT <<FK>>
   reservation_id : TEXT <<FK>>
   stars_spent : INTEGER
@@ -171,7 +184,7 @@ entity "reviews" as REV {
   * id : TEXT <<PK>>
   --
   reservation_id : TEXT <<FK>>
-  guest_id : TEXT <<FK>>
+  user_id : TEXT <<FK>>
   hotel_id : TEXT <<FK>>
   rating : INTEGER
   comment : TEXT
@@ -181,7 +194,7 @@ entity "reviews" as REV {
 entity "notifications" as N {
   * id : TEXT <<PK>>
   --
-  guest_id : TEXT <<FK>>
+  user_id : TEXT <<FK>>
   reservation_id : TEXT <<FK>>
   title : TEXT
   body : TEXT
@@ -195,8 +208,9 @@ entity "notifications" as N {
 L ||--o{ H
 H ||--o{ R
 RT ||--o{ R
-G ||--o{ RES
+U ||--o{ RES
 R ||--o{ RES
+RES ||--o{ G
 RES ||--o{ P
 RES ||--o{ RS
 S ||--o{ RS
@@ -206,16 +220,16 @@ AM ||--o{ HA
 R ||--o{ RA
 AM ||--o{ RA
 
-G ||--o{ LTX
+U ||--o{ LTX
 RES |o--o{ LTX
 RR |o--o{ LTX
-G ||--o{ RR
+U ||--o{ RR
 RW ||--o{ RR
 RES |o--o{ RR
 RES ||--o{ REV
-G ||--o{ REV
+U ||--o{ REV
 H ||--o{ REV
-G ||--o{ N
+U ||--o{ N
 RES |o--o{ N
 
 @enduml

@@ -95,7 +95,7 @@ flutter --> osm : HTTPS (Map Tiles)
 |---|---|---|
 | RF-10 | El huésped puede calificar y comentar su experiencia solo después de completar su reserva. | `reviews` |
 | RF-11 | El sistema envía alertas automáticas sobre confirmación de reservas y promociones. | `notifications` |
-| RF-12 | El usuario puede actualizar sus datos personales, documento y foto de perfil. | `guests` |
+| RF-12 | El usuario puede actualizar sus datos personales, documento y foto de perfil. | `users` |
 
 ### Diagrama de Casos de Uso
 
@@ -197,8 +197,8 @@ sys --> UC12
 | **Actor** | Huésped |
 | **Descripción** | El usuario consulta y actualiza sus datos personales, foto de perfil y visualiza su nivel de fidelidad. |
 | **Precondición** | El huésped debe estar autenticado. |
-| **Flujo principal** | 1. Accede a "Mi Perfil". 2. El sistema consulta `guests` y calcula las estrellas desde `loyalty_transactions`. 3. Muestra nombre, correo, teléfono y estrellas acumuladas. 4. El usuario puede editar sus datos y guardar. |
-| **Tablas** | `guests`, `loyalty_transactions` |
+| **Flujo principal** | 1. Accede a "Mi Perfil". 2. El sistema consulta `users` y calcula las estrellas desde `loyalty_transactions`. 3. Muestra nombre, correo, teléfono y estrellas acumuladas. 4. El usuario puede editar sus datos y guardar. |
+| **Tablas** | `users`, `loyalty_transactions` |
 | **Mockups** | Pantalla 19 (Perfil de usuario) |
 
 <!-- Mockup CU04 — agregar imagen exportada de Canva -->
@@ -213,7 +213,7 @@ sys --> UC12
 | **Descripción** | El huésped califica (1–5 estrellas) y comenta su experiencia en el hotel, solo disponible después de una estancia completada. |
 | **Precondición** | La reserva debe estar en estado `completed`. |
 | **Flujo principal** | 1. El huésped accede a la sección de comentarios del hotel. 2. Ingresa calificación y comentario. 3. Se crea el registro en `reviews` vinculado a la reserva. |
-| **Tablas** | `reviews`, `reservations`, `hotels`, `guests` |
+| **Tablas** | `reviews`, `reservations`, `hotels`, `users` |
 | **Mockups** | Pantalla 12 (Comentarios del hotel) |
 
 <!-- Mockup CU05 — agregar imagen exportada de Canva -->
@@ -269,9 +269,11 @@ entity "rooms" as R {
   is_available : INTEGER
   image_url : TEXT
 }
-entity "guests" as G {
+entity "users" as U {
   * id : TEXT <<PK>>
   --
+  email : TEXT
+  password_hash : TEXT
   name : TEXT
   lastname : TEXT
   phone : TEXT
@@ -280,11 +282,21 @@ entity "guests" as G {
   avatar_url : TEXT
   nationality : TEXT
 }
+entity "guests" as G {
+  * id : TEXT <<PK>>
+  --
+  reservation_id : TEXT <<FK>>
+  name : TEXT
+  lastname : TEXT
+  document_type : TEXT
+  document_number : TEXT
+  nationality : TEXT
+}
 
 entity "reservations" as RES {
   * id : TEXT <<PK>>
   --
-  guest_id : TEXT <<FK>>
+  user_id : TEXT <<FK>>
   room_id : TEXT <<FK>>
   check_in : TEXT
   check_out : TEXT
@@ -339,9 +351,9 @@ entity "reservation_services" as RS {
 entity "loyalty_transactions" as LTX {
   * id : TEXT <<PK>>
   --
-  guest_id : TEXT <<FK>>
+  user_id : TEXT <<FK>>
   reservation_id : TEXT <<FK>>
-  redemption_id : TEXT <<FK>>
+  reward_redemption_id : TEXT <<FK>>
   type : TEXT
   stars : INTEGER
   description : TEXT
@@ -359,7 +371,7 @@ entity "rewards" as RW {
 entity "reward_redemptions" as RR {
   * id : TEXT <<PK>>
   --
-  guest_id : TEXT <<FK>>
+  user_id : TEXT <<FK>>
   reward_id : TEXT <<FK>>
   reservation_id : TEXT <<FK>>
   stars_spent : INTEGER
@@ -370,7 +382,7 @@ entity "reviews" as REV {
   * id : TEXT <<PK>>
   --
   reservation_id : TEXT <<FK>>
-  guest_id : TEXT <<FK>>
+  user_id : TEXT <<FK>>
   hotel_id : TEXT <<FK>>
   rating : INTEGER
   comment : TEXT
@@ -379,7 +391,7 @@ entity "reviews" as REV {
 entity "notifications" as N {
   * id : TEXT <<PK>>
   --
-  guest_id : TEXT <<FK>>
+  user_id : TEXT <<FK>>
   reservation_id : TEXT <<FK>>
   title : TEXT
   body : TEXT
@@ -391,8 +403,9 @@ entity "notifications" as N {
 L ||--o{ H
 H ||--o{ R
 RT ||--o{ R
-G ||--o{ RES
+U ||--o{ RES
 R ||--o{ RES
+RES ||--o{ G
 RES ||--o{ P
 RES ||--o{ RS
 S ||--o{ RS
@@ -402,16 +415,16 @@ AM ||--o{ HA
 R ||--o{ RA
 AM ||--o{ RA
 
-G ||--o{ LTX
+U ||--o{ LTX
 RES |o--o{ LTX
 RR |o--o{ LTX
-G ||--o{ RR
+U ||--o{ RR
 RW ||--o{ RR
 RES |o--o{ RR
 RES ||--o{ REV
-G ||--o{ REV
+U ||--o{ REV
 H ||--o{ REV
-G ||--o{ N
+U ||--o{ N
 RES |o--o{ N
 
 @enduml
@@ -466,9 +479,11 @@ CREATE TABLE rooms (
     FOREIGN KEY (room_type_id) REFERENCES room_types(id) ON DELETE RESTRICT
 );
 
--- 5. guests
-CREATE TABLE guests (
+-- 5. users
+CREATE TABLE users (
     id              TEXT PRIMARY KEY,
+    email           TEXT NOT NULL UNIQUE,
+    password_hash   TEXT NOT NULL,
     name            TEXT NOT NULL,
     lastname        TEXT NOT NULL,
     phone           TEXT,
@@ -478,10 +493,22 @@ CREATE TABLE guests (
     nationality     TEXT
 );
 
+-- 6. guests
+CREATE TABLE guests (
+    id              TEXT PRIMARY KEY,
+    reservation_id  TEXT NOT NULL,
+    name            TEXT NOT NULL,
+    lastname        TEXT NOT NULL,
+    document_type   TEXT,
+    document_number TEXT,
+    nationality     TEXT,
+    FOREIGN KEY (reservation_id) REFERENCES reservations(id) ON DELETE CASCADE
+);
+
 -- 6. reservations
 CREATE TABLE reservations (
     id               TEXT    PRIMARY KEY,
-    guest_id         TEXT    NOT NULL,
+    user_id          TEXT    NOT NULL,
     room_id          TEXT    NOT NULL,
     check_in         TEXT    NOT NULL,  -- YYYY-MM-DD HH:MM:SS
     check_out        TEXT    NOT NULL,  -- YYYY-MM-DD HH:MM:SS
@@ -492,7 +519,7 @@ CREATE TABLE reservations (
     children         INTEGER DEFAULT 0,
     special_requests TEXT,
     created_at       TEXT    DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (guest_id) REFERENCES guests(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id)  REFERENCES users(id)  ON DELETE CASCADE,
     FOREIGN KEY (room_id)  REFERENCES rooms(id)  ON DELETE RESTRICT
 );
 
@@ -513,13 +540,13 @@ CREATE TABLE payments (
 CREATE TABLE reviews (
     id             TEXT PRIMARY KEY,
     reservation_id TEXT UNIQUE NOT NULL,
-    guest_id       TEXT NOT NULL,
+    user_id        TEXT NOT NULL,
     hotel_id       TEXT NOT NULL,
     rating         INTEGER CHECK (rating BETWEEN 1 AND 5),
     comment        TEXT,
     created_at     TEXT DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (reservation_id) REFERENCES reservations(id) ON DELETE CASCADE,
-    FOREIGN KEY (guest_id)       REFERENCES guests(id),
+    FOREIGN KEY (user_id)        REFERENCES users(id),
     FOREIGN KEY (hotel_id)       REFERENCES hotels(id)
 );
 
@@ -584,14 +611,14 @@ CREATE TABLE rewards (
 -- 17. reward_redemptions
 CREATE TABLE reward_redemptions (
     id             TEXT    PRIMARY KEY,
-    guest_id       TEXT    NOT NULL,
+    user_id        TEXT    NOT NULL,
     reward_id      TEXT    NOT NULL,
     reservation_id TEXT,
     stars_spent    INTEGER NOT NULL,
     status         TEXT    DEFAULT 'pending'
                            CHECK (status IN ('pending','applied','expired')),
     created_at     TEXT    DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (guest_id)       REFERENCES guests(id),
+    FOREIGN KEY (user_id)        REFERENCES users(id),
     FOREIGN KEY (reward_id)      REFERENCES rewards(id),
     FOREIGN KEY (reservation_id) REFERENCES reservations(id)
 );
@@ -599,30 +626,30 @@ CREATE TABLE reward_redemptions (
 -- 18. loyalty_transactions
 CREATE TABLE loyalty_transactions (
     id             TEXT    PRIMARY KEY,
-    guest_id       TEXT    NOT NULL,
+    user_id        TEXT    NOT NULL,
     reservation_id TEXT,
-    redemption_id  TEXT,
+    reward_redemption_id  TEXT,
     type           TEXT    NOT NULL
                            CHECK (type IN ('earned','redeemed','bonus','expired')),
     stars          INTEGER NOT NULL,
     description    TEXT,
     created_at     TEXT    DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (guest_id)       REFERENCES guests(id),
+    FOREIGN KEY (user_id)        REFERENCES users(id),
     FOREIGN KEY (reservation_id) REFERENCES reservations(id),
-    FOREIGN KEY (redemption_id)  REFERENCES reward_redemptions(id)
+    FOREIGN KEY (reward_redemption_id)  REFERENCES reward_redemptions(id)
 );
 
 -- 19. notifications
 CREATE TABLE notifications (
     id             TEXT    PRIMARY KEY,
-    guest_id       TEXT    NOT NULL,
+    user_id        TEXT    NOT NULL,
     reservation_id TEXT,
     title          TEXT    NOT NULL,
     body           TEXT    NOT NULL,
     type           TEXT    CHECK (type IN ('confirmation','reminder','promo')),
     is_read        INTEGER DEFAULT 0,
     created_at     TEXT    DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (guest_id)       REFERENCES guests(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id)        REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (reservation_id) REFERENCES reservations(id)
 );
 ```
@@ -676,11 +703,13 @@ CREATE TABLE notifications (
 | is_available | INTEGER | DEFAULT 1 | 1 = disponible, 0 = no disponible |
 | image_url | TEXT | | URL imagen de la habitación |
 
-### guests
+### users
 
 | Columna | Tipo | Restricciones | Descripción |
 |---|---|---|---|
 | id | TEXT | PK | UUID identificador único |
+| email | TEXT | NOT NULL, UNIQUE | Correo electrónico (usado para login) |
+| password_hash | TEXT | NOT NULL | Hash de la contraseña (bcrypt) |
 | name | TEXT | NOT NULL | Nombre |
 | lastname | TEXT | NOT NULL | Apellido |
 | phone | TEXT | | Teléfono |
@@ -689,12 +718,24 @@ CREATE TABLE notifications (
 | avatar_url | TEXT | | URL foto de perfil |
 | nationality | TEXT | | Nacionalidad |
 
+### guests
+
+| Columna | Tipo | Restricciones | Descripción |
+|---|---|---|---|
+| id | TEXT | PK | UUID identificador único |
+| reservation_id | TEXT | FK → reservations, NOT NULL | Reserva a la que pertenece el acompañante |
+| name | TEXT | NOT NULL | Nombre del acompañante |
+| lastname | TEXT | NOT NULL | Apellido del acompañante |
+| document_type | TEXT | | DNI / Pasaporte / CE |
+| document_number | TEXT | | Número de documento |
+| nationality | TEXT | | Nacionalidad |
+
 ### reservations
 
 | Columna | Tipo | Restricciones | Descripción |
 |---|---|---|---|
 | id | TEXT | PK | UUID identificador único |
-| guest_id | TEXT | FK → guests | Huésped que reserva |
+| user_id | TEXT | FK → users | Usuario que realiza la reserva |
 | room_id | TEXT | FK → rooms | Habitación reservada |
 | check_in | TEXT | NOT NULL | Fecha y hora de entrada (YYYY-MM-DD HH:MM:SS) |
 | check_out | TEXT | NOT NULL | Fecha y hora de salida (YYYY-MM-DD HH:MM:SS) |
@@ -723,7 +764,7 @@ CREATE TABLE notifications (
 |---|---|---|---|
 | id | TEXT | PK | UUID identificador único |
 | reservation_id | TEXT | FK → reservations, UNIQUE | Una reseña por reserva |
-| guest_id | TEXT | FK → guests | Huésped que reseña |
+| user_id | TEXT | FK → users | Usuario que escribe la reseña |
 | hotel_id | TEXT | FK → hotels | Hotel reseñado |
 | rating | INTEGER | CHECK 1–5 | Calificación |
 | comment | TEXT | | Comentario |
@@ -778,9 +819,9 @@ CREATE TABLE notifications (
 | Columna | Tipo | Restricciones | Descripción |
 |---|---|---|---|
 | id | TEXT | PK | UUID identificador único |
-| guest_id | TEXT | FK → guests | Huésped |
+| user_id | TEXT | FK → users | Usuario |
 | reservation_id | TEXT | FK → reservations, nullable | Reserva origen (si aplica) |
-| redemption_id | TEXT | FK → reward_redemptions, nullable | Canje origen (si aplica) |
+| reward_redemption_id | TEXT | FK → reward_redemptions, nullable | Canje origen (si aplica) |
 | type | TEXT | NOT NULL | earned / redeemed / bonus / expired |
 | stars | INTEGER | NOT NULL | Positivo = ganadas, negativo = gastadas |
 | description | TEXT | | Motivo del movimiento |
@@ -802,7 +843,7 @@ CREATE TABLE notifications (
 | Columna | Tipo | Restricciones | Descripción |
 |---|---|---|---|
 | id | TEXT | PK | UUID identificador único |
-| guest_id | TEXT | FK → guests | Huésped que canjea |
+| user_id | TEXT | FK → users | Usuario que canjea |
 | reward_id | TEXT | FK → rewards | Recompensa canjeada |
 | reservation_id | TEXT | FK → reservations, nullable | Reserva asociada (opcional) |
 | stars_spent | INTEGER | NOT NULL | Estrellas utilizadas |
@@ -814,7 +855,7 @@ CREATE TABLE notifications (
 | Columna | Tipo | Restricciones | Descripción |
 |---|---|---|---|
 | id | TEXT | PK | UUID identificador único |
-| guest_id | TEXT | FK → guests | Huésped destinatario |
+| user_id | TEXT | FK → users | Usuario destinatario |
 | reservation_id | TEXT | FK → reservations, nullable | Reserva relacionada (opcional) |
 | title | TEXT | NOT NULL | Título de la notificación |
 | body | TEXT | NOT NULL | Cuerpo del mensaje |

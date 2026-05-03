@@ -6,7 +6,7 @@ skinparam linetype ortho
 ' --- ENTIDADES ---
 
 entity "locations" as L {
-  * id : UUID <<PK>>
+  * id : TEXT <<PK>>
   --
   country : TEXT
   city : TEXT
@@ -14,9 +14,9 @@ entity "locations" as L {
 }
 
 entity "hotels" as H {
-  * id : UUID <<PK>>
+  * id : TEXT <<PK>>
   --
-  location_id : UUID <<FK>>
+  location_id : TEXT <<FK>>
   name : TEXT
   description : TEXT
   stars : INTEGER
@@ -27,28 +27,30 @@ entity "hotels" as H {
 }
 
 entity "room_types" as RT {
-  * id : UUID <<PK>>
+  * id : TEXT <<PK>>
   --
   name : TEXT
   description : TEXT
-  base_price : NUMERIC
+  base_price : FLOAT
   capacity : INTEGER
 }
 
 entity "rooms" as R {
-  * id : UUID <<PK>>
+  * id : TEXT <<PK>>
   --
-  hotel_id : UUID <<FK>>
-  room_type_id : UUID <<FK>>
+  hotel_id : TEXT <<FK>>
+  room_type_id : TEXT <<FK>>
   room_number : TEXT
   floor : INTEGER
   is_available : BOOLEAN
   image_url : TEXT
 }
 
-entity "guests" as G {
-  * id : UUID <<PK>>
+entity "users" as U {
+  * id : TEXT <<PK>>
   --
+  email : TEXT
+  password_hash : TEXT
   name : TEXT
   lastname : TEXT
   phone : TEXT
@@ -58,36 +60,47 @@ entity "guests" as G {
   nationality : TEXT
 }
 
+entity "guests" as G {
+  * id : TEXT <<PK>>
+  --
+  reservation_id : TEXT <<FK>>
+  name : TEXT
+  lastname : TEXT
+  document_type : TEXT
+  document_number : TEXT
+  nationality : TEXT
+}
+
 
 
 entity "reservations" as RES {
-  * id : UUID <<PK>>
+  * id : TEXT <<PK>>
   --
-  guest_id : UUID <<FK>>
-  room_id : UUID <<FK>>
-  check_in : DATE
-  check_out : DATE
-  total_price : NUMERIC
+  user_id : TEXT <<FK>>
+  room_id : TEXT <<FK>>
+  check_in : TIMESTAMP
+  check_out : TIMESTAMP
+  total_price : FLOAT
   status : TEXT
   adults : INTEGER
   children : INTEGER
   special_requests : TEXT
-  created_at : TIMESTAMPTZ
+  created_at : TIMESTAMP
 }
 
 entity "payments" as P {
-  * id : UUID <<PK>>
+  * id : TEXT <<PK>>
   --
-  reservation_id : UUID <<FK>>
-  amount : NUMERIC
+  reservation_id : TEXT <<FK>>
+  amount : FLOAT
   method : TEXT
   status : TEXT
-  paid_at : TIMESTAMPTZ
+  paid_at : TIMESTAMP
   transaction_id : TEXT
 }
 
 entity "amenities" as AM {
-  * id : UUID <<PK>>
+  * id : TEXT <<PK>>
   --
   name : TEXT
   icon : TEXT
@@ -95,47 +108,47 @@ entity "amenities" as AM {
 }
 
 entity "hotel_amenities" as HA {
-  * hotel_id : UUID <<PK, FK>>
-  * amenity_id : UUID <<PK, FK>>
+  * hotel_id : TEXT <<PK, FK>>
+  * amenity_id : TEXT <<PK, FK>>
 }
 
 entity "room_amenities" as RA {
-  * room_id : UUID <<PK, FK>>
-  * amenity_id : UUID <<PK, FK>>
+  * room_id : TEXT <<PK, FK>>
+  * amenity_id : TEXT <<PK, FK>>
 }
 
 entity "services" as S {
-  * id : UUID <<PK>>
+  * id : TEXT <<PK>>
   --
-  hotel_id : UUID <<FK>>
+  hotel_id : TEXT <<FK>>
   name : TEXT
-  price : NUMERIC
+  price : FLOAT
   description : TEXT
 }
 
 entity "reservation_services" as RS {
-  * id : UUID <<PK>>
+  * id : TEXT <<PK>>
   --
-  reservation_id : UUID <<FK>>
-  service_id : UUID <<FK>>
+  reservation_id : TEXT <<FK>>
+  service_id : TEXT <<FK>>
   quantity : INTEGER
-  subtotal : NUMERIC
+  subtotal : FLOAT
 }
 
 entity "loyalty_transactions" as LTX {
-  * id : UUID <<PK>>
+  * id : TEXT <<PK>>
   --
-  guest_id : UUID <<FK>>
-  reservation_id : UUID <<FK>>
-  redemption_id : UUID <<FK>>
+  user_id : TEXT <<FK>>
+  reservation_id : TEXT <<FK>>
+  reward_redemption_id : TEXT <<FK>>
   type : TEXT
   stars : INTEGER
   description : TEXT
-  created_at : TIMESTAMPTZ
+  created_at : TIMESTAMP
 }
 
 entity "rewards" as RW {
-  * id : UUID <<PK>>
+  * id : TEXT <<PK>>
   --
   name : TEXT
   description : TEXT
@@ -145,37 +158,37 @@ entity "rewards" as RW {
 }
 
 entity "reward_redemptions" as RR {
-  * id : UUID <<PK>>
+  * id : TEXT <<PK>>
   --
-  guest_id : UUID <<FK>>
-  reward_id : UUID <<FK>>
-  reservation_id : UUID <<FK>>
+  user_id : TEXT <<FK>>
+  reward_id : TEXT <<FK>>
+  reservation_id : TEXT <<FK>>
   stars_spent : INTEGER
   status : TEXT
-  created_at : TIMESTAMPTZ
+  created_at : TIMESTAMP
 }
 
 entity "reviews" as REV {
-  * id : UUID <<PK>>
+  * id : TEXT <<PK>>
   --
-  reservation_id : UUID <<FK>>
-  guest_id : UUID <<FK>>
-  hotel_id : UUID <<FK>>
+  reservation_id : TEXT <<FK>>
+  user_id : TEXT <<FK>>
+  hotel_id : TEXT <<FK>>
   rating : INTEGER
   comment : TEXT
-  created_at : TIMESTAMPTZ
+  created_at : TIMESTAMP
 }
 
 entity "notifications" as N {
-  * id : UUID <<PK>>
+  * id : TEXT <<PK>>
   --
-  guest_id : UUID <<FK>>
-  reservation_id : UUID <<FK>>
+  user_id : TEXT <<FK>>
+  reservation_id : TEXT <<FK>>
   title : TEXT
   body : TEXT
   type : TEXT
   is_read : BOOLEAN
-  created_at : TIMESTAMPTZ
+  created_at : TIMESTAMP
 }
 
 ' --- RELACIONES ---
@@ -183,8 +196,9 @@ entity "notifications" as N {
 L ||--o{ H
 H ||--o{ R
 RT ||--o{ R
-G ||--o{ RES
+U ||--o{ RES
 R ||--o{ RES
+RES ||--o{ G
 RES ||--o{ P
 RES ||--o{ RS
 S ||--o{ RS
@@ -197,19 +211,19 @@ AM ||--o{ RA
 
 
 
-G ||--o{ LTX
+U ||--o{ LTX
 RES |o--o{ LTX
 RR |o--o{ LTX
 
-G ||--o{ RR
+U ||--o{ RR
 RW ||--o{ RR
 RES |o--o{ RR
 
 RES ||--o{ REV
-G ||--o{ REV
+U ||--o{ REV
 H ||--o{ REV
 
-G ||--o{ N
+U ||--o{ N
 RES |o--o{ N
 
 @enduml
