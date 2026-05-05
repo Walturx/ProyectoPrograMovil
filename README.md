@@ -956,8 +956,8 @@ CREATE TABLE notification (
 | name | TEXT | NOT NULL | Nombre |
 | lastname | TEXT | NOT NULL | Apellido |
 | phone | TEXT | | Teléfono |
-| age | INTEGER | | Edad |
 | birthdate | TEXT | | Fecha de nacimiento |
+| age | INTEGER | | Edad |
 | document_type | TEXT | | DNI / Pasaporte / CE |
 | document_number | TEXT | UNIQUE | Número de documento |
 | avatar_url | TEXT | | URL foto de perfil |
