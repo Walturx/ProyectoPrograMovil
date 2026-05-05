@@ -52,6 +52,8 @@ entity "users" as Users {
   name : TEXT
   lastname : TEXT
   phone : TEXT
+  birthdate : TEXT
+  age : INTEGER
   document_type : TEXT
   document_number : TEXT
   avatar_url : TEXT

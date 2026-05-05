@@ -496,6 +496,8 @@ entity "users" as Users {
   name : TEXT
   lastname : TEXT
   phone : TEXT
+  birthdate : TEXT
+  age : INTEGER
   document_type : TEXT
   document_number : TEXT
   avatar_url : TEXT
@@ -720,6 +722,8 @@ CREATE TABLE user (
     name TEXT NOT NULL,
     lastname TEXT,
     phone TEXT,
+    birthdate TEXT,
+    age INTEGER,
     document_type TEXT,
     document_number TEXT UNIQUE,
     avatar_url TEXT,
@@ -943,6 +947,8 @@ CREATE TABLE notification (
 | name | TEXT | NOT NULL | Nombre |
 | lastname | TEXT | NOT NULL | Apellido |
 | phone | TEXT | | Teléfono |
+| age | INTEGER | | Edad |
+| birthdate | TEXT | | Fecha de nacimiento |
 | document_type | TEXT | | DNI / Pasaporte / CE |
 | document_number | TEXT | UNIQUE | Número de documento |
 | avatar_url | TEXT | | URL foto de perfil |
