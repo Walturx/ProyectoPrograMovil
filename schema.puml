@@ -1,0 +1,229 @@
+@startuml
+!theme plain
+hide circle
+skinparam linetype ortho
+
+' --- ENTIDADES ---
+
+entity "locations" as L {
+  * id : TEXT <<PK>>
+  --
+  country : TEXT
+  city : TEXT
+  state : TEXT
+}
+
+entity "hotels" as H {
+  * id : TEXT <<PK>>
+  --
+  location_id : TEXT <<FK>>
+  name : TEXT
+  description : TEXT
+  stars : INTEGER
+  phone : TEXT
+  email : TEXT
+  cover_image_url : TEXT
+  is_active : BOOLEAN
+}
+
+entity "room_types" as RT {
+  * id : TEXT <<PK>>
+  --
+  name : TEXT
+  description : TEXT
+  base_price : FLOAT
+  capacity : INTEGER
+}
+
+entity "rooms" as R {
+  * id : TEXT <<PK>>
+  --
+  hotel_id : TEXT <<FK>>
+  room_type_id : TEXT <<FK>>
+  room_number : TEXT
+  floor : INTEGER
+  is_available : BOOLEAN
+  image_url : TEXT
+}
+
+entity "users" as U {
+  * id : TEXT <<PK>>
+  --
+  email : TEXT
+  password_hash : TEXT
+  name : TEXT
+  lastname : TEXT
+  phone : TEXT
+  document_type : TEXT
+  document_number : TEXT
+  avatar_url : TEXT
+  nationality : TEXT
+}
+
+entity "guests" as G {
+  * id : TEXT <<PK>>
+  --
+  reservation_id : TEXT <<FK>>
+  name : TEXT
+  lastname : TEXT
+  document_type : TEXT
+  document_number : TEXT
+  nationality : TEXT
+}
+
+
+
+entity "reservations" as RES {
+  * id : TEXT <<PK>>
+  --
+  user_id : TEXT <<FK>>
+  room_id : TEXT <<FK>>
+  check_in : TIMESTAMP
+  check_out : TIMESTAMP
+  total_price : FLOAT
+  status : TEXT
+  adults : INTEGER
+  children : INTEGER
+  special_requests : TEXT
+  created_at : TIMESTAMP
+}
+
+entity "payments" as P {
+  * id : TEXT <<PK>>
+  --
+  reservation_id : TEXT <<FK>>
+  amount : FLOAT
+  method : TEXT
+  status : TEXT
+  paid_at : TIMESTAMP
+  transaction_id : TEXT
+}
+
+entity "amenities" as AM {
+  * id : TEXT <<PK>>
+  --
+  name : TEXT
+  icon : TEXT
+  category : TEXT
+}
+
+entity "hotel_amenities" as HA {
+  * hotel_id : TEXT <<PK, FK>>
+  * amenity_id : TEXT <<PK, FK>>
+}
+
+entity "room_amenities" as RA {
+  * room_id : TEXT <<PK, FK>>
+  * amenity_id : TEXT <<PK, FK>>
+}
+
+entity "services" as S {
+  * id : TEXT <<PK>>
+  --
+  hotel_id : TEXT <<FK>>
+  name : TEXT
+  price : FLOAT
+  description : TEXT
+}
+
+entity "reservation_services" as RS {
+  * id : TEXT <<PK>>
+  --
+  reservation_id : TEXT <<FK>>
+  service_id : TEXT <<FK>>
+  quantity : INTEGER
+  subtotal : FLOAT
+}
+
+entity "loyalty_transactions" as LTX {
+  * id : TEXT <<PK>>
+  --
+  user_id : TEXT <<FK>>
+  reservation_id : TEXT <<FK>>
+  reward_redemption_id : TEXT <<FK>>
+  type : TEXT
+  stars : INTEGER
+  description : TEXT
+  created_at : TIMESTAMP
+}
+
+entity "rewards" as RW {
+  * id : TEXT <<PK>>
+  --
+  name : TEXT
+  description : TEXT
+  stars_cost : INTEGER
+  type : TEXT
+  is_active : BOOLEAN
+}
+
+entity "reward_redemptions" as RR {
+  * id : TEXT <<PK>>
+  --
+  user_id : TEXT <<FK>>
+  reward_id : TEXT <<FK>>
+  reservation_id : TEXT <<FK>>
+  stars_spent : INTEGER
+  status : TEXT
+  created_at : TIMESTAMP
+}
+
+entity "reviews" as REV {
+  * id : TEXT <<PK>>
+  --
+  reservation_id : TEXT <<FK>>
+  user_id : TEXT <<FK>>
+  hotel_id : TEXT <<FK>>
+  rating : INTEGER
+  comment : TEXT
+  created_at : TIMESTAMP
+}
+
+entity "notifications" as N {
+  * id : TEXT <<PK>>
+  --
+  user_id : TEXT <<FK>>
+  reservation_id : TEXT <<FK>>
+  title : TEXT
+  body : TEXT
+  type : TEXT
+  is_read : BOOLEAN
+  created_at : TIMESTAMP
+}
+
+' --- RELACIONES ---
+
+L ||--o{ H
+H ||--o{ R
+RT ||--o{ R
+U ||--o{ RES
+R ||--o{ RES
+RES ||--o{ G
+RES ||--o{ P
+RES ||--o{ RS
+S ||--o{ RS
+H ||--o{ S
+
+H ||--o{ HA
+AM ||--o{ HA
+R ||--o{ RA
+AM ||--o{ RA
+
+
+
+U ||--o{ LTX
+RES |o--o{ LTX
+RR |o--o{ LTX
+
+U ||--o{ RR
+RW ||--o{ RR
+RES |o--o{ RR
+
+RES ||--o{ REV
+U ||--o{ REV
+H ||--o{ REV
+
+U ||--o{ N
+RES |o--o{ N
+
+@enduml
