@@ -307,7 +307,7 @@ sys --> UC12
 
 | Campo | Detalle |
 |---|---|
-| **Actor** | Huésped |
+| **Actor** | Usuario |
 | **Descripción** | El usuario ingresa datos de uno o varios invitados para la reserva. |
 | **Precondición** | Debe existir una reserva en estado `pending`. |
 | **Flujo principal** | 1. Se muestra el resumen de la reserva. 2. El usuario ingresa datos de los invitados (nombre, apellidos, tipo/número de documento, nacionalidad). 3. Se crea el registro en `guests` asociado a la reserva. |
@@ -322,7 +322,7 @@ sys --> UC12
 
 | Campo | Detalle |
 |---|---| 
-| **Actor** | Huésped |
+| **Actor** | Usuario |
 | **Descripción** | El usuario registra el pago de la reserva. |
 | **Precondición** | Debe existir una reserva en estado `pending`. |
 | **Flujo principal** | 1. Se muestra el resumen de la reserva. 2. El usuario registra el pago de la reserva. 3. Se actualiza el estado de la reserva a `confirmed`. 4. Se genera el pago en la tabla payments. 5. Se genera un código QR con la información de la reserva. 6. Se envia una notificación al usuario con la información de la reserva y el pago. |
@@ -341,7 +341,7 @@ sys --> UC12
 
 | Campo | Detalle |
 |---|---| 
-| **Actor** | Huésped |
+| **Actor** | Usuario |
 | **Descripción** | El usuario acumula estrellas por cada reserva realizada. |
 | **Precondición** | Debe existir una reserva en estado `confirmed`. |
 | **Flujo principal** | 1. El sistema calcula el número de estrellas a acumular. 2. El usuario ve el número de estrellas acumuladas. 3. Se actualiza el número de estrellas del usuario. |
@@ -359,10 +359,10 @@ sys --> UC12
 
 | Campo | Detalle |
 |---|---| 
-| **Actor** | Huésped |
+| **Actor** | Usuario |
 | **Descripción** | El usuario ve su perfil y el número de estrellas acumuladas. |
 | **Precondición** | El usuario debe estar autenticado en la app. |
-| **Flujo principal** | 1. El usuario accede a su perfil. 2. El sistema muestra el número de estrellas acumuladas. |
+| **Flujo principal** | 1. El usuario accede a su perfil. 2. El sistema muestra los datos del usuario y el número de estrellas acumuladas. 3. El usuario puede ver su historial de reservas. 4. El usuario puede ver su historial de transacciones. |
 | **Tablas** | `users`, `loyalty_transactions` |
 
 #### Mockup CU12
@@ -370,11 +370,15 @@ sys --> UC12
 ### User Details
 ![User Details](docs_images/mockups_images/user_details.png)
 
+### User Record
+![User History](docs_images/mockups_images/record.png)
+
+
 ### CU13: Modificar perfil
 
 | Campo | Detalle |
 |---|---| 
-| **Actor** | Huésped |
+| **Actor** | Usuario |
 | **Descripción** | El usuario modifica su perfil. |
 | **Precondición** | El usuario debe estar autenticado en la app. |
 | **Flujo principal** | 1. El usuario accede a su perfil. 2. El sistema muestra el perfil del usuario. 3. El usuario modifica su perfil. 4. Se actualiza el perfil del usuario. |
@@ -390,7 +394,7 @@ sys --> UC12
 
 | Campo | Detalle |
 |---|---| 
-| **Actor** | Huésped |
+| **Actor** | Usuario |
 | **Descripción** | El usuario canjea recompensas. |
 | **Precondición** | El usuario debe estar autenticado en la app. |
 | **Flujo principal** | 1. El usuario accede a su perfil. 2. El sistema muestra las recompensas disponibles. 3. El usuario canjea una recompensa. 4. Se actualiza el número de estrellas del usuario. |
@@ -408,7 +412,7 @@ sys --> UC12
 
 | Campo | Detalle |
 |---|---| 
-| **Actor** | Huésped |
+| **Actor** | Usuario |
 | **Descripción** | El usuario escribe una reseña para una reserva. |
 | **Precondición** | Debe existir una reserva en estado `confirmed`. |
 | **Flujo principal** | 1. El usuario accede a su perfil. 2. El sistema muestra las reservas realizadas. 3. El usuario selecciona una reserva. 4. El usuario escribe una reseña. 5. Se actualiza la reseña del usuario. |
@@ -423,7 +427,7 @@ sys --> UC12
 
 | Campo | Detalle |
 |---|---| 
-| **Actor** | Huésped |
+| **Actor** | Usuario |
 | **Descripción** | El usuario ve sus notificaciones. |
 | **Precondición** | El usuario debe estar autenticado en la app. |
 | **Flujo principal** | 1. El usuario accede a su perfil. 2. El sistema muestra las notificaciones. 3. El usuario ve las notificaciones. |
@@ -496,6 +500,8 @@ entity "users" as Users {
   document_number : TEXT
   avatar_url : TEXT
   nationality : TEXT
+  reset_password_token : INTEGER
+  status : BOOLEAN
 }
 
 entity "guests" as Guests {
@@ -717,7 +723,9 @@ CREATE TABLE user (
     document_type TEXT,
     document_number TEXT UNIQUE,
     avatar_url TEXT,
-    nationality TEXT
+    nationality TEXT,
+    reset_password_token INTEGER,
+    status BOOLEAN 
 );
 
 -- 6. guest
@@ -939,6 +947,8 @@ CREATE TABLE notification (
 | document_number | TEXT | UNIQUE | Número de documento |
 | avatar_url | TEXT | | URL foto de perfil |
 | nationality | TEXT | | Nacionalidad |
+| reset_password_token | INTEGER | | Token para restablecer contraseña |
+| status | BOOLEAN | | TRUE = activo, FALSE = inactivo |
 
 ### guests
 
@@ -1135,6 +1145,9 @@ CREATE TABLE notification (
 
 ### User Details
 ![User Details](docs_images/mockups_images/user_details.png)
+
+### User Record
+![User Record](docs_images/mockups_images/record.png)
 
 ### Star Shop
 ![Star Shop](docs_images/mockups_images/star_shop.png)
