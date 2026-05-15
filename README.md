@@ -505,6 +505,8 @@ entity "users" as Users {
   name : TEXT
   lastname : TEXT
   phone : TEXT
+  birthdate : TEXT
+  age : INTEGER
   document_type : TEXT
   document_number : TEXT
   avatar_url : TEXT
@@ -683,6 +685,8 @@ CREATE TABLE location (
     country TEXT NOT NULL,
     city TEXT NOT NULL,
     state TEXT NOT NULL
+    longitude FLOAT 
+    latitude FLOAT 
 );
 
 -- 2. hotel
@@ -694,7 +698,7 @@ CREATE TABLE hotel (
     stars INTEGER CHECK (stars BETWEEN 1 AND 5),
     phone TEXT,
     email TEXT,
-    cover_image_url TEXT,
+    cover_image_url TEXT[],
     is_active BOOLEAN,
     FOREIGN KEY (location_id) REFERENCES location(id_location)
 );
@@ -729,6 +733,8 @@ CREATE TABLE user (
     name TEXT NOT NULL,
     lastname TEXT,
     phone TEXT,
+    birthdate TEXT,
+    age INTEGER,
     document_type TEXT,
     document_number TEXT UNIQUE,
     avatar_url TEXT,
@@ -761,7 +767,7 @@ CREATE TABLE reservation (
     adults INTEGER DEFAULT 1,
     children INTEGER DEFAULT 0,
     special_requests TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_at DATETIME,
     FOREIGN KEY (user_id) REFERENCES user(id_user),
     FOREIGN KEY (room_id) REFERENCES room(id_room)
 );
@@ -834,7 +840,7 @@ CREATE TABLE loyalty_transaction (
     type TEXT NOT NULL,
     stars INTEGER NOT NULL,
     description TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_at DATETIME,
     FOREIGN KEY (user_id) REFERENCES user(id_user),
     FOREIGN KEY (reservation_id) REFERENCES reservation(id_reservation),
     FOREIGN KEY (reward_redemption_id) REFERENCES reward_redemption(id_reward_redemption)
@@ -858,7 +864,7 @@ CREATE TABLE reward_redemption (
     reservation_id TEXT,
     stars_spent INTEGER NOT NULL,
     status TEXT DEFAULT 'pending',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_at DATETIME,
     FOREIGN KEY (user_id) REFERENCES user(id_user),
     FOREIGN KEY (reward_id) REFERENCES reward(id_reward),
     FOREIGN KEY (reservation_id) REFERENCES reservation(id_reservation)
@@ -872,7 +878,7 @@ CREATE TABLE review (
     hotel_id TEXT NOT NULL,
     rating INTEGER CHECK (rating BETWEEN 1 AND 5),
     comment TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_at DATETIME,
     FOREIGN KEY (reservation_id) REFERENCES reservation(id_reservation),
     FOREIGN KEY (user_id) REFERENCES user(id_user),
     FOREIGN KEY (hotel_id) REFERENCES hotel(id_hotel)
@@ -887,7 +893,7 @@ CREATE TABLE notification (
     body TEXT NOT NULL,
     type TEXT,
     is_read BOOLEAN,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_at DATETIME,
     FOREIGN KEY (user_id) REFERENCES user(id_user),
     FOREIGN KEY (reservation_id) REFERENCES reservation(id_reservation)
 );
@@ -905,6 +911,8 @@ CREATE TABLE notification (
 | country | TEXT | NOT NULL      | País                     |
 | city    | TEXT | NOT NULL      | Ciudad                   |
 | state   | TEXT | NOT NULL      | Provincia / Estado       |
+|longitude  | FLOAT | | Longitud
+|latitude   | FLOAT | | Latitud
 
 ### hotels
 
@@ -917,7 +925,7 @@ CREATE TABLE notification (
 | stars           | INTEGER | CHECK 1–5      | Categoría en estrellas   |
 | phone           | TEXT    |                | Teléfono de contacto     |
 | email           | TEXT    |                | Email de contacto        |
-| cover_image_url | TEXT    |                | URL imagen principal     |
+| cover_image_url | TEXT[]    |                | URL imagen principal     |
 | is_active       | INTEGER | DEFAULT 1      | 1 = activo, 0 = inactivo |
 
 ### room_types
@@ -944,20 +952,22 @@ CREATE TABLE notification (
 
 ### users
 
-| Columna              | Tipo    | Restricciones    | Descripción                           |
-| -------------------- | ------- | ---------------- | ------------------------------------- |
-| id                   | TEXT    | PK               | UUID identificador único              |
-| email                | TEXT    | NOT NULL, UNIQUE | Correo electrónico (usado para login) |
-| password_hash        | TEXT    | NOT NULL         | Hash de la contraseña (bcrypt)        |
-| name                 | TEXT    | NOT NULL         | Nombre                                |
-| lastname             | TEXT    | NOT NULL         | Apellido                              |
-| phone                | TEXT    |                  | Teléfono                              |
-| document_type        | TEXT    |                  | DNI / Pasaporte / CE                  |
-| document_number      | TEXT    | UNIQUE           | Número de documento                   |
-| avatar_url           | TEXT    |                  | URL foto de perfil                    |
-| nationality          | TEXT    |                  | Nacionalidad                          |
-| reset_password_token | INTEGER |                  | Token para restablecer contraseña     |
-| status               | BOOLEAN |                  | TRUE = activo, FALSE = inactivo       |
+| Columna | Tipo | Restricciones | Descripción |
+|---|---|---|---|
+| id | TEXT | PK | UUID identificador único |
+| email | TEXT | NOT NULL, UNIQUE | Correo electrónico (usado para login) |
+| password_hash | TEXT | NOT NULL | Hash de la contraseña (bcrypt) |
+| name | TEXT | NOT NULL | Nombre |
+| lastname | TEXT | NOT NULL | Apellido |
+| phone | TEXT | | Teléfono |
+| birthdate | TEXT | | Fecha de nacimiento |
+| age | INTEGER | | Edad |
+| document_type | TEXT | | DNI / Pasaporte / CE |
+| document_number | TEXT | UNIQUE | Número de documento |
+| avatar_url | TEXT | | URL foto de perfil |
+| nationality | TEXT | | Nacionalidad |
+| reset_password_token | INTEGER | | Token para restablecer contraseña |
+| status | BOOLEAN | | TRUE = activo, FALSE = inactivo |
 
 ### guests
 
@@ -985,7 +995,7 @@ CREATE TABLE notification (
 | adults           | INTEGER  | DEFAULT 1                 | Cantidad de adultos                           |
 | children         | INTEGER  | DEFAULT 0                 | Cantidad de niños                             |
 | special_requests | TEXT     |                           | Solicitudes especiales                        |
-| created_at       | DATETIME | DEFAULT CURRENT_TIMESTAMP | Fecha de creación                             |
+| created_at       | DATETIME | | Fecha de creación                             |
 
 ### payments
 
@@ -1009,7 +1019,7 @@ CREATE TABLE notification (
 | hotel_id       | TEXT     | FK → hotels               | Hotel reseñado                |
 | rating         | INTEGER  | CHECK 1–5                 | Calificación                  |
 | comment        | TEXT     |                           | Comentario                    |
-| created_at     | DATETIME | DEFAULT CURRENT_TIMESTAMP | Fecha de la reseña            |
+| created_at     | DATETIME |  | Fecha de la reseña            |
 
 ### amenities
 
@@ -1065,7 +1075,7 @@ CREATE TABLE notification (
 | type                 | TEXT     | NOT NULL                          | earned / redeemed / bonus / expired     |
 | stars                | INTEGER  | NOT NULL                          | Positivo = ganadas, negativo = gastadas |
 | description          | TEXT     |                                   | Motivo del movimiento                   |
-| created_at           | DATETIME | DEFAULT CURRENT_TIMESTAMP         | Fecha del movimiento                    |
+| created_at           | DATETIME |          | Fecha del movimiento                    |
 
 ### rewards
 
@@ -1088,7 +1098,7 @@ CREATE TABLE notification (
 | reservation_id | TEXT     | FK → reservations, nullable | Reserva asociada (opcional) |
 | stars_spent    | INTEGER  | NOT NULL                    | Estrellas utilizadas        |
 | status         | TEXT     | DEFAULT 'pending'           | pending / applied / expired |
-| created_at     | DATETIME | DEFAULT CURRENT_TIMESTAMP   | Fecha del canje             |
+| created_at     | DATETIME |    | Fecha del canje             |
 
 ### notifications
 
@@ -1101,7 +1111,7 @@ CREATE TABLE notification (
 | body           | TEXT     | NOT NULL                    | Cuerpo del mensaje              |
 | type           | TEXT     |                             | confirmation / reminder / promo |
 | is_read        | INTEGER  | DEFAULT 0                   | 0 = no leída, 1 = leída         |
-| created_at     | DATETIME | DEFAULT CURRENT_TIMESTAMP   | Fecha de creación               |
+| created_at     | DATETIME | | Fecha de creación               |
 
 ## 8. Mockups en orden
 

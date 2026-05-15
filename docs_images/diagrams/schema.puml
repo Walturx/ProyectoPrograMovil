@@ -8,6 +8,8 @@ entity "locations" as Locations {
   --
   country : TEXT
   city : TEXT
+  longitude : FLOAT 
+  latitude : FLOAT 
   state : TEXT
 }
 
@@ -20,7 +22,7 @@ entity "hotels" as Hotels {
   stars : INTEGER
   phone : TEXT
   email : TEXT
-  cover_image_url : TEXT
+  cover_image_url : TEXT[]
   is_active : BOOLEAN
 }
 
@@ -52,6 +54,8 @@ entity "users" as Users {
   name : TEXT
   lastname : TEXT
   phone : TEXT
+  birthdate : TEXT
+  age : INTEGER
   document_type : TEXT
   document_number : TEXT
   avatar_url : TEXT
