@@ -1,0 +1,30 @@
+
+
+[
+  {
+    "id": "rw1",
+    "name": "Helado Premium",
+    "description": "Helado gratis",
+    "stars_cost": 5,
+    "type": "food",
+    "is_active": true
+  },
+
+  {
+    "id": "rw2",
+    "name": "Chicha Gratis",
+    "description": "Bebida gratis",
+    "stars_cost": 4,
+    "type": "drink",
+    "is_active": true
+  },
+
+  {
+    "id": "rw3",
+    "name": "1 Noche Gratis",
+    "description": "Hospedaje gratis",
+    "stars_cost": 30,
+    "type": "hotel",
+    "is_active": true
+  }
+]

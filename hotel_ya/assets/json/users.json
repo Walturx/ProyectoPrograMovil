@@ -1,0 +1,15 @@
+[
+  {
+    "id": "u1",
+    "email": "juan@email.com",
+    "password_hash": "123456",
+    "name": "Juan",
+    "lastname": "Pérez",
+    "phone": "+51 999999999",
+    "document_type": "DNI",
+    "document_number": "12345678",
+    "avatar_url": "https://i.pravatar.cc/300",
+    "nationality": "Peruano",
+    "stars": 40
+  }
+]

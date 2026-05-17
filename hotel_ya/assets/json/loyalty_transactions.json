@@ -1,0 +1,43 @@
+
+
+[
+  {
+    "id": "lt1",
+    "user_id": "u1",
+    "type": "earned",
+    "stars": 5,
+    "description": "Reserva completada",
+    "hotel_name": "Hotel Paradise",
+    "created_at": "2024-03-12"
+  },
+
+  {
+    "id": "lt2",
+    "user_id": "u1",
+    "type": "spent",
+    "stars": 5,
+    "description": "Helado Premium",
+    "hotel_name": null,
+    "created_at": "2024-03-13"
+  },
+
+  {
+    "id": "lt3",
+    "user_id": "u1",
+    "type": "spent",
+    "stars": 5,
+    "description": "Helado Premium",
+    "hotel_name": null,
+    "created_at": "2024-03-15"
+  },
+
+  {
+    "id": "lt4",
+    "user_id": "u1",
+    "type": "spent",
+    "stars": 30,
+    "description": "1 Noche Gratis",
+    "hotel_name": null,
+    "created_at": "2024-03-20"
+  }
+]

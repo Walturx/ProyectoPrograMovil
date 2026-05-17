@@ -1,0 +1,23 @@
+
+
+[
+  {
+    "id": "rr1",
+    "user_id": "u1",
+    "reward_id": "rw1",
+    "reservation_id": null,
+    "stars_spent": 5,
+    "status": "completed",
+    "created_at": "2024-03-13"
+  },
+
+  {
+    "id": "rr2",
+    "user_id": "u1",
+    "reward_id": "rw3",
+    "reservation_id": "res1",
+    "stars_spent": 30,
+    "status": "completed",
+    "created_at": "2024-03-20"
+  }
+]
