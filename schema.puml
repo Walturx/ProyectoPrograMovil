@@ -58,6 +58,7 @@ entity "users" as U {
   document_number : TEXT
   avatar_url : TEXT
   nationality : TEXT
+  stars_available : INTEGER
 }
 
 entity "guests" as G {

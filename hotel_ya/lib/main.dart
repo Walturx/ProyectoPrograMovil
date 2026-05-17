@@ -1,23 +1,43 @@
 import 'package:flutter/material.dart';
 
+import 'package:get/get.dart';
+
 import 'theme/app_theme.dart';
 
 import 'pages/profile/profile_page.dart';
 import 'pages/rewards_shop/rewards_shop_page.dart';
+import 'pages/rewards_shop/rewards_shop_controller.dart';
 import 'pages/qr_reward/qr_reward_page.dart';
 import 'pages/history/history_page.dart';
+import 'pages/qr_reward/qr_reward_controller.dart';
 
 void main() {
-  runApp(const MyApp());
+
+  /// REGISTER CONTROLLERS
+  Get.put(
+    RewardsShopController(),
+  );
+
+  Get.put(
+    QRRewardController(),
+  );
+
+  runApp(
+    const MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+
+  const MyApp({
+    super.key,
+  });
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+
+    return GetMaterialApp(
 
       title: 'HotelYa',
 
@@ -37,25 +57,33 @@ class MyApp extends StatelessWidget {
       // This works for code too, not just values:
       // Most code changes can be tested with just a hot reload.
 
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner:
+          false,
 
       // TRY THIS:
       // Change the page below to preview different screens.
       //
       // Example:
       //
-      // home: const RewardsShopPage(),
+      // home: RewardsShopPage(),
       // home: const QRRewardPage(),
       // home: const HistoryPage(),
       //
       // Then use hot reload or hot restart.
-      home: const ProfilePage(),
+
+      home: ProfilePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+
+  const MyHomePage({
+
+    super.key,
+
+    required this.title,
+  });
 
   // This widget is the home page of your application.
   // It is stateful, meaning that it has a State object
@@ -126,7 +154,8 @@ class _MyHomePageState
         // that was created by the App.build method,
         // and use it to set our appbar title.
 
-        title: Text(widget.title),
+        title:
+            Text(widget.title),
       ),
 
       body: Center(
@@ -166,6 +195,7 @@ class _MyHomePageState
             ),
 
             Text(
+
               '$_counter',
 
               style:
@@ -180,11 +210,13 @@ class _MyHomePageState
       floatingActionButton:
           FloatingActionButton(
 
-        onPressed: _incrementCounter,
+        onPressed:
+            _incrementCounter,
 
         tooltip: 'Increment',
 
-        child: const Icon(Icons.add),
+        child:
+            const Icon(Icons.add),
       ),
     );
   }
