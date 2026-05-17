@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../widgets/custom_bottom_nav.dart';
+import '../../widgets/custom_bottom_nav.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -169,7 +169,7 @@ class _HistoryPageState
 
       bottomNavigationBar:
           const CustomBottomNav(
-        currentIndex: 0,
+        currentIndex: 1,
       ),
 
       body: SafeArea(

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'theme/app_theme.dart';
 
-import 'pages/profile_page.dart';
-import 'pages/rewards_shop_page.dart';
-import 'pages/qr_reward_page.dart';
-import 'pages/history_page.dart';
+import 'pages/profile/profile_page.dart';
+import 'pages/rewards_shop/rewards_shop_page.dart';
+import 'pages/qr_reward/qr_reward_page.dart';
+import 'pages/history/history_page.dart';
 
 void main() {
   runApp(const MyApp());

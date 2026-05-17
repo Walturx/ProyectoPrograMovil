@@ -1,12 +1,12 @@
-// lib/pages/profile_page.dart
 
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../widgets/custom_bottom_nav.dart';
-import '../widgets/info_tile.dart';
+import '../../widgets/custom_bottom_nav.dart';
+import '../../widgets/info_tile.dart';
+import '../history/history_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -845,6 +845,26 @@ class _ProfilePageState
                           BorderRadius
                               .circular(
                                   20),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HistoryPage()),
+                    );
+                  },
+                  icon: const Icon(Icons.history),
+                  label: const Text("Ver historial"),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 18),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                 ),

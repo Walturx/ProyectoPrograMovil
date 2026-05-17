@@ -5,8 +5,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../widgets/custom_bottom_nav.dart';
-import 'qr_reward_page.dart';
+import '../../widgets/custom_bottom_nav.dart';
+import '../qr_reward/qr_reward_page.dart';
 
 class RewardsShopPage extends StatefulWidget {
   const RewardsShopPage({super.key});

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../pages/history_page.dart';
-import '../pages/profile_page.dart';
-import '../pages/rewards_shop_page.dart';
-import '../pages/qr_reward_page.dart';
+import '../pages/history/history_page.dart';
+import '../pages/profile/profile_page.dart';
+import '../pages/reservation/reservation_page.dart';
+import '../pages/rewards_shop/rewards_shop_page.dart';
+import '../pages/qr_reward/qr_reward_page.dart';
 
 class CustomBottomNav extends StatelessWidget {
 
@@ -24,7 +25,7 @@ class CustomBottomNav extends StatelessWidget {
     switch (index) {
 
       case 0:
-        page = const HistoryPage();
+        page = const ReservationPage();
         break;
 
       case 1:
@@ -33,10 +34,6 @@ class CustomBottomNav extends StatelessWidget {
 
       case 2:
         page = const RewardsShopPage();
-        break;
-
-      case 3:
-        page = const QRRewardPage();
         break;
 
       default:
@@ -72,9 +69,9 @@ class CustomBottomNav extends StatelessWidget {
       destinations: const [
 
         NavigationDestination(
-          icon: Icon(Icons.history),
-          selectedIcon: Icon(Icons.history),
-          label: 'Historial',
+          icon: Icon(Icons.search),
+          selectedIcon: Icon(Icons.search),
+          label: 'Buscar',
         ),
 
         NavigationDestination(
@@ -91,12 +88,6 @@ class CustomBottomNav extends StatelessWidget {
               Icon(Icons.card_giftcard),
 
           label: 'Tienda',
-        ),
-
-        NavigationDestination(
-          icon: Icon(Icons.qr_code_outlined),
-          selectedIcon: Icon(Icons.qr_code),
-          label: 'QR',
         ),
       ],
     );

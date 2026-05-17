@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../widgets/custom_bottom_nav.dart';
+import '../../widgets/custom_bottom_nav.dart';
 
 class QRRewardPage extends StatefulWidget {
   const QRRewardPage({super.key});
@@ -163,7 +163,7 @@ class _QRRewardPageState
 
       bottomNavigationBar:
           const CustomBottomNav(
-        currentIndex: 3,
+        currentIndex: 2,
       ),
 
       body: SafeArea(
