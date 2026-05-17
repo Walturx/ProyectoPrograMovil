@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import 'package:qr_flutter/qr_flutter.dart';
-
 /// CONTROLLER
 import '../../pages/qr_reward/qr_reward_controller.dart';
 
@@ -27,6 +25,7 @@ class QRRewardQRCard
                 QRRewardController>();
 
     return Obx(() {
+      print(controller.qrData.value);
 
       return Container(
 
@@ -70,13 +69,14 @@ class QRRewardQRCard
 
               padding:
                   const EdgeInsets
-                      .all(30),
+                      .all(20),
 
               decoration:
                   BoxDecoration(
 
                 color:
-                    Colors.white,
+                    const Color(
+                        0xFFF8F6F1),
 
                 borderRadius:
                     BorderRadius
@@ -84,20 +84,15 @@ class QRRewardQRCard
                             24),
               ),
 
-              child: QrImageView(
+              child: Image.network(
 
-                data:
-                    controller
-                        .qrData
-                        .value,
+                "https://quickchart.io/qr"
+                "?size=250"
+                "&text=${controller.qrData.value}",
 
-                version:
-                    QrVersions.auto,
+                width: 220,
 
-                size: 320,
-
-                backgroundColor:
-                    Colors.white,
+                height: 220,
               ),
             ),
 

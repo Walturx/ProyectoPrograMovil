@@ -26,13 +26,29 @@ class QRRewardService {
   /// GENERATE QR DATA
   String generateQRData({
 
-    required int userId,
+    required String  userId,
 
     required RewardModel reward,
 
     required int remainingStars,
   }) {
 
-        return "https://google.com";
+    return jsonEncode({
+
+      "reward_id":
+          reward.id,
+
+      "reward":
+          reward.name,
+
+      "stars":
+          reward.starsCost,
+
+      "remaining":
+          remainingStars,
+
+      "user":
+          userId,
+    });
   }
 }

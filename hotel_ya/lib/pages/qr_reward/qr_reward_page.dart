@@ -27,9 +27,10 @@ class QRRewardPage
 
   /// CONTROLLER
   QRRewardController
-      get controller =>
-          Get.find<
-              QRRewardController>();
+    get controller =>
+        Get.put(
+          QRRewardController(),
+        );
 
   @override
   Widget build(

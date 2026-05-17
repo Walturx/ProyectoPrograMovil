@@ -18,9 +18,6 @@ void main() {
     RewardsShopController(),
   );
 
-  Get.put(
-    QRRewardController(),
-  );
 
   runApp(
     const MyApp(),
