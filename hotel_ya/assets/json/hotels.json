@@ -1,0 +1,71 @@
+{
+  "count": 6,
+  "hotels": [
+    {
+      "id": "h1",
+      "location_id": "loc1",
+      "name": "Hotel Paradise",
+      "description": "Un lujoso hotel frente al mar con vistas espectaculares y servicio de primera clase.",
+      "stars": 5,
+      "phone": "+51 1 234 5678",
+      "email": "contacto@hotelparadise.com",
+      "cover_image_url": "https://images.unsplash.com/photo-1566073771259-6a8506099945",
+      "is_active": true
+    },
+    {
+      "id": "h2",
+      "location_id": "loc2",
+      "name": "Ocean View Hotel",
+      "description": "Hotel boutique con diseño moderno y acceso directo a la playa.",
+      "stars": 4,
+      "phone": "+51 1 345 6789",
+      "email": "reservas@oceanview.com",
+      "cover_image_url": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa",
+      "is_active": true
+    },
+    {
+      "id": "h3",
+      "location_id": "loc3",
+      "name": "Grand Lima Hotel",
+      "description": "Ubicado en el corazón de Miraflores, ideal para viajes de negocios y turismo.",
+      "stars": 4,
+      "phone": "+51 1 456 7890",
+      "email": "info@grandlima.com",
+      "cover_image_url": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb",
+      "is_active": true
+    },
+    {
+      "id": "h4",
+      "location_id": "loc4",
+      "name": "Cusco Imperial",
+      "description": "Hotel colonial restaurado con vistas a la Plaza de Armas y spa andino.",
+      "stars": 5,
+      "phone": "+51 84 567 890",
+      "email": "reservas@cuscoimperial.com",
+      "cover_image_url": "https://images.unsplash.com/photo-1445019980597-93fa8acb246c",
+      "is_active": true
+    },
+    {
+      "id": "h5",
+      "location_id": "loc5",
+      "name": "Arequipa Plaza Hotel",
+      "description": "Hotel familiar con piscina temperada y restaurante de comida arequipeña.",
+      "stars": 3,
+      "phone": "+51 54 678 901",
+      "email": "contacto@arequipaplaza.com",
+      "cover_image_url": "https://images.unsplash.com/photo-1564501049412-61c2a3083791",
+      "is_active": true
+    },
+    {
+      "id": "h6",
+      "location_id": "loc1",
+      "name": "Sunset Beach Resort",
+      "description": "Resort todo incluido con actividades acuáticas y entretenimiento nocturno.",
+      "stars": 4,
+      "phone": "+51 1 789 0123",
+      "email": "info@sunsetbeach.com",
+      "cover_image_url": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4",
+      "is_active": false
+    }
+  ]
+}

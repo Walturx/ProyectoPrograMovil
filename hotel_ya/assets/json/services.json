@@ -1,0 +1,86 @@
+[
+  {
+    "id": "s1",
+    "hotel_id": "h1",
+    "name": "Desayuno Buffet",
+    "price": 25.00,
+    "description": "Desayuno completo con opciones internacionales y locales."
+  },
+  {
+    "id": "s2",
+    "hotel_id": "h1",
+    "name": "Spa & Masajes",
+    "price": 80.00,
+    "description": "Sesión de relajación con masaje corporal completo."
+  },
+  {
+    "id": "s3",
+    "hotel_id": "h1",
+    "name": "Traslado Aeropuerto",
+    "price": 45.00,
+    "description": "Servicio de transporte privado al aeropuerto."
+  },
+  {
+    "id": "s4",
+    "hotel_id": "h1",
+    "name": "Lavandería Express",
+    "price": 15.00,
+    "description": "Servicio de lavado y planchado en 4 horas."
+  },
+  {
+    "id": "s5",
+    "hotel_id": "h2",
+    "name": "Desayuno Continental",
+    "price": 18.00,
+    "description": "Desayuno ligero con café, jugos y panes."
+  },
+  {
+    "id": "s6",
+    "hotel_id": "h2",
+    "name": "Tour en Bote",
+    "price": 60.00,
+    "description": "Paseo en bote por la costa con guía turístico."
+  },
+  {
+    "id": "s7",
+    "hotel_id": "h3",
+    "name": "Room Service 24h",
+    "price": 10.00,
+    "description": "Servicio de comida a la habitación disponible las 24 horas."
+  },
+  {
+    "id": "s8",
+    "hotel_id": "h3",
+    "name": "Gimnasio Premium",
+    "price": 0.00,
+    "description": "Acceso gratuito al gimnasio equipado con máquinas modernas."
+  },
+  {
+    "id": "s9",
+    "hotel_id": "h4",
+    "name": "Tour Cultural",
+    "price": 35.00,
+    "description": "Recorrido guiado por sitios históricos de Cusco."
+  },
+  {
+    "id": "s10",
+    "hotel_id": "h4",
+    "name": "Spa Andino",
+    "price": 70.00,
+    "description": "Tratamiento spa con ingredientes andinos tradicionales."
+  },
+  {
+    "id": "s11",
+    "hotel_id": "h5",
+    "name": "Piscina Temperada",
+    "price": 0.00,
+    "description": "Acceso gratuito a piscina climatizada y área de descanso."
+  },
+  {
+    "id": "s12",
+    "hotel_id": "h6",
+    "name": "Actividades Acuáticas",
+    "price": 50.00,
+    "description": "Kayak, snorkel y deportes acuáticos incluidos."
+  }
+]

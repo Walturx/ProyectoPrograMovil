@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hotel_ya/pages/hotel/hotel_page.dart';
+import 'package:hotel_ya/pages/rooms/rooms_page.dart';
+import 'pages/search/search_page.dart';
 
 import 'theme/app_theme.dart';
 
@@ -18,7 +21,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-
       title: 'HotelYa',
 
       theme: AppTheme.lightTheme,
@@ -36,7 +38,6 @@ class MyApp extends StatelessWidget {
       //
       // This works for code too, not just values:
       // Most code changes can be tested with just a hot reload.
-
       debugShowCheckedModeBanner: false,
 
       // TRY THIS:
@@ -49,7 +50,45 @@ class MyApp extends StatelessWidget {
       // home: const HistoryPage(),
       //
       // Then use hot reload or hot restart.
-      home: const ProfilePage(),
+      // home: const ProfilePage(),
+      // home: const SearchPage(),
+      // home: const SearchPage(),
+      /* home: HotelPage(
+        hotel: {
+          "id": "h1",
+          "location_id": "loc1",  
+          "name": "Hotel Paradise",
+          "description":
+              "Un lujoso hotel frente al mar con vistas espectaculares y servicio de primera clase.",
+          "stars": 5,
+          "phone": "+51 1 234 5678",
+          "email": "contacto@hotelparadise.com",
+          "cover_image_url":
+              "https://images.unsplash.com/photo-1566073771259-6a8506099945",
+          "is_active": true,
+        },
+      ),*/
+      home: RoomPage(
+        hotel: {
+          "id": "h1",
+          "name": "Hotel Paradise",
+          "stars": 5,
+          "phone": "+51 1 234 5678",
+          "email": "contacto@hotelparadise.com",
+          "cover_image_url":
+              "https://images.unsplash.com/photo-1566073771259-6a8506099945",
+        },
+        room: {
+          "id": "r1",
+          "hotel_id": "h1",
+          "room_type_id": "rt1",
+          "room_number": "101",
+          "floor": 1,
+          "is_available": true,
+          "image_url":
+              "https://images.unsplash.com/photo-1631049307264-da0ec9d70304",
+        },
+      ),
     );
   }
 }
@@ -71,19 +110,14 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  State<MyHomePage> createState() =>
-      _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState
-    extends State<MyHomePage> {
-
+class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   void _incrementCounter() {
-
     setState(() {
-
       // This call to setState tells the Flutter framework
       // that something has changed in this State,
       // which causes it to rerun the build method below
@@ -99,7 +133,6 @@ class _MyHomePageState
 
   @override
   Widget build(BuildContext context) {
-
     // This method is rerun every time setState is called,
     // for instance as done by the _incrementCounter method above.
     //
@@ -109,34 +142,24 @@ class _MyHomePageState
     // having to individually change instances of widgets.
 
     return Scaffold(
-
       appBar: AppBar(
-
         // TRY THIS:
         // Try changing the color here to a specific color
         // and trigger a hot reload to see the AppBar
         // change color while the other colors stay the same.
-
-        backgroundColor:
-            Theme.of(context)
-                .colorScheme
-                .inversePrimary,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
 
         // Here we take the value from the MyHomePage object
         // that was created by the App.build method,
         // and use it to set our appbar title.
-
         title: Text(widget.title),
       ),
 
       body: Center(
-
         // Center is a layout widget.
         // It takes a single child and positions it
         // in the middle of the parent.
-
         child: Column(
-
           // Column is also a layout widget.
           // It takes a list of children and
           // arranges them vertically.
@@ -155,31 +178,21 @@ class _MyHomePageState
           // TRY THIS:
           // Invoke "debug painting"
           // to see the wireframe for each widget.
-
-          mainAxisAlignment:
-              MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
 
           children: [
-
-            const Text(
-              'You have pushed the button this many times:',
-            ),
+            const Text('You have pushed the button this many times:'),
 
             Text(
               '$_counter',
 
-              style:
-                  Theme.of(context)
-                      .textTheme
-                      .headlineMedium,
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],
         ),
       ),
 
-      floatingActionButton:
-          FloatingActionButton(
-
+      floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
 
         tooltip: 'Increment',
