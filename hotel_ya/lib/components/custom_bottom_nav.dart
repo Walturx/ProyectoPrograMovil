@@ -6,6 +6,7 @@ import '../pages/reservation/reservation_page.dart';
 import '../pages/rewards_shop/rewards_shop_page.dart';
 import '../pages/qr_reward/qr_reward_page.dart';
 
+
 class CustomBottomNav extends StatelessWidget {
 
   final int currentIndex;
@@ -29,15 +30,15 @@ class CustomBottomNav extends StatelessWidget {
         break;
 
       case 1:
-        page = const ProfilePage();
+        page = ProfilePage();
         break;
 
       case 2:
-        page = const RewardsShopPage();
+        page = RewardsShopPage();
         break;
 
       default:
-        page = const ProfilePage();
+        page =  ProfilePage();
     }
 
     Navigator.pushReplacement(
