@@ -1,0 +1,30 @@
+[
+  {
+    "id": "rt1",
+    "name": "Estándar",
+    "description": "Habitación cómoda con cama doble, baño privado y TV.",
+    "base_price": 120.00,
+    "capacity": 2
+  },
+  {
+    "id": "rt2",
+    "name": "Suite Deluxe",
+    "description": "Suite amplia con sala de estar, minibar y vista panorámica.",
+    "base_price": 280.00,
+    "capacity": 3
+  },
+  {
+    "id": "rt3",
+    "name": "Junior Suite",
+    "description": "Habitación premium con escritorio, sofá y balcón privado.",
+    "base_price": 200.00,
+    "capacity": 2
+  },
+  {
+    "id": "rt4",
+    "name": "Familiar",
+    "description": "Habitación espaciosa con dos camas dobles ideal para familias.",
+    "base_price": 350.00,
+    "capacity": 5
+  }
+]

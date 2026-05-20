@@ -1,0 +1,52 @@
+[
+  {
+    "id": "rev1",
+    "reservation_id": "res1",
+    "user_id": "u1",
+    "hotel_id": "h1",
+    "rating": 5,
+    "comment": "Excelente hotel, las vistas son increíbles y el servicio de primera.",
+    "created_at": "2026-05-14",
+    "user_name": "Carlos Mendoza"
+  },
+  {
+    "id": "rev2",
+    "reservation_id": "res2",
+    "user_id": "u1",
+    "hotel_id": "h1",
+    "rating": 4,
+    "comment": "Muy buena experiencia, solo el check-in fue un poco lento.",
+    "created_at": "2026-04-20",
+    "user_name": "María López"
+  },
+  {
+    "id": "rev3",
+    "reservation_id": "res3",
+    "user_id": "u1",
+    "hotel_id": "h2",
+    "rating": 5,
+    "comment": "El mejor hotel boutique que he visitado. Totalmente recomendado.",
+    "created_at": "2026-03-15",
+    "user_name": "Ana García"
+  },
+  {
+    "id": "rev4",
+    "reservation_id": "res4",
+    "user_id": "u1",
+    "hotel_id": "h3",
+    "rating": 4,
+    "comment": "Ubicación perfecta en Miraflores, cerca de todo.",
+    "created_at": "2026-04-10",
+    "user_name": "Jorge Ramírez"
+  },
+  {
+    "id": "rev5",
+    "reservation_id": "res5",
+    "user_id": "u1",
+    "hotel_id": "h4",
+    "rating": 5,
+    "comment": "El spa andino es una experiencia única. Hotel hermoso.",
+    "created_at": "2026-05-01",
+    "user_name": "Lucía Torres"
+  }
+]
