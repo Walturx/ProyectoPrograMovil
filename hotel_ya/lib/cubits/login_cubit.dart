@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:hotel_ya/cubits/auth_state.dart';
+import 'package:hotel_ya/cubits/login_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());

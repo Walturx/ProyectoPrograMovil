@@ -1,6 +1,7 @@
 // lib/components/profile/profile_header.dart
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart' show Obx;
 
 /// CONTROLLER
 import '../../pages/profile/profile_controller.dart';
@@ -26,7 +27,7 @@ class ProfileHeader
   @override
   Widget build(BuildContext context) {
 
-    return Container(
+    return Obx(() => Container(
 
       width: double.infinity,
 
@@ -224,6 +225,6 @@ class ProfileHeader
           ),
         ],
       ),
-    );
+    ));
   }
 }

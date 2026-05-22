@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hotel_ya/cubits/auth_cubit.dart';
-import 'package:hotel_ya/cubits/auth_state.dart';
+import 'package:hotel_ya/cubits/login_cubit.dart';
+import 'package:hotel_ya/cubits/login_state.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: size.height * 0.03),
                 Center(
                   child: Image.asset(
-                    'assets/logo.jpeg',
+                    'assets/logo.png',
                     width: size.height * 0.25,
                     height: size.height * 0.25,
                     fit: BoxFit.contain,
@@ -282,6 +282,14 @@ class _LoginPageState extends State<LoginPage> {
                         : '¿Ya tienes cuenta? Inicia sesión',
                   ),
                 ),
+                const SizedBox(height: 12),
+                if (isLogin)
+                  TextButton(
+                    onPressed: () {
+                      context.go('/forgot_password');
+                    },
+                    child: const Text('¿Olvidaste tu contraseña?'),
+                  ),
               ],
             ),
           ),

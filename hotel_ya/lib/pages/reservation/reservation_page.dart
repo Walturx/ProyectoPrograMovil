@@ -16,23 +16,26 @@ class _ReservationPageState extends State<ReservationPage> {
 
   // Selector de hora
   Widget _buildHourPicker({required bool isCheckIn}) {
-    return SizedBox(
-      height: 80,
-      child: ListWheelScrollView.useDelegate(
-        itemExtent: 40,
-        physics: const FixedExtentScrollPhysics(),
-        onSelectedItemChanged: (index) {
-          if (isCheckIn) {
-            control.checkInHour.value = index + 6;
-          } else {
-            control.checkOutHour.value = index + 6;
-          }
-        },
-        childDelegate: ListWheelChildBuilderDelegate(
-          builder: (context, index) {
-            if (index >= 0 && index <= 16) return Center(child: Text("${index + 6}:00"));
-            return null;
+    return Container(
+      child: SizedBox(
+        height: 80,
+        child: ListWheelScrollView.useDelegate(
+          itemExtent: 40,
+          physics: const FixedExtentScrollPhysics(),
+          onSelectedItemChanged: (index) {
+            if (isCheckIn) {
+              control.checkInHour.value = index + 6;
+            } else {
+              control.checkOutHour.value = index + 6;
+            }
           },
+          childDelegate: ListWheelChildBuilderDelegate(
+            builder: (context, index) {
+              if (index >= 0 && index <= 16)
+                return Center(child: Text("${index + 6}:00"));
+              return null;
+            },
+          ),
         ),
       ),
     );
@@ -104,7 +107,8 @@ class _ReservationPageState extends State<ReservationPage> {
           initialValue: g.age.toString(),
           decoration: const InputDecoration(labelText: "Edad"),
           keyboardType: TextInputType.number,
-          onChanged: (val) => control.updateGuest(index, age: int.tryParse(val) ?? 0),
+          onChanged: (val) =>
+              control.updateGuest(index, age: int.tryParse(val) ?? 0),
         ),
         const SizedBox(height: 16),
       ],
@@ -126,7 +130,10 @@ class _ReservationPageState extends State<ReservationPage> {
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: [
-            Text("Hotel XXX", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text(
+              "Hotel XXX",
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             Text("HABITACIÓN 102"),
             const SizedBox(height: 16),
 
@@ -134,11 +141,20 @@ class _ReservationPageState extends State<ReservationPage> {
             Text("Indique checkin:"),
             Row(
               children: [
-                TextButton(
-                  onPressed: () => _pickDate(isCheckIn: true),
-                  child: Obx(() => Text(control.checkIn.value != null
-                      ? DateFormat("dd/MM/yyyy").format(control.checkIn.value!)
-                      : "Día")),
+                Container(
+                  decoration: BoxDecoration(),
+                  child: TextButton(
+                    onPressed: () => _pickDate(isCheckIn: true),
+                    child: Obx(
+                      () => Text(
+                        control.checkIn.value != null
+                            ? DateFormat(
+                                "dd/MM/yyyy",
+                              ).format(control.checkIn.value!)
+                            : "Día",
+                      ),
+                    ),
+                  ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(child: _buildHourPicker(isCheckIn: true)),
@@ -150,9 +166,15 @@ class _ReservationPageState extends State<ReservationPage> {
               children: [
                 TextButton(
                   onPressed: () => _pickDate(isCheckIn: false),
-                  child: Obx(() => Text(control.checkOut.value != null
-                      ? DateFormat("dd/MM/yyyy").format(control.checkOut.value!)
-                      : "Día")),
+                  child: Obx(
+                    () => Text(
+                      control.checkOut.value != null
+                          ? DateFormat(
+                              "dd/MM/yyyy",
+                            ).format(control.checkOut.value!)
+                          : "Día",
+                    ),
+                  ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(child: _buildHourPicker(isCheckIn: false)),
@@ -161,17 +183,25 @@ class _ReservationPageState extends State<ReservationPage> {
             const SizedBox(height: 16),
 
             // Invitados
-            Obx(() => Column(
-              children: List.generate(control.numberOfGuests.value, (index) => _buildGuestForm(index)),
-            )),
+            Obx(
+              () => Column(
+                children: List.generate(
+                  control.numberOfGuests.value,
+                  (index) => _buildGuestForm(index),
+                ),
+              ),
+            ),
 
             ElevatedButton(
               onPressed: () {
                 // Validar que check-in y check-out estén seleccionadas
-                if (control.checkIn.value == null || control.checkOut.value == null) {
+                if (control.checkIn.value == null ||
+                    control.checkOut.value == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text("Por favor seleccione fecha de check-in y check-out"),
+                      content: Text(
+                        "Por favor seleccione fecha de check-in y check-out",
+                      ),
                       backgroundColor: Colors.red,
                     ),
                   );
@@ -179,7 +209,9 @@ class _ReservationPageState extends State<ReservationPage> {
                 }
 
                 // Generar lista de invitados con edad, DNI y parentesco
-                final guestData = List.generate(control.numberOfGuests.value, (i) {
+                final guestData = List.generate(control.numberOfGuests.value, (
+                  i,
+                ) {
                   final g = control.guests[i];
                   return {
                     "name": "${g.name} ${g.lastName}",

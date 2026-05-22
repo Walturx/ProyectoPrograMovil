@@ -1,6 +1,7 @@
 //hotel_ya/lib/pages/hotel/hotel_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'hotel_controller.dart';
 
 class HotelPage extends StatelessWidget {
@@ -15,6 +16,17 @@ class HotelPage extends StatelessWidget {
     controller.loadHotelData(hotel['id'].toString());
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text(hotel['name']),
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => context..go('/home'),
+          ),
+        ],
+      ),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -27,13 +39,6 @@ class HotelPage extends StatelessWidget {
               expandedHeight: 280,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
-                title: Text(
-                  hotel['name'],
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    shadows: [Shadow(color: Colors.black54, blurRadius: 10)],
-                  ),
-                ),
                 background: Stack(
                   fit: StackFit.expand,
                   children: [
@@ -297,140 +302,144 @@ class HotelPage extends StatelessWidget {
                         final room = controller.rooms[index];
                         final bool isAvailable = room['is_available'];
 
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 16),
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(22),
-                            border: Border.all(
-                              color: isAvailable
-                                  ? Colors.transparent
-                                  : Colors.red.shade100,
-                              width: 1.5,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
-                                blurRadius: 10,
-                                offset: const Offset(0, 4),
+                        return GestureDetector(
+                          onTap: () => context.go('/reservation'),
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 16),
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(22),
+                              border: Border.all(
+                                color: isAvailable
+                                    ? Colors.transparent
+                                    : Colors.red.shade100,
+                                width: 1.5,
                               ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              /// IMAGEN
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(14),
-                                child: Image.network(
-                                  room['image_url'],
-                                  width: 80,
-                                  height: 80,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Container(
-                                      width: 80,
-                                      height: 80,
-                                      color: Colors.grey.shade200,
-                                      child: const Icon(
-                                        Icons.bed,
-                                        color: Colors.grey,
-                                      ),
-                                    );
-                                  },
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.05),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 4),
                                 ),
-                              ),
+                              ],
+                            ),
+                            child: Row(
+                              children: [
+                                /// IMAGEN
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(14),
+                                  child: Image.network(
+                                    room['image_url'],
+                                    width: 80,
+                                    height: 80,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Container(
+                                        width: 80,
+                                        height: 80,
+                                        color: Colors.grey.shade200,
+                                        child: const Icon(
+                                          Icons.bed,
+                                          color: Colors.grey,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
 
-                              const SizedBox(width: 14),
+                                const SizedBox(width: 14),
 
-                              /// INFO
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                /// INFO
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        room['type_name'],
+                                        style: const TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        "Piso ${room['floor']} · Hab. ${room['room_number']}",
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.people,
+                                            size: 16,
+                                            color: Colors.grey.shade500,
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            "${room['capacity']} personas",
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.grey.shade500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+                                /// PRECIO + ESTADO
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      room['type_name'],
+                                      "\$${room['base_price'].toStringAsFixed(0)}",
                                       style: const TextStyle(
-                                        fontSize: 17,
+                                        fontSize: 20,
                                         fontWeight: FontWeight.bold,
+                                        color: Color(0xFFD4AF37),
                                       ),
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
-                                      "Piso ${room['floor']} · Hab. ${room['room_number']}",
+                                      "/noche",
                                       style: TextStyle(
-                                        fontSize: 13,
-                                        color: Colors.grey.shade600,
+                                        fontSize: 12,
+                                        color: Colors.grey.shade500,
                                       ),
                                     ),
-                                    const SizedBox(height: 6),
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.people,
-                                          size: 16,
-                                          color: Colors.grey.shade500,
+                                    const SizedBox(height: 8),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 4,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: isAvailable
+                                            ? Colors.green.shade50
+                                            : Colors.red.shade50,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Text(
+                                        isAvailable ? "Disponible" : "Ocupada",
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.bold,
+                                          color: isAvailable
+                                              ? Colors.green
+                                              : Colors.red,
                                         ),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          "${room['capacity']} personas",
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            color: Colors.grey.shade500,
-                                          ),
-                                        ),
-                                      ],
+                                      ),
                                     ),
                                   ],
                                 ),
-                              ),
-
-                              /// PRECIO + ESTADO
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    "\$${room['base_price'].toStringAsFixed(0)}",
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFFD4AF37),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    "/noche",
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey.shade500,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: isAvailable
-                                          ? Colors.green.shade50
-                                          : Colors.red.shade50,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Text(
-                                      isAvailable ? "Disponible" : "Ocupada",
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.bold,
-                                        color: isAvailable
-                                            ? Colors.green
-                                            : Colors.red,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         );
                       },

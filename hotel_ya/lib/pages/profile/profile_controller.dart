@@ -117,31 +117,19 @@ class ProfileController extends GetxController {
 
   /// UPDATE PROFILE
   void updateProfile() {
+    if (user.value == null) return;
 
-    user.value =
-        user.value!.copyWith(
-
-      name:
-          nameController.text,
-
-      lastname:
-          lastnameController
-              .text,
-
-      phone:
-          phoneController.text,
-
-      nationality:
-          nationalityController
-              .text,
-
-      documentNumber:
-          documentController
-              .text,
-
-      avatarUrl:
-          avatarController.text,
+    final updated = user.value!.copyWith(
+      name: nameController.text,
+      lastname: lastnameController.text,
+      phone: phoneController.text,
+      nationality: nationalityController.text,
+      documentNumber: documentController.text,
+      avatarUrl: avatarController.text,
     );
+
+    user.value = updated;
+    profileService.updateUser(updated); // persiste en cache de sesión
   }
 
   @override

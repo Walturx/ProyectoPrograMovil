@@ -31,7 +31,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/logo.jpeg',
+              'assets/logo.png',
               width: 120,
               height: 120,
               fit: BoxFit.contain,
@@ -39,10 +39,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
             const SizedBox(height: 24),
             const Text(
               'HotelYa',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 48),
             const CircularProgressIndicator(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class PaymentQRPage extends StatelessWidget {
@@ -19,16 +20,16 @@ class PaymentQRPage extends StatelessWidget {
     final pricePerNight = 150.0;
     final nights = checkOut.difference(checkIn).inDays;
     final total = nights * pricePerNight;
-    final guests = ["Inv. 1: Nombre_completo", "Inv. 2: Nombre_completo", "Inv. 3: Nombre_completo"];
+    final guests = [
+      "Inv. 1: Nombre_completo",
+      "Inv. 2: Nombre_completo",
+      "Inv. 3: Nombre_completo",
+    ];
 
     return Scaffold(
       body: Column(
         children: [
-
-          Container(
-            height: 60,
-            color: const Color(0xFFDDBE5C),
-          ),
+          Container(height: 60, color: const Color(0xFFDDBE5C)),
 
           // Contenido principal
           Expanded(
@@ -52,9 +53,15 @@ class PaymentQRPage extends StatelessWidget {
                   Text("Adultos: $adults"),
                   Text("Infantes: $children"),
                   Text("Usuario: $user"),
-                  Text("Check-in: ${checkIn.day}/${checkIn.month}/${checkIn.year} - ${checkIn.hour} pm"),
-                  Text("Check-out: ${checkOut.day}/${checkOut.month}/${checkOut.year} - ${checkOut.hour} pm"),
-                  Text("Precio por noche: \$${pricePerNight.toStringAsFixed(2)}"),
+                  Text(
+                    "Check-in: ${checkIn.day}/${checkIn.month}/${checkIn.year} - ${checkIn.hour} pm",
+                  ),
+                  Text(
+                    "Check-out: ${checkOut.day}/${checkOut.month}/${checkOut.year} - ${checkOut.hour} pm",
+                  ),
+                  Text(
+                    "Precio por noche: \$${pricePerNight.toStringAsFixed(2)}",
+                  ),
                   Text("Noches: $nights"),
                   Text("Total: \$${total.toStringAsFixed(2)}"),
                   const Divider(height: 20, thickness: 1),
@@ -102,7 +109,7 @@ class PaymentQRPage extends StatelessWidget {
                         // Botón regresar al inicio
                         ElevatedButton.icon(
                           onPressed: () {
-                            Navigator.popUntil(context, (route) => route.isFirst);
+                            context.go('/home');
                           },
                           icon: const Icon(Icons.home),
                           label: const Text("Regresar al inicio"),

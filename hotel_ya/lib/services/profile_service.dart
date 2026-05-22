@@ -7,38 +7,25 @@ import 'package:flutter/services.dart';
 import '../models/user_model.dart';
 
 class ProfileService {
+  // Cache en memoria — persiste durante la sesión
+  UserModel? _cachedUser;
 
   Future<UserModel> fetchUser() async {
+    if (_cachedUser != null) return _cachedUser!;
 
     try {
-
-      /// LOAD JSON
-      String jsonString =
-          await rootBundle.loadString(
-        'assets/json/users.json',
-      );
-
-      /// PARSE JSON
-      final List<dynamic> jsonList =
-          json.decode(jsonString);
-
-      /// CURRENT USER
-      final UserModel user =
-          UserModel.fromJson(
-        jsonList[0],
-      );
-
-      return user;
-
+      final String jsonString =
+          await rootBundle.loadString('assets/json/users.json');
+      final List<dynamic> jsonList = json.decode(jsonString);
+      _cachedUser = UserModel.fromJson(jsonList[0]);
+      return _cachedUser!;
     } catch (e) {
-
-      print(
-        'ERROR PROFILE SERVICE:',
-      );
-
-      print(e);
-
       rethrow;
     }
+  }
+
+  // Guarda los cambios en el cache — los mantiene mientras la app esté abierta
+  void updateUser(UserModel updated) {
+    _cachedUser = updated;
   }
 }

@@ -1,6 +1,7 @@
 // lib/components/profile/profile_info_card.dart
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart' show Obx;
 
 /// CONTROLLER
 import '../../pages/profile/profile_controller.dart';
@@ -24,7 +25,7 @@ class ProfileInfoCard
   @override
   Widget build(BuildContext context) {
 
-    return Card(
+    return Obx(() => Card(
 
       child: Column(
         children: [
@@ -107,6 +108,6 @@ class ProfileInfoCard
           ),
         ],
       ),
-    );
+    ));
   }
 }

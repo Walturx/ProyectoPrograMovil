@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 
 /// COMPONENTS
 import '../../components/custom_bottom_nav.dart';
@@ -18,84 +19,41 @@ import '../../components/qr_reward/qr_reward_footer.dart';
 /// CONTROLLER
 import 'qr_reward_controller.dart';
 
-class QRRewardPage
-    extends StatelessWidget {
-
-  const QRRewardPage({
-    super.key,
-  });
+class QRRewardPage extends StatelessWidget {
+  const QRRewardPage({super.key});
 
   /// CONTROLLER
-  QRRewardController
-    get controller =>
-        Get.put(
-          QRRewardController(),
-        );
+  QRRewardController get controller => Get.put(QRRewardController());
 
   @override
-  Widget build(
-      BuildContext context) {
-
+  Widget build(BuildContext context) {
     return Obx(() {
-
       /// LOADING
-      if (controller
-          .isLoading.value) {
-
-        return const Scaffold(
-
-          body: Center(
-
-            child:
-                CircularProgressIndicator(),
-          ),
-        );
+      if (controller.isLoading.value) {
+        return const Scaffold(body: Center(child: CircularProgressIndicator()));
       }
 
       /// INVALID REWARD
-      if (controller
-              .selectedReward ==
-          null) {
-
-        return const Scaffold(
-
-          body: Center(
-
-            child: Text(
-              "No reward selected",
-            ),
-          ),
-        );
+      if (controller.selectedReward == null) {
+        return const Scaffold(body: Center(child: Text("No reward selected")));
       }
 
       return Scaffold(
+        appBar: AppBar(title: const Text("QR Reward")),
 
         /// BOTTOM NAV
-        bottomNavigationBar:
-            const CustomBottomNav(
-          currentIndex: 2,
-        ),
+        bottomNavigationBar: const CustomBottomNav(currentIndex: 2),
 
         /// BODY
         body: SafeArea(
-
-          child:
-              SingleChildScrollView(
-
+          child: SingleChildScrollView(
             child: Padding(
-
-              padding:
-                  const EdgeInsets.all(
-                      20),
+              padding: const EdgeInsets.all(20),
 
               child: Column(
-
-                crossAxisAlignment:
-                    CrossAxisAlignment
-                        .center,
+                crossAxisAlignment: CrossAxisAlignment.center,
 
                 children: const [
-
                   /// HEADER
                   QRRewardHeader(),
 
