@@ -37,6 +37,20 @@ class QRRewardPage extends StatelessWidget {
       return Scaffold(
         backgroundColor: const Color(0xFFF8F6F1),
 
+        appBar: AppBar(
+          backgroundColor: const Color(0xFFF8F6F1),
+
+          elevation: 0,
+
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+
         bottomNavigationBar: const CustomBottomNav(currentIndex: 2),
 
         body: SafeArea(
@@ -48,7 +62,7 @@ class QRRewardPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
 
                 children: [
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
 
                   /// HEADER
                   const QRRewardHeader(),

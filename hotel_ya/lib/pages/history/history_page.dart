@@ -32,6 +32,20 @@ class HistoryPage extends StatelessWidget {
       return Scaffold(
         backgroundColor: const Color(0xFFF8F6F1),
 
+        appBar: AppBar(
+          backgroundColor: const Color(0xFFF8F6F1),
+
+          elevation: 0,
+
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+
         bottomNavigationBar: const CustomBottomNav(currentIndex: 1),
 
         body: SafeArea(
@@ -42,7 +56,7 @@ class HistoryPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
 
               children: [
-                const SizedBox(height: 28),
+                const SizedBox(height: 10),
 
                 /// RESERVATIONS TITLE
                 const Text(
