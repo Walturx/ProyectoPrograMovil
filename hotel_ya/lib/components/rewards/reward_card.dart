@@ -2,251 +2,144 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:get/get.dart';
-
 /// MODEL
 import '../../models/reward_model.dart';
 
-/// CONTROLLER
-import '../../pages/rewards_shop/rewards_shop_controller.dart';
-
-class RewardCard
-    extends StatelessWidget {
-
+class RewardCard extends StatelessWidget {
   final RewardModel reward;
 
-  final int index;
+  final bool isSelected;
+
+  final bool canAfford;
+
+  final IconData icon;
+
+  final VoidCallback? onTap;
 
   const RewardCard({
-
     super.key,
 
     required this.reward,
 
-    required this.index,
+    required this.isSelected,
+
+    required this.canAfford,
+
+    required this.icon,
+
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: canAfford ? onTap : null,
 
-    /// CONTROLLER
-    final RewardsShopController
-        controller =
-            Get.find<
-                RewardsShopController>();
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
 
-    return Obx(() {
+        margin: const EdgeInsets.only(bottom: 20),
 
-      /// CAN AFFORD
-      final bool canAfford =
-          controller.canAfford(
-              reward);
+        padding: const EdgeInsets.all(20),
 
-      /// IS SELECTED
-      final bool isSelected =
-          controller.isSelected(
-              index);
+        decoration: BoxDecoration(
+          color: Colors.white,
 
-      return GestureDetector(
+          borderRadius: BorderRadius.circular(26),
 
-        onTap: canAfford
-            ? () {
+          border: Border.all(
+            color: isSelected ? const Color(0xFFD4AF37) : Colors.transparent,
 
-                controller
-                    .selectReward(
-                        index);
-              }
-            : null,
-
-        child: AnimatedContainer(
-
-          duration:
-              const Duration(
-            milliseconds: 200,
+            width: 2.5,
           ),
 
-          margin:
-              const EdgeInsets.only(
-                  bottom: 20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
 
-          padding:
-              const EdgeInsets.all(
-                  20),
+              blurRadius: 10,
 
-          decoration:
-              BoxDecoration(
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
 
-            color: Colors.white,
+        child: Row(
+          children: [
+            /// ICON
+            Container(
+              padding: const EdgeInsets.all(16),
 
-            borderRadius:
-                BorderRadius.circular(
-                    26),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFF3CD),
 
-            border: Border.all(
+                borderRadius: BorderRadius.circular(18),
+              ),
 
-              color: isSelected
-                  ? const Color(
-                      0xFFD4AF37)
-                  : Colors.transparent,
-
-              width: 2.5,
+              child: Icon(icon, size: 34, color: const Color(0xFFD4AF37)),
             ),
 
-            boxShadow: [
+            const SizedBox(width: 18),
 
-              BoxShadow(
+            /// INFO
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
 
-                color: Colors.black
-                    .withOpacity(
-                        0.05),
+                children: [
+                  Text(
+                    reward.name,
 
-                blurRadius: 10,
+                    style: const TextStyle(
+                      fontSize: 24,
 
-                offset:
-                    const Offset(
-                        0, 4),
-              ),
-            ],
-          ),
-
-          child: Row(
-            children: [
-
-              /// ICON
-              Container(
-
-                padding:
-                    const EdgeInsets
-                        .all(16),
-
-                decoration:
-                    BoxDecoration(
-
-                  color:
-                      const Color(
-                          0xFFFFF3CD),
-
-                  borderRadius:
-                      BorderRadius
-                          .circular(
-                              18),
-                ),
-
-                child: Icon(
-
-                  controller
-                      .getRewardIcon(
-                    reward.type,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
 
-                  size: 34,
+                  const SizedBox(height: 8),
 
-                  color:
-                      const Color(
-                          0xFFD4AF37),
-                ),
-              ),
+                  Text(
+                    reward.description,
 
-              const SizedBox(
-                  width: 18),
+                    style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+                  ),
 
-              /// INFO
-              Expanded(
+                  const SizedBox(height: 14),
 
-                child: Column(
+                  Row(
+                    children: [
+                      const Icon(Icons.star, color: Colors.amber, size: 22),
 
-                  crossAxisAlignment:
-                      CrossAxisAlignment
-                          .start,
+                      const SizedBox(width: 6),
 
-                  children: [
+                      Text(
+                        "${reward.starsCost} estrellas",
 
-                    Text(
+                        style: const TextStyle(
+                          fontSize: 16,
 
-                      reward.name,
-
-                      style:
-                          const TextStyle(
-                        fontSize: 24,
-
-                        fontWeight:
-                            FontWeight
-                                .bold,
-                      ),
-                    ),
-
-                    const SizedBox(
-                        height: 8),
-
-                    Text(
-
-                      reward.description,
-
-                      style:
-                          TextStyle(
-
-                        fontSize: 16,
-
-                        color: Colors
-                            .grey
-                            .shade600,
-                      ),
-                    ),
-
-                    const SizedBox(
-                        height: 14),
-
-                    Row(
-                      children: [
-
-                        const Icon(
-                          Icons.star,
-
-                          color: Colors
-                              .amber,
-
-                          size: 22,
+                          fontWeight: FontWeight.bold,
                         ),
-
-                        const SizedBox(
-                            width: 6),
-
-                        Text(
-
-                          "${reward.starsCost} estrellas",
-
-                          style:
-                              const TextStyle(
-                            fontSize: 16,
-
-                            fontWeight:
-                                FontWeight
-                                    .bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
+            ),
 
-              /// CHECK
-              if (isSelected)
+            /// CHECK
+            if (isSelected)
+              const Icon(
+                Icons.check_circle,
 
-                const Icon(
+                color: Color(0xFFD4AF37),
 
-                  Icons.check_circle,
-
-                  color:
-                      Color(
-                          0xFFD4AF37),
-
-                  size: 34,
-                ),
-            ],
-          ),
+                size: 34,
+              ),
+          ],
         ),
-      );
-    });
+      ),
+    );
   }
 }

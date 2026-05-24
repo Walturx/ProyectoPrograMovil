@@ -2,188 +2,105 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:get/get.dart';
+class RewardsSummaryCard extends StatelessWidget {
+  final int stars;
 
-/// CONTROLLER
-import '../../pages/rewards_shop/rewards_shop_controller.dart';
-
-class RewardsSummaryCard
-    extends StatelessWidget {
+  final int remainingStars;
 
   const RewardsSummaryCard({
     super.key,
+
+    required this.stars,
+
+    required this.remainingStars,
   });
 
   @override
   Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
 
-    /// CONTROLLER
-    final RewardsShopController
-        controller =
-            Get.find<
-                RewardsShopController>();
+      padding: const EdgeInsets.all(24),
 
-    return Obx(() {
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFFFFE082), Color(0xFFFFF3CD)],
+        ),
 
-      return Container(
+        borderRadius: BorderRadius.circular(28),
+      ),
 
-        width:
-            double.infinity,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
-        padding:
-            const EdgeInsets.all(
-                24),
+        children: [
+          /// AVAILABLE
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
 
-        decoration:
-            BoxDecoration(
+            children: [
+              Text(
+                "Disponibles",
 
-          gradient:
-              const LinearGradient(
-            colors: [
-              Color(0xFFFFE082),
-              Color(0xFFFFF3CD),
+                style: TextStyle(color: Colors.grey.shade700, fontSize: 16),
+              ),
+
+              const SizedBox(height: 12),
+
+              Row(
+                children: [
+                  Text(
+                    "$stars",
+
+                    style: const TextStyle(
+                      fontSize: 42,
+
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(width: 8),
+
+                  const Icon(Icons.star, color: Colors.amber, size: 34),
+                ],
+              ),
             ],
           ),
 
-          borderRadius:
-              BorderRadius.circular(
-                  28),
-        ),
+          /// REMAINING
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
 
-        child: Row(
+            children: [
+              Text(
+                "Restantes",
 
-          mainAxisAlignment:
-              MainAxisAlignment
-                  .spaceBetween,
+                style: TextStyle(color: Colors.grey.shade700, fontSize: 16),
+              ),
 
-          children: [
+              const SizedBox(height: 12),
 
-            /// AVAILABLE
-            Column(
+              Row(
+                children: [
+                  Text(
+                    "$remainingStars",
 
-              crossAxisAlignment:
-                  CrossAxisAlignment
-                      .start,
+                    style: const TextStyle(
+                      fontSize: 42,
 
-              children: [
-
-                Text(
-
-                  "Disponibles",
-
-                  style:
-                      TextStyle(
-
-                    color: Colors
-                        .grey
-                        .shade700,
-
-                    fontSize:
-                        16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
 
-                const SizedBox(
-                    height: 12),
+                  const SizedBox(width: 8),
 
-                Row(
-                  children: [
-
-                    Text(
-
-                      "${controller.userStars}",
-
-                      style:
-                          const TextStyle(
-                        fontSize:
-                            42,
-
-                        fontWeight:
-                            FontWeight
-                                .bold,
-                      ),
-                    ),
-
-                    const SizedBox(
-                        width: 8),
-
-                    const Icon(
-                      Icons.star,
-
-                      color:
-                          Colors.amber,
-
-                      size: 34,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-
-            /// REMAINING
-            Column(
-
-              crossAxisAlignment:
-                  CrossAxisAlignment
-                      .end,
-
-              children: [
-
-                Text(
-
-                  "Restantes",
-
-                  style:
-                      TextStyle(
-
-                    color: Colors
-                        .grey
-                        .shade700,
-
-                    fontSize:
-                        16,
-                  ),
-                ),
-
-                const SizedBox(
-                    height: 12),
-
-                Row(
-                  children: [
-
-                    Text(
-
-                      "${controller.remainingStars}",
-
-                      style:
-                          const TextStyle(
-                        fontSize:
-                            42,
-
-                        fontWeight:
-                            FontWeight
-                                .bold,
-                      ),
-                    ),
-
-                    const SizedBox(
-                        width: 8),
-
-                    const Icon(
-                      Icons.star,
-
-                      color:
-                          Colors.amber,
-
-                      size: 34,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    });
+                  const Icon(Icons.star, color: Colors.amber, size: 34),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

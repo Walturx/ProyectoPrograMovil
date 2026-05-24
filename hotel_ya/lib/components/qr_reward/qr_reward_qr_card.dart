@@ -2,184 +2,111 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:get/get.dart';
+class QRRewardQRCard extends StatelessWidget {
+  final String qrData;
 
-/// CONTROLLER
-import '../../pages/qr_reward/qr_reward_controller.dart';
-
-class QRRewardQRCard
-    extends StatelessWidget {
+  final int remainingStars;
 
   const QRRewardQRCard({
     super.key,
+
+    required this.qrData,
+
+    required this.remainingStars,
   });
 
   @override
-  Widget build(
-      BuildContext context) {
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
 
-    /// CONTROLLER
-    final QRRewardController
-        controller =
-            Get.find<
-                QRRewardController>();
+      padding: const EdgeInsets.all(24),
 
-    return Obx(() {
-      print(controller.qrData.value);
+      decoration: BoxDecoration(
+        color: Colors.white,
 
-      return Container(
+        borderRadius: BorderRadius.circular(30),
 
-        width:
-            double.infinity,
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10),
+        ],
+      ),
 
-        padding:
-            const EdgeInsets.all(
-                24),
+      child: Column(
+        children: [
+          /// QR
+          Container(
+            padding: const EdgeInsets.all(20),
 
-        decoration:
-            BoxDecoration(
+            decoration: BoxDecoration(
+              color: const Color(0xFFF8F6F1),
 
-          color:
-              Colors.white,
-
-          borderRadius:
-              BorderRadius.circular(
-                  30),
-
-          boxShadow: [
-
-            BoxShadow(
-
-              color: Colors
-                  .black
-                  .withOpacity(
-                      0.05),
-
-              blurRadius:
-                  10,
-            ),
-          ],
-        ),
-
-        child: Column(
-          children: [
-
-            /// QR
-            Container(
-
-              padding:
-                  const EdgeInsets
-                      .all(20),
-
-              decoration:
-                  BoxDecoration(
-
-                color:
-                    const Color(
-                        0xFFF8F6F1),
-
-                borderRadius:
-                    BorderRadius
-                        .circular(
-                            24),
-              ),
-
-              child: Image.network(
-
-                "https://quickchart.io/qr"
-                "?size=250"
-                "&text=${controller.qrData.value}",
-
-                width: 220,
-
-                height: 220,
-              ),
+              borderRadius: BorderRadius.circular(24),
             ),
 
-            const SizedBox(
-                height: 30),
+            child: Image.network(
+              "https://quickchart.io/qr"
+              "?size=250"
+              "&text=$qrData",
 
-            /// STARS
-            Container(
+              width: 220,
 
-              padding:
-                  const EdgeInsets
-                      .symmetric(
-                horizontal: 24,
-                vertical: 16,
-              ),
+              height: 220,
 
-              decoration:
-                  BoxDecoration(
+              errorBuilder: (_, __, ___) {
+                return const SizedBox(
+                  width: 220,
 
-                color:
-                    const Color(
-                        0xFFFFF8E1),
+                  height: 220,
 
-                borderRadius:
-                    BorderRadius
-                        .circular(
-                            20),
-              ),
-
-              child: Row(
-
-                mainAxisSize:
-                    MainAxisSize.min,
-
-                children: [
-
-                  Text(
-
-                    "${controller.remainingStars}",
-
-                    style:
-                        const TextStyle(
-                      fontSize:
-                          32,
-
-                      fontWeight:
-                          FontWeight
-                              .bold,
-                    ),
-                  ),
-
-                  const SizedBox(
-                      width: 10),
-
-                  const Icon(
-
-                    Icons.star,
-
-                    color:
-                        Colors.amber,
-
-                    size: 34,
-                  ),
-
-                  const SizedBox(
-                      width: 10),
-
-                  Text(
-
-                    "restantes",
-
-                    style:
-                        TextStyle(
-                      fontSize:
-                          16,
-
-                      color: Colors
-                          .grey
-                          .shade700,
-                    ),
-                  ),
-                ],
-              ),
+                  child: Center(child: Text("QR Error")),
+                );
+              },
             ),
-          ],
-        ),
-      );
-    });
+          ),
+
+          const SizedBox(height: 30),
+
+          /// STARS
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFF8E1),
+
+              borderRadius: BorderRadius.circular(20),
+            ),
+
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+
+              children: [
+                Text(
+                  "$remainingStars",
+
+                  style: const TextStyle(
+                    fontSize: 32,
+
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                const SizedBox(width: 10),
+
+                const Icon(Icons.star, color: Colors.amber, size: 34),
+
+                const SizedBox(width: 10),
+
+                Text(
+                  "restantes",
+
+                  style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

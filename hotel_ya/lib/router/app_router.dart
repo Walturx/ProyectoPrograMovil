@@ -57,76 +57,49 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/reservation',
       builder: (context, state) {
-
-        final extra =
-        state.extra as Map<String, dynamic>?;
+        final extra = state.extra as Map<String, dynamic>?;
 
         if (extra == null) {
-
-          return const Scaffold(
-
-            body: Center(
-
-              child: Text(
-                'Extra viene null',
-              ),
-            ),
-          );
+          return const Scaffold(body: Center(child: Text('Extra viene null')));
         }
 
         return ReservationPage(
+          hotel: extra['hotel'],
 
-          hotel:
-          extra['hotel'],
+          room: extra['room'],
 
-          room:
-          extra['room'],
-
-          roomType:
-          extra['roomType'],
+          roomType: extra['roomType'],
         );
       },
     ),
 
     GoRoute(
-
       path: '/reservation/details',
 
       builder: (context, state) {
-
-        final extra =
-        state.extra as Map<String, dynamic>;
+        final extra = state.extra as Map<String, dynamic>;
 
         return ReservationDetailsPage(
+          hotelName: extra['hotelName'],
 
-          hotelName:
-          extra['hotelName'],
+          roomNumber: extra['roomNumber'],
 
-          roomNumber:
-          extra['roomNumber'],
+          guests: extra['guests'],
 
-          guests:
-          extra['guests'],
+          checkIn: extra['checkIn'],
 
-          checkIn:
-          extra['checkIn'],
+          checkInHour: extra['checkInHour'],
 
-          checkInHour:
-          extra['checkInHour'],
+          checkOut: extra['checkOut'],
 
-          checkOut:
-          extra['checkOut'],
+          checkOutHour: extra['checkOutHour'],
 
-          checkOutHour:
-          extra['checkOutHour'],
-
-          pricePerNight:
-          extra['pricePerNight'],
+          pricePerNight: extra['pricePerNight'],
         );
       },
     ),
 
-    GoRoute(path: '/qr', builder: (context, state) => const QRRewardPage()),
+    GoRoute(path: '/qr', builder: (context, state) => QRRewardPage()),
 
     GoRoute(path: '/profile', builder: (context, state) => ProfilePage()),
 

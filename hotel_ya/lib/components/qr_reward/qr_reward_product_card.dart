@@ -2,210 +2,104 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:get/get.dart';
+/// MODEL
+import '../../models/reward_model.dart';
 
-/// CONTROLLER
-import '../../pages/qr_reward/qr_reward_controller.dart';
+class QRRewardProductCard extends StatelessWidget {
+  final RewardModel reward;
 
-class QRRewardProductCard
-    extends StatelessWidget {
+  final IconData icon;
 
   const QRRewardProductCard({
     super.key,
+
+    required this.reward,
+
+    required this.icon,
   });
 
   @override
-  Widget build(
-      BuildContext context) {
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        /// TOP ICON
+        Container(
+          padding: const EdgeInsets.all(18),
 
-    /// CONTROLLER
-    final QRRewardController
-        controller =
-            Get.find<
-                QRRewardController>();
+          decoration: BoxDecoration(
+            color: const Color(0xFFFFF3CD),
 
-    return Obx(() {
+            borderRadius: BorderRadius.circular(24),
+          ),
 
-      /// REWARD
-      final reward =
-          controller
-              .selectedReward;
+          child: Icon(icon, size: 50, color: const Color(0xFFD4AF37)),
+        ),
 
-      if (reward == null) {
+        const SizedBox(height: 30),
 
-        return const SizedBox();
-      }
+        /// PRODUCT CARD
+        Container(
+          padding: const EdgeInsets.all(18),
 
-      /// REWARD TYPE
-      final String rewardType =
-          reward.type;
+          decoration: BoxDecoration(
+            color: Colors.white,
 
-      return Column(
+            borderRadius: BorderRadius.circular(24),
 
-        children: [
+            boxShadow: [
+              BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10),
+            ],
+          ),
 
-          /// ICONO TOP
-          Container(
+          child: Row(
+            children: [
+              /// ICON
+              Container(
+                padding: const EdgeInsets.all(14),
 
-            padding:
-                const EdgeInsets
-                    .all(18),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFF3CD),
 
-            decoration:
-                BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                ),
 
-              color:
-                  const Color(
-                      0xFFFFF3CD),
-
-              borderRadius:
-                  BorderRadius.circular(
-                      24),
-            ),
-
-            child: Icon(
-
-              controller
-                  .rewardsShopController
-                  .getRewardIcon(
-                rewardType,
+                child: Icon(icon, size: 34, color: const Color(0xFFD4AF37)),
               ),
 
-              size: 50,
+              const SizedBox(width: 18),
 
-              color:
-                  const Color(
-                      0xFFD4AF37),
-            ),
-          ),
+              /// TEXTS
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
 
-          const SizedBox(
-              height: 30),
+                  children: [
+                    const Text(
+                      "Premio Canjeado",
 
-          /// PRODUCTO
-          Container(
-
-            padding:
-                const EdgeInsets
-                    .all(18),
-
-            decoration:
-                BoxDecoration(
-
-              color:
-                  Colors.white,
-
-              borderRadius:
-                  BorderRadius.circular(
-                      24),
-
-              boxShadow: [
-
-                BoxShadow(
-
-                  color: Colors
-                      .black
-                      .withOpacity(
-                          0.05),
-
-                  blurRadius:
-                      10,
-                ),
-              ],
-            ),
-
-            child: Row(
-              children: [
-
-                /// ICONO
-                Container(
-
-                  padding:
-                      const EdgeInsets
-                          .all(14),
-
-                  decoration:
-                      BoxDecoration(
-
-                    color:
-                        const Color(
-                            0xFFFFF3CD),
-
-                    borderRadius:
-                        BorderRadius
-                            .circular(
-                                18),
-                  ),
-
-                  child: Icon(
-
-                    controller
-                        .rewardsShopController
-                        .getRewardIcon(
-                      rewardType,
+                      style: TextStyle(color: Colors.grey),
                     ),
 
-                    size: 34,
+                    const SizedBox(height: 6),
 
-                    color:
-                        const Color(
-                            0xFFD4AF37),
-                  ),
-                ),
+                    Text(
+                      reward.name,
 
-                const SizedBox(
-                    width: 18),
+                      style: const TextStyle(
+                        fontSize: 20,
 
-                /// TEXTOS
-                Expanded(
-
-                  child: Column(
-
-                    crossAxisAlignment:
-                        CrossAxisAlignment
-                            .start,
-
-                    children: [
-
-                      const Text(
-
-                        "Premio Canjeado",
-
-                        style:
-                            TextStyle(
-                          color:
-                              Colors.grey,
-                        ),
+                        fontWeight: FontWeight.bold,
                       ),
-
-                      const SizedBox(
-                          height: 6),
-
-                      Text(
-
-                        reward.name,
-
-                        style:
-                            const TextStyle(
-                          fontSize:
-                              20,
-
-                          fontWeight:
-                              FontWeight
-                                  .bold,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
+        ),
 
-          const SizedBox(
-              height: 30),
-        ],
-      );
-    });
+        const SizedBox(height: 30),
+      ],
+    );
   }
 }

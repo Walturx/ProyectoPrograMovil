@@ -63,9 +63,10 @@ class _EditProfileModalState extends State<EditProfileModal> {
                         backgroundColor: Colors.grey.shade200,
                         backgroundImage:
                             widget.controller.previewAvatar.value.isNotEmpty
-                                ? NetworkImage(
-                                    widget.controller.previewAvatar.value)
-                                : null,
+                            ? NetworkImage(
+                                widget.controller.previewAvatar.value,
+                              )
+                            : null,
                         child: widget.controller.previewAvatar.value.isEmpty
                             ? const Icon(Icons.person, size: 50)
                             : null,
@@ -174,8 +175,10 @@ class _EditProfileModalState extends State<EditProfileModal> {
         decoration: InputDecoration(
           labelText: label,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 14,
+          ),
         ),
       ),
     );

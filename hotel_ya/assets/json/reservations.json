@@ -2,8 +2,7 @@
   {
     "id": "res1",
     "user_id": "u1",
-    "hotel_name": "Hotel Paradise",
-    "room_name": "Suite Deluxe",
+    "room_id": "r2",
     "check_in": "2026-05-10",
     "check_out": "2026-05-13",
     "total_price": 450.00,
@@ -13,12 +12,10 @@
     "special_requests": "Vista al mar",
     "created_at": "2026-05-01"
   },
-
   {
     "id": "res2",
     "user_id": "u1",
-    "hotel_name": "Ocean View Hotel",
-    "room_name": "Junior Suite",
+    "room_id": "r8",
     "check_in": "2026-05-20",
     "check_out": "2026-05-25",
     "total_price": 800.00,
@@ -28,4 +25,4 @@
     "special_requests": "Cama extra",
     "created_at": "2026-05-15"
   }
-] 
+]

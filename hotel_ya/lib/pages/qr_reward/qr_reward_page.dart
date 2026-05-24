@@ -3,27 +3,23 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
-
-/// COMPONENTS
-import '../../components/custom_bottom_nav.dart';
-
-import '../../components/qr_reward/qr_reward_header.dart';
-
-import '../../components/qr_reward/qr_reward_product_card.dart';
-
-import '../../components/qr_reward/qr_reward_qr_card.dart';
-
-import '../../components/qr_reward/qr_reward_footer.dart';
 
 /// CONTROLLER
 import 'qr_reward_controller.dart';
 
+/// COMPONENTS
+import '../../components/qr_reward/qr_reward_header.dart';
+import '../../components/qr_reward/qr_reward_product_card.dart';
+import '../../components/qr_reward/qr_reward_qr_card.dart';
+
+/// NAVBAR
+import '../../components/custom_bottom_nav.dart';
+
 class QRRewardPage extends StatelessWidget {
-  const QRRewardPage({super.key});
+  QRRewardPage({super.key});
 
   /// CONTROLLER
-  QRRewardController get controller => Get.put(QRRewardController());
+  final QRRewardController controller = Get.put(QRRewardController());
 
   @override
   Widget build(BuildContext context) {
@@ -33,18 +29,16 @@ class QRRewardPage extends StatelessWidget {
         return const Scaffold(body: Center(child: CircularProgressIndicator()));
       }
 
-      /// INVALID REWARD
+      /// NO REWARD
       if (controller.selectedReward == null) {
         return const Scaffold(body: Center(child: Text("No reward selected")));
       }
 
       return Scaffold(
-        appBar: AppBar(title: const Text("QR Reward")),
+        backgroundColor: const Color(0xFFF8F6F1),
 
-        /// BOTTOM NAV
         bottomNavigationBar: const CustomBottomNav(currentIndex: 2),
 
-        /// BODY
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
@@ -53,18 +47,33 @@ class QRRewardPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
 
-                children: const [
+                children: [
+                  const SizedBox(height: 20),
+
                   /// HEADER
-                  QRRewardHeader(),
+                  const QRRewardHeader(),
+
+                  const SizedBox(height: 30),
 
                   /// PRODUCT CARD
-                  QRRewardProductCard(),
+                  QRRewardProductCard(
+                    reward: controller.selectedReward!,
+
+                    icon: controller.rewardsShopController.getRewardIcon(
+                      controller.selectedReward!.type,
+                    ),
+                  ),
+
+                  const SizedBox(height: 30),
 
                   /// QR CARD
-                  QRRewardQRCard(),
+                  QRRewardQRCard(
+                    qrData: controller.qrData.value,
 
-                  /// FOOTER
-                  QRRewardFooter(),
+                    remainingStars: controller.remainingStars,
+                  ),
+
+                  const SizedBox(height: 30),
                 ],
               ),
             ),

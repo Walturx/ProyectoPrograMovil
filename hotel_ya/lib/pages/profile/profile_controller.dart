@@ -11,15 +11,11 @@ import '../../models/user_model.dart';
 import '../../services/profile_service.dart';
 
 class ProfileController extends GetxController {
-
   /// PROFILE SERVICE
-  final ProfileService
-      profileService =
-          ProfileService();
+  final ProfileService profileService = ProfileService();
 
   /// USER DATA
-  Rx<UserModel?> user =
-      Rx<UserModel?>(null);
+  Rx<UserModel?> user = Rx<UserModel?>(null);
 
   /// LOADING
   RxBool isLoading = true.obs;
@@ -28,33 +24,20 @@ class ProfileController extends GetxController {
   RxString previewAvatar = "".obs;
 
   /// TEXT CONTROLLERS
-  final TextEditingController
-      nameController =
-          TextEditingController();
+  final TextEditingController nameController = TextEditingController();
 
-  final TextEditingController
-      lastnameController =
-          TextEditingController();
+  final TextEditingController lastnameController = TextEditingController();
 
-  final TextEditingController
-      phoneController =
-          TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
 
-  final TextEditingController
-      nationalityController =
-          TextEditingController();
+  final TextEditingController nationalityController = TextEditingController();
 
-  final TextEditingController
-      documentController =
-          TextEditingController();
+  final TextEditingController documentController = TextEditingController();
 
-  final TextEditingController
-      avatarController =
-          TextEditingController();
+  final TextEditingController avatarController = TextEditingController();
 
   @override
   void onInit() {
-
     super.onInit();
 
     /// LOAD USER
@@ -63,55 +46,37 @@ class ProfileController extends GetxController {
 
   /// LOAD USER
   Future<void> loadUser() async {
-
     try {
+      final response = await profileService.fetchUser();
 
-      /// FETCH USER
-      user.value =
-          await profileService
-              .fetchUser();
+      if (response.success && response.hasData) {
+        user.value = response.data;
 
-      /// INITIAL VALUES
-      nameController.text =
-          user.value!.name;
+        /// INITIAL VALUES
+        nameController.text = user.value!.name;
+        lastnameController.text = user.value!.lastname;
+        phoneController.text = user.value!.phone;
+        nationalityController.text = user.value!.nationality;
+        documentController.text = user.value!.documentNumber;
+        avatarController.text = user.value!.avatarUrl;
 
-      lastnameController.text =
-          user.value!.lastname;
-
-      phoneController.text =
-          user.value!.phone;
-
-      nationalityController.text =
-          user.value!.nationality;
-
-      documentController.text =
-          user.value!
-              .documentNumber;
-
-      avatarController.text =
-          user.value!.avatarUrl;
-
-      /// PREVIEW AVATAR
-      previewAvatar.value =
-          user.value!.avatarUrl;
-
+        /// PREVIEW AVATAR
+        previewAvatar.value = user.value!.avatarUrl;
+      } else {
+        print("ERROR PROFILE CONTROLLER:");
+        print(response.error);
+      }
+    } catch (e) {
+      print("LOAD USER ERROR:");
+      print(e);
+    } finally {
       /// FINISH LOADING
       isLoading.value = false;
-
-    } catch (e) {
-
-      print(
-        "ERROR PROFILE CONTROLLER:",
-      );
-
-      print(e);
     }
   }
 
   /// UPDATE AVATAR PREVIEW
-  void updateAvatarPreview(
-      String value) {
-
+  void updateAvatarPreview(String value) {
     previewAvatar.value = value;
   }
 
@@ -134,20 +99,13 @@ class ProfileController extends GetxController {
 
   @override
   void onClose() {
-
     /// DISPOSE CONTROLLERS
     nameController.dispose();
-
     lastnameController.dispose();
-
     phoneController.dispose();
-
     nationalityController.dispose();
-
     documentController.dispose();
-
     avatarController.dispose();
-
     super.onClose();
   }
 }

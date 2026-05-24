@@ -8,214 +8,130 @@ import 'package:get/get.dart';
 import 'history_controller.dart';
 
 /// COMPONENTS
-import '../../components/custom_bottom_nav.dart';
+import '../../components/history/reservation_card.dart';
 
 import '../../components/history/transaction_card.dart';
 
-import '../../components/history/reservation_card.dart';
+/// NAVBAR
+import '../../components/custom_bottom_nav.dart';
 
-class HistoryPage
-    extends StatelessWidget {
-
+class HistoryPage extends StatelessWidget {
   HistoryPage({super.key});
 
-  /// GETX CONTROLLER
-  final HistoryController
-      controller =
-          Get.put(
-    HistoryController(),
-  );
-
-  /// BUILD BODY
-  Widget _buildBody(
-    BuildContext context,
-  ) {
-
-    return SafeArea(
-
-      child:
-          SingleChildScrollView(
-
-        padding:
-            const EdgeInsets.all(
-                20),
-
-        child: Column(
-
-          crossAxisAlignment:
-              CrossAxisAlignment
-                  .start,
-
-          children: [
-
-            const SizedBox(
-                height: 10),
-
-            /// TITLE
-            const Text(
-
-              "Historial",
-
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight:
-                    FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(
-                height: 8),
-
-            Text(
-
-              "Actividad reciente de tu cuenta",
-
-              style: TextStyle(
-
-                color:
-                    Colors.grey
-                        .shade600,
-
-                fontSize: 16,
-              ),
-            ),
-
-            const SizedBox(
-                height: 32),
-
-            /// TRANSACTIONS
-            const Text(
-
-              "Movimientos de Estrellas",
-
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight:
-                    FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(
-                height: 18),
-
-            ListView.builder(
-
-              itemCount:
-                  controller
-                      .loyaltyTransactions
-                      .length,
-
-              shrinkWrap: true,
-
-              physics:
-                  const NeverScrollableScrollPhysics(),
-
-              itemBuilder:
-                  (context, index) {
-
-                final transaction =
-                    controller
-                        .loyaltyTransactions[
-                            index];
-
-                return TransactionCard(
-
-                  transaction:
-                      transaction,
-
-                  controller:
-                      controller,
-                );
-              },
-            ),
-
-            const SizedBox(
-                height: 36),
-
-            /// RESERVATIONS
-            const Text(
-
-              "Historial de Reservas",
-
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight:
-                    FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(
-                height: 18),
-
-            ListView.builder(
-
-              itemCount:
-                  controller
-                      .reservations
-                      .length,
-
-              shrinkWrap: true,
-
-              physics:
-                  const NeverScrollableScrollPhysics(),
-
-              itemBuilder:
-                  (context, index) {
-
-                final reservation =
-                    controller
-                        .reservations[
-                            index];
-
-                return ReservationCard(
-
-                  reservation:
-                      reservation,
-
-                  controller:
-                      controller,
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  /// CONTROLLER
+  final HistoryController controller = Get.put(HistoryController());
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-
+  Widget build(BuildContext context) {
     return Obx(() {
-
       /// LOADING
-      if (controller
-          .isLoading.value) {
-
-        return const Scaffold(
-
-          body: Center(
-
-            child:
-                CircularProgressIndicator(),
-          ),
-        );
+      if (controller.isLoading.value) {
+        return const Scaffold(body: Center(child: CircularProgressIndicator()));
       }
 
       return Scaffold(
+        backgroundColor: const Color(0xFFF8F6F1),
 
-        /// BOTTOM NAV
-        bottomNavigationBar:
-            const CustomBottomNav(
-          currentIndex: 1,
-        ),
+        bottomNavigationBar: const CustomBottomNav(currentIndex: 1),
 
-        /// BODY
-        body:
-            _buildBody(
-          context,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+
+              children: [
+                const SizedBox(height: 28),
+
+                /// RESERVATIONS TITLE
+                const Text(
+                  "Reservas",
+
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+
+                const SizedBox(height: 18),
+
+                /// RESERVATIONS
+                if (controller.reservations.isEmpty)
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(20),
+
+                      child: Text("No hay reservas"),
+                    ),
+                  )
+                else
+                  ...List.generate(controller.reservations.length, (index) {
+                    final reservation = controller.reservations[index];
+
+                    return ReservationCard(
+                      reservation: reservation,
+
+                      hotelName: controller.getHotelName(reservation.roomId),
+
+                      roomTypeName: controller.getRoomTypeName(
+                        reservation.roomId,
+                      ),
+
+                      status: controller.getReservationStatus(
+                        reservation.checkOut,
+                      ),
+
+                      statusColor: controller.getReservationStatusColor(
+                        controller.getReservationStatus(reservation.checkOut),
+                      ),
+
+                      formattedStatus: controller.formatStatus(
+                        controller.getReservationStatus(reservation.checkOut),
+                      ),
+                    );
+                  }),
+
+                const SizedBox(height: 30),
+
+                /// TRANSACTIONS TITLE
+                const Text(
+                  "Movimientos",
+
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+
+                const SizedBox(height: 18),
+
+                /// TRANSACTIONS
+                if (controller.loyaltyTransactions.isEmpty)
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(20),
+
+                      child: Text("No hay movimientos"),
+                    ),
+                  )
+                else
+                  ...List.generate(controller.loyaltyTransactions.length, (
+                    index,
+                  ) {
+                    final transaction = controller.loyaltyTransactions[index];
+
+                    return TransactionCard(
+                      transaction: transaction,
+
+                      icon: controller.getTransactionIcon(transaction.type),
+
+                      color: controller.getTransactionColor(transaction.type),
+
+                      formattedStars: transaction.type == "earned"
+                          ? "+${transaction.stars} ⭐"
+                          : "-${transaction.stars} ⭐",
+                    );
+                  }),
+
+                const SizedBox(height: 30),
+              ],
+            ),
+          ),
         ),
       );
     });
