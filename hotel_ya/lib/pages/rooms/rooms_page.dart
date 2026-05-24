@@ -1,8 +1,9 @@
 // hotel_ya/lib/pages/rooms/rooms_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import '../reservation/reservation_page.dart';
 import 'rooms_controller.dart';
+import 'package:go_router/go_router.dart';
 
 class RoomPage extends StatefulWidget {
   final Map<String, dynamic> room;
@@ -102,14 +103,20 @@ class _RoomPageState extends State<RoomPage> {
 
                 const SizedBox(height: 30),
 
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'RESERVAR',
-                      style: TextStyle(fontSize: 16),
-                    ),
+                ElevatedButton(
+                  onPressed: () {
+                    context.go(
+                      '/reservation',
+                      extra: {
+                        'hotel': hotelData,
+                        'room': roomData,
+                        'roomType': typeData,
+                      },
+                    );
+                  },
+                  child: const Text(
+                    'RESERVAR',
+                    style: TextStyle(fontSize: 16),
                   ),
                 ),
 

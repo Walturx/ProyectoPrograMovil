@@ -7,40 +7,81 @@ class Guest {
   String relation;
   int age;
 
-  Guest({this.name = '', this.lastName = '', this.dni = '', this.relation = '', this.age = 0});
+  Guest({
+    this.name = '',
+    this.lastName = '',
+    this.dni = '',
+    this.relation = '',
+    this.age = 0,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      "name": "$name $lastName",
+      "age": age,
+      "dni": dni,
+      "relation": relation,
+    };
+  }
 }
 
 class ReservationController extends GetxController {
-  // Fechas y horas
   Rx<DateTime?> checkIn = Rx<DateTime?>(null);
   Rx<DateTime?> checkOut = Rx<DateTime?>(null);
-  RxInt checkInHour = 6.obs;
-  RxInt checkOutHour = 6.obs;
 
-  // Invitados
-  RxInt numberOfGuests = 3.obs;
+  // Hora fija para hoteles: 12:00
+  RxInt checkInHour = 12.obs;
+  RxInt checkOutHour = 12.obs;
+
+  // Solo acompañantes. El usuario principal cuenta como 1 hospedante.
+  RxInt numberOfGuests = 0.obs;
   RxList<Guest> guests = <Guest>[].obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    guests.value = List.generate(numberOfGuests.value, (_) => Guest());
+  void addGuest(int maxCompanions) {
+    if (numberOfGuests.value < maxCompanions) {
+      guests.add(Guest());
+      numberOfGuests.value = guests.length;
+    }
   }
 
-  // Actualiza datos de un invitado
-  void updateGuest(int index, {String? name, String? lastName, String? dni, String? relation, int? age}) {
-    final g = guests[index];
-    if (name != null) g.name = name;
-    if (lastName != null) g.lastName = lastName;
-    if (dni != null) g.dni = dni;
-    if (relation != null) g.relation = relation;
-    if (age != null) g.age = age;
+  void removeGuest(int index) {
+    if (index >= 0 && index < guests.length) {
+      guests.removeAt(index);
+      numberOfGuests.value = guests.length;
+    }
+  }
+
+  void updateGuest(
+      int index, {
+        String? name,
+        String? lastName,
+        String? dni,
+        String? relation,
+        int? age,
+      }) {
+    if (index < 0 || index >= guests.length) return;
+
+    final guest = guests[index];
+
+    if (name != null) guest.name = name;
+    if (lastName != null) guest.lastName = lastName;
+    if (dni != null) guest.dni = dni;
+    if (relation != null) guest.relation = relation;
+    if (age != null) guest.age = age;
+
     guests.refresh();
   }
 
-  // Cambiar cantidad de invitados
-  void changeGuests(int count) {
-    numberOfGuests.value = count;
-    guests.value = List.generate(count, (_) => Guest());
+  List<Map<String, dynamic>> getGuestData() {
+    return guests.map((guest) => guest.toMap()).toList();
+  }
+
+  void resetReservation() {
+    checkIn.value = null;
+    checkOut.value = null;
+    checkInHour.value = 12;
+    checkOutHour.value = 12;
+    numberOfGuests.value = 0;
+    guests.clear();
   }
 }

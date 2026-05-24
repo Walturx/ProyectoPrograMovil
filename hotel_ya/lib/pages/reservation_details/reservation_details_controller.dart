@@ -1,30 +1,84 @@
 import 'package:get/get.dart';
 
 class ReservationDetailsController extends GetxController {
+
+  // HOTEL
+  RxString hotelName = ''.obs;
+
+  // HABITACIÓN
+  RxString roomType = ''.obs;
+  RxString roomNumber = ''.obs;
+  RxInt roomCapacity = 1.obs;
+
+  // FECHAS
   Rx<DateTime?> checkIn = Rx<DateTime?>(null);
   Rx<DateTime?> checkOut = Rx<DateTime?>(null);
 
-  RxInt checkInHour = 6.obs;
-  RxInt checkOutHour = 6.obs;
+  // PRECIOS
+  RxDouble pricePerNight = 0.0.obs;
+  RxDouble total = 0.0.obs;
 
-  int numberOfGuests = 3;
+  // HUÉSPEDES
+  RxList<Map<String, dynamic>> guests =
+      <Map<String, dynamic>>[].obs;
 
-  RxList<String> guestNames = <String>[].obs;
-  RxList<int> guestAges = <int>[].obs;
+  // CANTIDADES
+  RxInt adults = 0.obs;
+  RxInt children = 0.obs;
+  RxInt nights = 0.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    guestNames.clear();
-    guestAges.clear();
-    for (int i = 0; i < numberOfGuests; i++) {
-      guestNames.add('');
-      guestAges.add(0);
-    }
+  void loadReservationData({
+    required String hotel,
+    required String room,
+    required int capacity,
+    required DateTime checkInDate,
+    required DateTime checkOutDate,
+    required double price,
+    required List<Map<String, dynamic>> guestList,
+  }) {
+
+    hotelName.value = hotel;
+    roomType.value = room;
+    roomCapacity.value = capacity;
+
+    checkIn.value = checkInDate;
+    checkOut.value = checkOutDate;
+
+    pricePerNight.value = price;
+
+    guests.assignAll(guestList);
+
+    // NOCHES
+    nights.value =
+        checkOutDate.difference(checkInDate).inDays;
+
+    // TOTAL
+    total.value =
+        nights.value * pricePerNight.value;
+
+    // ADULTOS / NIÑOS
+    adults.value =
+        guestList.where((g) => g['age'] >= 18).length;
+
+    children.value =
+        guestList.where((g) => g['age'] < 18).length;
   }
 
-  void updateGuest(int index, String name, int age) {
-    guestNames[index] = name;
-    guestAges[index] = age;
+  void clearReservation() {
+    hotelName.value = '';
+    roomType.value = '';
+    roomNumber.value = '';
+
+    checkIn.value = null;
+    checkOut.value = null;
+
+    pricePerNight.value = 0;
+    total.value = 0;
+
+    guests.clear();
+
+    adults.value = 0;
+    children.value = 0;
+    nights.value = 0;
   }
 }
