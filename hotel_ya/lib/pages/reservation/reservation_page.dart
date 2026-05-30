@@ -31,8 +31,9 @@ class _ReservationPageState extends State<ReservationPage> {
           },
           childDelegate: ListWheelChildBuilderDelegate(
             builder: (context, index) {
-              if (index >= 0 && index <= 16)
+              if (index >= 0 && index <= 16) {
                 return Center(child: Text("${index + 6}:00"));
+              }
               return null;
             },
           ),

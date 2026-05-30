@@ -10,48 +10,31 @@ import '../models/loyalty_transaction_model.dart';
 import '../models/reservation_model.dart';
 
 class HistoryService {
-
   /// FETCH LOYALTY TRANSACTIONS
-  Future<List<LoyaltyTransactionModel>>
-      fetchTransactions() async {
-
+  Future<List<LoyaltyTransactionModel>> fetchTransactions() async {
     try {
-
       /// LOAD JSON
-      String jsonString =
-          await rootBundle.loadString(
-
+      String jsonString = await rootBundle.loadString(
         'assets/json/loyalty_transactions.json',
       );
 
       /// PARSE JSON
-      final List<dynamic> jsonList =
-          json.decode(jsonString);
+      final List<dynamic> jsonList = json.decode(jsonString);
 
       /// CONVERT TO MODEL
-      final transactions =
-          jsonList.map((json) {
-
+      final transactions = jsonList.map((json) {
         return LoyaltyTransactionModel.fromJson({
-
           ...json,
 
-          'reservation_id':
-              json['reservation_id'] ?? "",
+          'reservation_id': json['reservation_id'] ?? "",
 
-          'reward_redemption_id':
-              json['reward_redemption_id'] ?? "",
+          'reward_redemption_id': json['reward_redemption_id'] ?? "",
         });
-
       }).toList();
 
       return transactions;
-
     } catch (e) {
-
-      print(
-        'ERROR FETCH TRANSACTIONS:',
-      );
+      print('ERROR FETCH TRANSACTIONS:');
 
       print(e);
 
@@ -60,49 +43,32 @@ class HistoryService {
   }
 
   /// FETCH RESERVATIONS
-  Future<List<ReservationModel>>
-      fetchReservations() async {
-
+  Future<List<ReservationModel>> fetchReservations() async {
     try {
-
       /// LOAD JSON
-      String jsonString =
-          await rootBundle.loadString(
-
+      String jsonString = await rootBundle.loadString(
         'assets/json/reservations.json',
       );
 
       /// PARSE JSON
-      final List<dynamic> jsonList =
-          json.decode(jsonString);
+      final List<dynamic> jsonList = json.decode(jsonString);
 
       /// CONVERT TO MODEL
-      final reservations =
-          jsonList.map((json) {
-
+      final reservations = jsonList.map((json) {
         return ReservationModel.fromJson({
-
           ...json,
 
-          'room_id':
-              json['room_id'] ?? "",
+          'room_id': json['room_id'] ?? "",
 
-          'status':
-              json['status'] ?? "",
+          'status': json['status'] ?? "",
 
-          'special_requests':
-              json['special_requests'] ?? "",
+          'special_requests': json['special_requests'] ?? "",
         });
-
       }).toList();
 
       return reservations;
-
     } catch (e) {
-
-      print(
-        'ERROR FETCH RESERVATIONS:',
-      );
+      print('ERROR FETCH RESERVATIONS:');
 
       print(e);
 

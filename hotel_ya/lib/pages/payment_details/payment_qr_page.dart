@@ -6,7 +6,7 @@ class PaymentQRPage extends StatelessWidget {
   final String qrData;
   final int stars;
 
-  PaymentQRPage({super.key, required this.qrData, required this.stars});
+  const PaymentQRPage({super.key, required this.qrData, required this.stars});
 
   @override
   Widget build(BuildContext context) {

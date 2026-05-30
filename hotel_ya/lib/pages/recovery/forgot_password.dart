@@ -5,7 +5,7 @@ import 'package:hotel_ya/cubits/recovery_cubit.dart';
 import 'package:hotel_ya/cubits/recovery_state.dart';
 
 class ForgotPassword extends StatefulWidget {
-  ForgotPassword({Key? key}) : super(key: key);
+  const ForgotPassword({super.key});
 
   @override
   _ForgotPasswordState createState() => _ForgotPasswordState();

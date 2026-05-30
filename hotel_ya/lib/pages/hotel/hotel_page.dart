@@ -210,7 +210,7 @@ class HotelPage extends StatelessWidget {
                                 fit: StackFit.expand,
                                 children: [
                                   Image.network(
-                                    room['image_url'],
+                                    room.imageUrl,
                                     fit: BoxFit.cover,
                                     errorBuilder: (context, error, stackTrace) {
                                       return Container(
@@ -240,7 +240,7 @@ class HotelPage extends StatelessWidget {
                                         ),
                                       ),
                                       child: Text(
-                                        "${room['type_name']} - Hab. ${room['room_number']}",
+                                        "${room.typeName} - Hab. ${room.roomNumber}",
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
@@ -300,7 +300,7 @@ class HotelPage extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         final room = controller.rooms[index];
-                        final bool isAvailable = room['is_available'];
+                        final bool isAvailable = room.isAvailable;
 
                         return GestureDetector(
                           onTap: () => context.go('/reservation'),
@@ -330,7 +330,7 @@ class HotelPage extends StatelessWidget {
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(14),
                                   child: Image.network(
-                                    room['image_url'],
+                                    room.imageUrl,
                                     width: 80,
                                     height: 80,
                                     fit: BoxFit.cover,
@@ -357,7 +357,7 @@ class HotelPage extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        room['type_name'],
+                                        room.typeName,
                                         style: const TextStyle(
                                           fontSize: 17,
                                           fontWeight: FontWeight.bold,
@@ -365,7 +365,7 @@ class HotelPage extends StatelessWidget {
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        "Piso ${room['floor']} · Hab. ${room['room_number']}",
+                                        "Piso ${room.floor} · Hab. ${room.roomNumber}",
                                         style: TextStyle(
                                           fontSize: 13,
                                           color: Colors.grey.shade600,
@@ -381,7 +381,7 @@ class HotelPage extends StatelessWidget {
                                           ),
                                           const SizedBox(width: 4),
                                           Text(
-                                            "${room['capacity']} personas",
+                                            "${room.capacity} personas",
                                             style: TextStyle(
                                               fontSize: 13,
                                               color: Colors.grey.shade500,
@@ -398,7 +398,7 @@ class HotelPage extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      "\$${room['base_price'].toStringAsFixed(0)}",
+                                      "\$${room.basePrice.toStringAsFixed(0)}",
                                       style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
@@ -498,7 +498,7 @@ class HotelPage extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(14),
                                 ),
                                 child: Icon(
-                                  _getServiceIcon(service['name']),
+                                  _getServiceIcon(service.name),
                                   color: const Color(0xFFD4AF37),
                                   size: 24,
                                 ),
@@ -508,7 +508,7 @@ class HotelPage extends StatelessWidget {
 
                               /// NOMBRE
                               Text(
-                                service['name'],
+                                service.name,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
@@ -521,13 +521,13 @@ class HotelPage extends StatelessWidget {
 
                               /// PRECIO
                               Text(
-                                service['price'] == 0
+                                service.price == 0
                                     ? "Gratis"
-                                    : "\$${service['price'].toStringAsFixed(0)}",
+                                    : "\$${service.price.toStringAsFixed(0)}",
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.bold,
-                                  color: service['price'] == 0
+                                  color: service.price == 0
                                       ? Colors.green
                                       : const Color(0xFFD4AF37),
                                 ),
@@ -657,7 +657,7 @@ class HotelPage extends StatelessWidget {
                                       radius: 20,
                                       backgroundColor: const Color(0xFFFFF3CD),
                                       child: Text(
-                                        review['user_name'][0],
+                                        review.userName[0],
                                         style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Color(0xFFD4AF37),
@@ -674,14 +674,14 @@ class HotelPage extends StatelessWidget {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            review['user_name'],
+                                            review.userName,
                                             style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 15,
                                             ),
                                           ),
                                           Text(
-                                            review['created_at'],
+                                            review.createdAt,
                                             style: TextStyle(
                                               fontSize: 12,
                                               color: Colors.grey.shade500,
@@ -694,7 +694,7 @@ class HotelPage extends StatelessWidget {
                                     /// ESTRELLAS
                                     Row(
                                       children: List.generate(
-                                        review['rating'],
+                                        review.rating,
                                         (i) => const Icon(
                                           Icons.star,
                                           color: Colors.amber,
@@ -708,7 +708,7 @@ class HotelPage extends StatelessWidget {
                                 const SizedBox(height: 12),
 
                                 Text(
-                                  review['comment'],
+                                  review.comment,
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.grey.shade700,

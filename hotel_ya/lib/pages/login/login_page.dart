@@ -5,7 +5,7 @@ import 'package:hotel_ya/cubits/login_cubit.dart';
 import 'package:hotel_ya/cubits/login_state.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();

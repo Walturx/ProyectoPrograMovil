@@ -88,9 +88,15 @@ class ReservationDetailsPage extends StatelessWidget {
                   Text("Número de habitación: $roomNumber"),
                   Text("Adultos: $adults"),
                   Text("Infantes: $children"),
-                  Text("Check-in: ${checkIn.day}/${checkIn.month}/${checkIn.year} - $checkInHour:00"),
-                  Text("Check-out: ${checkOut.day}/${checkOut.month}/${checkOut.year} - $checkOutHour:00"),
-                  Text("Precio por noche: \$${pricePerNight.toStringAsFixed(2)}"),
+                  Text(
+                    "Check-in: ${checkIn.day}/${checkIn.month}/${checkIn.year} - $checkInHour:00",
+                  ),
+                  Text(
+                    "Check-out: ${checkOut.day}/${checkOut.month}/${checkOut.year} - $checkOutHour:00",
+                  ),
+                  Text(
+                    "Precio por noche: \$${pricePerNight.toStringAsFixed(2)}",
+                  ),
                   Text("Noches: $nights"),
                   Text("Total: \$${total.toStringAsFixed(2)}"),
                 ],
@@ -124,8 +130,10 @@ class ReservationDetailsPage extends StatelessWidget {
                   const SizedBox(height: 8),
                   ...guests.asMap().entries.map((entry) {
                     final g = entry.value;
-                    return Text("Inv. ${entry.key + 1}: ${g['name']} (${g['age']} años)");
-                  }).toList(),
+                    return Text(
+                      "Inv. ${entry.key + 1}: ${g['name']} (${g['age']} años)",
+                    );
+                  }),
                 ],
               ),
             ),
@@ -141,7 +149,8 @@ class ReservationDetailsPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (_) => PaymentPage(
-                        qrData: '{"redemption_id":"123","user_id":"456","reward":"Noches Gratis","stars_spent":3,"status":"approved"}',
+                        qrData:
+                            '{"redemption_id":"123","user_id":"456","reward":"Noches Gratis","stars_spent":3,"status":"approved"}',
                         stars: 3,
                       ),
                     ),

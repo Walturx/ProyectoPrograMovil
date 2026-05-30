@@ -21,7 +21,10 @@ class SearchPage extends StatelessWidget {
               onChanged: controller.updateSearch,
               decoration: InputDecoration(
                 hintText: "Buscar hotel...",
-                prefixIcon: Icon(Icons.search, color: Theme.of(context).primaryColor),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: Theme.of(context).primaryColor,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: BorderSide.none,
@@ -74,7 +77,7 @@ class SearchPage extends StatelessWidget {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(14),
                             child: Image.network(
-                              hotel['cover_image_url'],
+                              hotel.coverImageUrl,
                               width: 90,
                               height: 90,
                               fit: BoxFit.cover,
@@ -105,7 +108,7 @@ class SearchPage extends StatelessWidget {
                               children: [
                                 /// NOMBRE
                                 Text(
-                                  hotel['name'],
+                                  hotel.name,
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -116,7 +119,7 @@ class SearchPage extends StatelessWidget {
 
                                 /// DESCRIPCION
                                 Text(
-                                  hotel['description'],
+                                  hotel.description,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -133,7 +136,7 @@ class SearchPage extends StatelessWidget {
                                     /// ESTRELLAS
                                     Row(
                                       children: List.generate(
-                                        hotel['stars'],
+                                        hotel.stars,
                                         (i) => const Icon(
                                           Icons.star,
                                           color: Colors.amber,
@@ -151,19 +154,17 @@ class SearchPage extends StatelessWidget {
                                         vertical: 4,
                                       ),
                                       decoration: BoxDecoration(
-                                        color: hotel['is_active']
+                                        color: hotel.isActive
                                             ? Colors.green.shade50
                                             : Colors.red.shade50,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Text(
-                                        hotel['is_active']
-                                            ? "Activo"
-                                            : "Inactivo",
+                                        hotel.isActive ? "Activo" : "Inactivo",
                                         style: TextStyle(
                                           fontSize: 12,
                                           fontWeight: FontWeight.bold,
-                                          color: hotel['is_active']
+                                          color: hotel.isActive
                                               ? Colors.green
                                               : Colors.red,
                                         ),

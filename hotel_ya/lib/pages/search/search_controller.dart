@@ -1,13 +1,15 @@
 //hotel_ya/lib/pages/search/search_controller.dart
-import 'dart:convert';
 
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import '../../models/hotel_model.dart';
+import '../../services/hotel_service.dart';
 
 class SearchPageController extends GetxController {
+  final HotelService hotelService = HotelService();
+
   RxString searchText = ''.obs;
-  RxList<dynamic> allHotels = <dynamic>[].obs;
-  RxList<dynamic> filteredHotels = <dynamic>[].obs;
+  RxList<HotelModel> allHotels = <HotelModel>[].obs;
+  RxList<HotelModel> filteredHotels = <HotelModel>[].obs;
   RxBool isLoading = true.obs;
 
   @override
@@ -17,12 +19,13 @@ class SearchPageController extends GetxController {
   }
 
   Future<void> loadHotels() async {
-    final String response =
-        await rootBundle.loadString('assets/json/hotels.json');
-    final data = json.decode(response);
+    isLoading.value = true;
 
-    allHotels.value = data['hotels'];
-    filteredHotels.value = allHotels;
+    final hotels = await hotelService.getHotels();
+
+    allHotels.value = hotels;
+    filteredHotels.value = hotels;
+
     isLoading.value = false;
   }
 
@@ -32,10 +35,12 @@ class SearchPageController extends GetxController {
     if (value.isEmpty) {
       filteredHotels.value = allHotels;
     } else {
+      final query = value.toLowerCase();
+
       filteredHotels.value = allHotels.where((hotel) {
-        final name = hotel['name'].toString().toLowerCase();
-        final description = hotel['description'].toString().toLowerCase();
-        final query = value.toLowerCase();
+        final name = hotel.name.toLowerCase();
+        final description = hotel.description.toLowerCase();
+
         return name.contains(query) || description.contains(query);
       }).toList();
     }

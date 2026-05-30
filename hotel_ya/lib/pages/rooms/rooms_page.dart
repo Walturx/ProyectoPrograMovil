@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'rooms_controller.dart';
+import '../../models/hotel_model.dart';
+import '../../models/room_model.dart';
 
 class RoomPage extends StatefulWidget {
-  final Map<String, dynamic> room;
-  final Map<String, dynamic> hotel;
-
+  final RoomModel room;
+  final HotelModel hotel;
   const RoomPage({super.key, required this.room, required this.hotel});
 
   @override
@@ -39,9 +40,9 @@ class _RoomPageState extends State<RoomPage> {
           return const Center(child: CircularProgressIndicator());
         }
 
-        final roomData = controller.room;
-        final hotelData = controller.hotel;
-        final typeData = controller.roomType;
+        final roomData = controller.room.value;
+        final hotelData = controller.hotel.value;
+        final typeData = controller.roomType.value;
 
         return SingleChildScrollView(
           padding: const EdgeInsets.all(22),
@@ -64,7 +65,7 @@ class _RoomPageState extends State<RoomPage> {
 
               children: [
                 Text(
-                  hotelData['name'] ?? 'Hotel',
+                  hotelData?.name ?? 'Hotel',
 
                   style: const TextStyle(
                     fontSize: 28,
@@ -74,12 +75,12 @@ class _RoomPageState extends State<RoomPage> {
 
                 const SizedBox(height: 8),
 
-                Text('HABITACIÓN ${roomData['room_number']}'),
+                Text('HABITACIÓN ${roomData?.roomNumber}'),
 
                 const SizedBox(height: 10),
 
                 Image.network(
-                  roomData['image_url'] ?? '',
+                  roomData?.imageUrl ?? '',
                   height: 200,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -87,12 +88,12 @@ class _RoomPageState extends State<RoomPage> {
 
                 const SizedBox(height: 20),
 
-                Text(typeData['description'] ?? ''),
+                Text(typeData?.description ?? ''),
 
                 const SizedBox(height: 20),
 
                 Text(
-                  'Precio: \$${typeData['base_price']}',
+                  'Precio: \$${typeData?.basePrice}',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
