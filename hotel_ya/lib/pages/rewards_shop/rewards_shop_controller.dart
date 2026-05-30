@@ -12,34 +12,24 @@ import '../../models/reward_model.dart';
 /// SERVICE
 import '../../services/rewards_shop_service.dart';
 
-class RewardsShopController
-    extends GetxController {
-
+class RewardsShopController extends GetxController {
   /// SERVICE
-  final RewardsShopService
-      rewardsShopService =
-          RewardsShopService();
+  final RewardsShopService rewardsShopService = RewardsShopService();
 
   /// LOADING
-  final RxBool isLoading =
-      true.obs;
+  final RxBool isLoading = true.obs;
 
   /// USER
-  final Rxn<UserModel> user =
-      Rxn<UserModel>();
+  final Rxn<UserModel> user = Rxn<UserModel>();
 
   /// REWARDS
-  final RxList<RewardModel>
-      rewards =
-          <RewardModel>[].obs;
+  final RxList<RewardModel> rewards = <RewardModel>[].obs;
 
   /// SELECTED REWARD
-  final RxInt selectedIndex =
-      (-1).obs;
+  final RxInt selectedIndex = (-1).obs;
 
   @override
   void onInit() {
-
     super.onInit();
 
     /// LOAD DATA
@@ -47,152 +37,104 @@ class RewardsShopController
   }
 
   /// LOAD DATA
-  Future<void> loadData()
-      async {
-
+  Future<void> loadData() async {
     try {
-
       /// START LOADING
-      isLoading.value =
-          true;
+      isLoading.value = true;
 
       /// FETCH USER
-      final loadedUser =
-          await rewardsShopService
-              .fetchUser();
+      final userResponse = await rewardsShopService.fetchUser();
 
       /// FETCH REWARDS
-      final loadedRewards =
-          await rewardsShopService
-              .fetchRewards();
+      final rewardsResponse = await rewardsShopService.fetchRewards();
 
       /// ASSIGN USER
-      user.value =
-          loadedUser;
+      if (userResponse.success && userResponse.hasData) {
+        user.value = userResponse.data;
+      } else {
+        print('ERROR USER: ${userResponse.error}');
+      }
 
       /// ASSIGN REWARDS
-      rewards.assignAll(
-          loadedRewards);
-
+      if (rewardsResponse.success && rewardsResponse.hasData) {
+        rewards.assignAll(rewardsResponse.data!);
+      } else {
+        print('ERROR REWARDS: ${rewardsResponse.error}');
+      }
     } catch (e) {
-
-      print(
-        'ERROR REWARDS SHOP CONTROLLER:',
-      );
+      print('ERROR REWARDS SHOP CONTROLLER:');
 
       print(e);
 
-      Get.snackbar(
-        'Error',
-        'Failed to load rewards',
-      );
-
+      Get.snackbar('Error', 'Failed to load rewards');
     } finally {
-
       /// FINISH LOADING
-      isLoading.value =
-          false;
+      isLoading.value = false;
     }
   }
 
   /// SELECT REWARD
-  void selectReward(
-      int index) {
-
+  void selectReward(int index) {
     /// INVALID INDEX
-    if (index < 0 ||
-        index >= rewards.length) {
-
+    if (index < 0 || index >= rewards.length) {
       return;
     }
 
     /// CANNOT AFFORD
-    if (!canAfford(
-        rewards[index])) {
-
+    if (!canAfford(rewards[index])) {
       return;
     }
 
-    if (selectedIndex.value ==
-        index) {
-
+    if (selectedIndex.value == index) {
       /// DESELECT
-      selectedIndex.value =
-          -1;
-
+      selectedIndex.value = -1;
     } else {
-
       /// SELECT
-      selectedIndex.value =
-          index;
+      selectedIndex.value = index;
     }
   }
 
   /// GET SELECTED REWARD
-  RewardModel?
-      get selectedReward {
-
-    if (selectedIndex.value ==
-        -1) {
-
+  RewardModel? get selectedReward {
+    if (selectedIndex.value == -1) {
       return null;
     }
 
-    if (selectedIndex.value >=
-        rewards.length) {
-
+    if (selectedIndex.value >= rewards.length) {
       return null;
     }
 
-    return rewards[
-        selectedIndex.value];
+    return rewards[selectedIndex.value];
   }
 
   /// GET USER STARS
   int get userStars {
-
-    return user.value
-            ?.starsAvailable ??
-        0;
+    return user.value?.starsAvailable ?? 0;
   }
 
   /// GET SELECTED COST
   int get selectedCost {
-
-    return selectedReward
-            ?.starsCost ??
-        0;
+    return selectedReward?.starsCost ?? 0;
   }
 
   /// GET REMAINING STARS
   int get remainingStars {
-
-    return userStars -
-        selectedCost;
+    return userStars - selectedCost;
   }
 
   /// IS SELECTED
-  bool isSelected(
-      int index) {
-
-    return selectedIndex.value ==
-        index;
+  bool isSelected(int index) {
+    return selectedIndex.value == index;
   }
 
   /// CAN AFFORD
-  bool canAfford(
-      RewardModel reward) {
-
-    return userStars >=
-        reward.starsCost;
+  bool canAfford(RewardModel reward) {
+    return userStars >= reward.starsCost;
   }
 
   /// GET REWARD ICON
-  IconData getRewardIcon(
-      String type) {
-
+  IconData getRewardIcon(String type) {
     switch (type) {
-
       case "food":
         return Icons.icecream;
 
@@ -207,4 +149,3 @@ class RewardsShopController
     }
   }
 }
-

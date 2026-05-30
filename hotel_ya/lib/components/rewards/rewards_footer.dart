@@ -2,187 +2,93 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:get/get.dart';
+class RewardsFooter extends StatelessWidget {
+  final int selectedCost;
 
-/// CONTROLLER
-import '../../pages/rewards_shop/rewards_shop_controller.dart';
+  final bool hasSelection;
 
-/// PAGES
-import '../../pages/qr_reward/qr_reward_page.dart';
-
-class RewardsFooter
-    extends StatelessWidget {
+  final VoidCallback onContinue;
 
   const RewardsFooter({
     super.key,
+
+    required this.selectedCost,
+
+    required this.hasSelection,
+
+    required this.onContinue,
   });
 
   @override
   Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
 
-    /// CONTROLLER
-    final RewardsShopController
-        controller =
-            Get.find<
-                RewardsShopController>();
+      decoration: BoxDecoration(
+        color: Colors.white,
 
-    return Obx(() {
+        borderRadius: BorderRadius.circular(24),
 
-      return Container(
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10),
+        ],
+      ),
 
-        padding:
-            const EdgeInsets.all(
-                20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
-        decoration:
-            BoxDecoration(
+        children: [
+          /// TOTAL
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
 
-          color: Colors.white,
+            children: [
+              Text(
+                "Total Gastado",
 
-          borderRadius:
-              BorderRadius.circular(
-                  24),
+                style: TextStyle(color: Colors.grey.shade600),
+              ),
 
-          boxShadow: [
+              const SizedBox(height: 8),
 
-            BoxShadow(
+              Row(
+                children: [
+                  Text(
+                    "$selectedCost",
 
-              color: Colors.black
-                  .withOpacity(
-                      0.05),
+                    style: const TextStyle(
+                      fontSize: 34,
 
-              blurRadius: 10,
-            ),
-          ],
-        ),
-
-        child: Row(
-
-          mainAxisAlignment:
-              MainAxisAlignment
-                  .spaceBetween,
-
-          children: [
-
-            /// TOTAL
-            Column(
-
-              crossAxisAlignment:
-                  CrossAxisAlignment
-                      .start,
-
-              children: [
-
-                Text(
-
-                  "Total Gastado",
-
-                  style:
-                      TextStyle(
-
-                    color: Colors
-                        .grey
-                        .shade600,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
 
-                const SizedBox(
-                    height: 8),
+                  const SizedBox(width: 8),
 
-                Row(
-                  children: [
-
-                    Text(
-
-                      "${controller.selectedCost}",
-
-                      style:
-                          const TextStyle(
-                        fontSize:
-                            34,
-
-                        fontWeight:
-                            FontWeight
-                                .bold,
-                      ),
-                    ),
-
-                    const SizedBox(
-                        width: 8),
-
-                    const Icon(
-                      Icons.star,
-
-                      color:
-                          Colors.amber,
-
-                      size: 30,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-
-            /// BUTTON
-            ElevatedButton.icon(
-
-              onPressed:
-                  controller
-                              .selectedIndex
-                              .value ==
-                          -1
-                      ? null
-                      : () {
-
-                          Navigator.push(
-
-                            context,
-
-                            MaterialPageRoute(
-
-                              builder:
-                                  (context) {
-
-                                return const QRRewardPage();
-                              },
-                            ),
-                          );
-                        },
-
-              icon:
-                  const Icon(
-                Icons.qr_code,
+                  const Icon(Icons.star, color: Colors.amber, size: 30),
+                ],
               ),
+            ],
+          ),
 
-              label:
-                  const Text(
-                "Continuar",
-              ),
+          /// BUTTON
+          ElevatedButton.icon(
+            onPressed: hasSelection ? onContinue : null,
 
-              style:
-                  ElevatedButton
-                      .styleFrom(
+            icon: const Icon(Icons.qr_code),
 
-                padding:
-                    const EdgeInsets
-                        .symmetric(
-                  horizontal: 26,
-                  vertical: 18,
-                ),
+            label: const Text("Continuar"),
 
-                shape:
-                    RoundedRectangleBorder(
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 18),
 
-                  borderRadius:
-                      BorderRadius
-                          .circular(
-                              18),
-                ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18),
               ),
             ),
-          ],
-        ),
-      );
-    });
+          ),
+        ],
+      ),
+    );
   }
 }

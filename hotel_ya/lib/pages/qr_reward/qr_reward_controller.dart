@@ -11,63 +11,44 @@ import '../../services/qr_reward_service.dart';
 /// CONTROLLERS
 import '../rewards_shop/rewards_shop_controller.dart';
 
-class QRRewardController
-    extends GetxController {
-
+class QRRewardController extends GetxController {
   /// SERVICE
-  final QRRewardService
-      qrRewardService =
-          QRRewardService();
+  final QRRewardService qrRewardService = QRRewardService();
 
   /// REWARDS SHOP CONTROLLER
-  final RewardsShopController
-      rewardsShopController =
-          Get.find<
-              RewardsShopController>();
+  final RewardsShopController rewardsShopController =
+      Get.find<RewardsShopController>();
 
   /// LOADING
-  final RxBool isLoading =
-      true.obs;
+  final RxBool isLoading = true.obs;
 
   /// USER
-  final RxMap<String, dynamic>
-      user =
-          <String, dynamic>{}
-              .obs;
+  final RxMap<String, dynamic> user = <String, dynamic>{}.obs;
 
   /// QR DATA
-  final RxString qrData =
-      ''.obs;
+  final RxString qrData = ''.obs;
 
   /// SELECTED REWARD
   RewardModel? get selectedReward {
-
-    return rewardsShopController
-        .selectedReward;
+    return rewardsShopController.selectedReward;
   }
 
   /// USER STARS
   int get userStars {
-
-    return rewardsShopController
-        .userStars;
+    return rewardsShopController.userStars;
   }
 
   /// REMAINING STARS
   int get remainingStars {
-
     if (selectedReward == null) {
       return userStars;
     }
 
-    return userStars -
-        selectedReward!
-            .starsCost;
+    return userStars - selectedReward!.starsCost;
   }
 
   @override
   void onInit() {
-
     super.onInit();
 
     /// LOAD DATA
@@ -75,66 +56,46 @@ class QRRewardController
   }
 
   /// LOAD DATA
-  Future<void> loadData()
-      async {
-
+  Future<void> loadData() async {
     try {
-
       /// START LOADING
-      isLoading.value =
-          true;
+      isLoading.value = true;
 
       /// FETCH USER
-      final fetchedUser =
-          await qrRewardService
-              .fetchUser();
+      final response = await qrRewardService.fetchUser();
 
-      user.assignAll(
-          fetchedUser);
+      if (response.success && response.hasData) {
+        user.assignAll(response.data!);
 
-      /// GENERATE QR
-      generateQR();
-
+        /// GENERATE QR
+        generateQR();
+      } else {
+        print('ERROR QR REWARD: ${response.error}');
+      }
     } catch (e) {
-
-      print(
-        'ERROR QR REWARD CONTROLLER:',
-      );
+      print('ERROR QR REWARD CONTROLLER:');
 
       print(e);
 
-      Get.snackbar(
-        'Error',
-        'Failed to load QR reward',
-      );
-
+      Get.snackbar('Error', 'Failed to load QR reward');
     } finally {
-
       /// FINISH LOADING
-      isLoading.value =
-          false;
+      isLoading.value = false;
     }
   }
 
   /// GENERATE QR
   void generateQR() {
-
     if (selectedReward == null) {
       return;
     }
 
-    qrData.value =
-        qrRewardService
-            .generateQRData(
+    qrData.value = qrRewardService.generateQRData(
+      userId: user["id"],
 
-      userId:
-          user["id"],
+      reward: selectedReward!,
 
-      reward:
-          selectedReward!,
-
-      remainingStars:
-          remainingStars,
+      remainingStars: remainingStars,
     );
   }
 }

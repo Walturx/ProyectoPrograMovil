@@ -2,123 +2,54 @@
 
 import 'package:flutter/material.dart';
 
-/// PAGES
-import '../../pages/history/history_page.dart';
+import 'package:go_router/go_router.dart';
 
-class ProfileActionButtons
-    extends StatelessWidget {
+class ProfileActionButtons extends StatelessWidget {
+  final VoidCallback onEdit;
 
-  final VoidCallback
-      onEdit;
-
-  const ProfileActionButtons({
-
-    super.key,
-
-    required this.onEdit,
-  });
+  const ProfileActionButtons({super.key, required this.onEdit});
 
   @override
   Widget build(BuildContext context) {
+    final buttonStyle = ElevatedButton.styleFrom(
+      padding: const EdgeInsets.symmetric(vertical: 18),
+
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    );
 
     return Column(
       children: [
-
         /// EDIT BUTTON
         SizedBox(
+          width: double.infinity,
 
-          width:
-              double.infinity,
-
-          child:
-              ElevatedButton.icon(
-
+          child: ElevatedButton.icon(
             onPressed: onEdit,
 
-            icon: const Icon(
-              Icons.edit,
-            ),
+            icon: const Icon(Icons.edit),
 
-            label: const Text(
-              "Editar Perfil",
-            ),
+            label: const Text("Editar Perfil"),
 
-            style:
-                ElevatedButton
-                    .styleFrom(
-
-              padding:
-                  const EdgeInsets
-                      .symmetric(
-                vertical: 18,
-              ),
-
-              shape:
-                  RoundedRectangleBorder(
-
-                borderRadius:
-                    BorderRadius
-                        .circular(
-                            20),
-              ),
-            ),
+            style: buttonStyle,
           ),
         ),
 
-        const SizedBox(
-            height: 16),
+        const SizedBox(height: 16),
 
         /// HISTORY BUTTON
         SizedBox(
+          width: double.infinity,
 
-          width:
-              double.infinity,
-
-          child:
-              ElevatedButton.icon(
-
+          child: ElevatedButton.icon(
             onPressed: () {
-
-              Navigator.push(
-
-                context,
-
-                MaterialPageRoute(
-
-                  builder:
-                      (context) =>
-                          HistoryPage(),
-                ),
-              );
+              context.push('/history');
             },
 
-            icon: const Icon(
-              Icons.history,
-            ),
+            icon: const Icon(Icons.history),
 
-            label: const Text(
-              "Ver historial",
-            ),
+            label: const Text("Ver historial"),
 
-            style:
-                ElevatedButton
-                    .styleFrom(
-
-              padding:
-                  const EdgeInsets
-                      .symmetric(
-                vertical: 18,
-              ),
-
-              shape:
-                  RoundedRectangleBorder(
-
-                borderRadius:
-                    BorderRadius
-                        .circular(
-                            20),
-              ),
-            ),
+            style: buttonStyle,
           ),
         ),
       ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../services/reservation_qr_service.dart';
 import '../payment/payment_page.dart';
-
+import '../../components/wallet_bottom_nav.dart';
 class ReservationDetailsPage extends StatelessWidget {
   final String hotelName;
   final int roomNumber;
@@ -29,7 +30,7 @@ class ReservationDetailsPage extends StatelessWidget {
     final nights = checkOut.difference(checkIn).inDays;
 
     // Calcular adultos e infantes
-    final adults = guests.where((g) => g['age'] >= 18).length;
+    final adults = guests.where((g) => g['age'] >= 18).length+1;
     final children = guests.where((g) => g['age'] < 18).length;
 
     // Precio total
@@ -145,13 +146,47 @@ class ReservationDetailsPage extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
+
+                  final qrService = ReservationQRService();
+
+                  final qrData = qrService.generateReservationQR(
+                    hotelName: hotelName,
+                    roomType: "Suite",
+                    roomNumber: roomNumber,
+                    checkIn: checkIn,
+                    checkOut: checkOut,
+                    totalGuests: adults + children,
+                    totalPrice: total,
+                    guests: guests,
+                  );
+
                   Navigator.push(
+
                     context,
+
                     MaterialPageRoute(
+
                       builder: (_) => PaymentPage(
-                        qrData:
-                            '{"redemption_id":"123","user_id":"456","reward":"Noches Gratis","stars_spent":3,"status":"approved"}',
-                        stars: 3,
+                        qrData: qrData,
+
+                        stars: (adults + children) + 3,
+
+                        hotelName: hotelName,
+
+                        roomNumber: roomNumber,
+
+                        adults: adults,
+
+                        children: children,
+
+                        checkIn: checkIn,
+
+                        checkOut: checkOut,
+
+                        pricePerNight:
+                        pricePerNight,
+
+                        guests: guests,
                       ),
                     ),
                   );
@@ -169,13 +204,8 @@ class ReservationDetailsPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        color: const Color(0xFFDDBE5C),
-        height: 60,
-        child: const Center(
-          child: Icon(Icons.account_balance_wallet, size: 30),
-        ),
-      ),
+      bottomNavigationBar:
+      const WalletBottomNav(),
     );
   }
 }

@@ -2,64 +2,33 @@
 
 import 'package:flutter/material.dart';
 
-class QRRewardFooter
-    extends StatelessWidget {
+class QRRewardFooter extends StatelessWidget {
+  final VoidCallback onSave;
 
-  const QRRewardFooter({
-    super.key,
-  });
+  const QRRewardFooter({super.key, required this.onSave});
 
   @override
-  Widget build(
-      BuildContext context) {
-
+  Widget build(BuildContext context) {
     return Column(
-
       children: [
+        const SizedBox(height: 24),
 
-        const SizedBox(
-            height: 24),
-
-        /// BOTON
+        /// BUTTON
         SizedBox(
+          width: double.infinity,
 
-          width:
-              double.infinity,
+          child: ElevatedButton.icon(
+            onPressed: onSave,
 
-          child:
-              ElevatedButton.icon(
+            icon: const Icon(Icons.download),
 
-            onPressed: () {},
+            label: const Text("Guardar QR", style: TextStyle(fontSize: 16)),
 
-            icon: const Icon(
-              Icons.download,
-            ),
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 18),
 
-            label: const Text(
-
-              "Guardar QR",
-
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-
-            style:
-                ElevatedButton.styleFrom(
-
-              padding:
-                  const EdgeInsets
-                      .symmetric(
-                vertical: 18,
-              ),
-
-              shape:
-                  RoundedRectangleBorder(
-
-                borderRadius:
-                    BorderRadius
-                        .circular(
-                            20),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
               ),
             ),
           ),

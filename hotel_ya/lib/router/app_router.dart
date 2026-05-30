@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hotel_ya/cubits/login_cubit.dart';
@@ -5,16 +6,18 @@ import 'package:hotel_ya/pages/history/history_page.dart';
 import 'package:hotel_ya/pages/home/home_page.dart';
 import 'package:hotel_ya/pages/hotel/hotel_page.dart';
 import 'package:hotel_ya/pages/login/login_page.dart';
-import 'package:hotel_ya/pages/payment/payment_page.dart';
-import 'package:hotel_ya/pages/payment_details/payment_qr_page.dart';
 import 'package:hotel_ya/pages/profile/profile_page.dart';
 import 'package:hotel_ya/pages/qr_reward/qr_reward_page.dart';
 import 'package:hotel_ya/pages/recovery/forgot_password.dart';
 import 'package:hotel_ya/pages/reservation/reservation_page.dart';
 import 'package:hotel_ya/pages/rewards_shop/rewards_shop_page.dart';
 import 'package:hotel_ya/pages/rooms/rooms_page.dart';
+import 'package:hotel_ya/models/room_model.dart';
+import 'package:hotel_ya/models/hotel_model.dart';
 import 'package:hotel_ya/pages/search/search_page.dart';
 import 'package:hotel_ya/pages/splash_screen/splash_screen_page.dart';
+
+import '../pages/reservation_details/reservation_details_page.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/',
@@ -47,40 +50,58 @@ final appRouter = GoRouter(
       builder: (context, state) {
         final extra = state.extra as Map<String, dynamic>;
         return RoomPage(
-          room: extra['room'] as Map<String, dynamic>,
-          hotel: extra['hotel'] as Map<String, dynamic>,
+          room: RoomModel.fromJson(extra['room'] as Map<String, dynamic>),
+          hotel: HotelModel.fromJson(extra['hotel'] as Map<String, dynamic>),
         );
       },
     ),
 
     GoRoute(
       path: '/reservation',
-      builder: (context, state) => const ReservationPage(),
-    ),
-
-    GoRoute(
-      path: '/payment',
       builder: (context, state) {
-        final extra = state.extra as Map<String, dynamic>;
-        return PaymentPage(
-          qrData: extra['qrData'] as String,
-          stars: extra['stars'] as int,
+        final extra = state.extra as Map<String, dynamic>?;
+
+        if (extra == null) {
+          return const Scaffold(body: Center(child: Text('Extra viene null')));
+        }
+
+        return ReservationPage(
+          hotel: extra['hotel'],
+
+          room: extra['room'],
+
+          roomType: extra['roomType'],
         );
       },
     ),
 
     GoRoute(
-      path: '/payment_details',
+      path: '/reservation/details',
+
       builder: (context, state) {
         final extra = state.extra as Map<String, dynamic>;
-        return PaymentQRPage(
-          qrData: extra['qrData'] as String,
-          stars: extra['stars'] as int,
+
+        return ReservationDetailsPage(
+          hotelName: extra['hotelName'],
+
+          roomNumber: extra['roomNumber'],
+
+          guests: extra['guests'],
+
+          checkIn: extra['checkIn'],
+
+          checkInHour: extra['checkInHour'],
+
+          checkOut: extra['checkOut'],
+
+          checkOutHour: extra['checkOutHour'],
+
+          pricePerNight: extra['pricePerNight'],
         );
       },
     ),
 
-    GoRoute(path: '/qr', builder: (context, state) => const QRRewardPage()),
+    GoRoute(path: '/qr', builder: (context, state) => QRRewardPage()),
 
     GoRoute(path: '/profile', builder: (context, state) => ProfilePage()),
 

@@ -23,7 +23,7 @@ class HotelPage extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () => context..go('/home'),
+            onPressed: () => context.go('/home'),
           ),
         ],
       ),
@@ -303,7 +303,29 @@ class HotelPage extends StatelessWidget {
                         final bool isAvailable = room.isAvailable;
 
                         return GestureDetector(
-                          onTap: () => context.go('/reservation'),
+                          onTap: () {
+
+                            if (!isAvailable) {
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Esta habitación no está disponible'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+
+                              return;
+                            }
+
+                            context.push(
+                              '/reservation',
+                              extra: {
+                                'hotel': hotel,
+                                'room': room.toJson(),
+                                'roomType': room.toJson(),
+                              },
+                            );
+                          },
                           child: Container(
                             margin: const EdgeInsets.only(bottom: 16),
                             padding: const EdgeInsets.all(16),

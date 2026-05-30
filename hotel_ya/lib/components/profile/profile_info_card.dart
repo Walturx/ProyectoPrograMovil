@@ -1,113 +1,68 @@
 // lib/components/profile/profile_info_card.dart
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart' show Obx;
 
-/// CONTROLLER
-import '../../pages/profile/profile_controller.dart';
+/// MODEL
+import '../../models/user_model.dart';
 
 /// COMPONENTS
 import '../info_tile.dart';
 
-class ProfileInfoCard
-    extends StatelessWidget {
+class ProfileInfoCard extends StatelessWidget {
+  final UserModel user;
 
-  final ProfileController
-      controller;
-
-  const ProfileInfoCard({
-
-    super.key,
-
-    required this.controller,
-  });
+  const ProfileInfoCard({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
+    return Card(
+      elevation: 0,
 
-    return Obx(() => Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
 
-      child: Column(
-        children: [
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
 
-          InfoTile(
+        child: Column(
+          children: [
+            InfoTile(
+              icon: Icons.person,
 
-            icon: Icons.person,
+              title: "Nombre",
 
-            title: "Nombre",
+              value: "${user.name} ${user.lastname}",
+            ),
 
-            value:
-                "${controller.user.value?.name ?? ""} ${controller.user.value?.lastname ?? ""}",
-          ),
+            const Divider(),
 
-          const Divider(),
+            InfoTile(icon: Icons.email, title: "Correo", value: user.email),
 
-          InfoTile(
+            const Divider(),
 
-            icon: Icons.email,
+            InfoTile(icon: Icons.phone, title: "Teléfono", value: user.phone),
 
-            title: "Correo",
+            const Divider(),
 
-            value:
-                controller
-                        .user
-                        .value
-                        ?.email ??
-                    "",
-          ),
+            InfoTile(
+              icon: Icons.badge,
 
-          const Divider(),
+              title: "Documento",
 
-          InfoTile(
+              value: user.documentNumber,
+            ),
 
-            icon: Icons.phone,
+            const Divider(),
 
-            title:
-                "Teléfono",
+            InfoTile(
+              icon: Icons.flag,
 
-            value:
-                controller
-                        .user
-                        .value
-                        ?.phone ??
-                    "",
-          ),
+              title: "Nacionalidad",
 
-          const Divider(),
-
-          InfoTile(
-
-            icon: Icons.badge,
-
-            title:
-                "Documento",
-
-            value:
-                controller
-                        .user
-                        .value
-                        ?.documentNumber ??
-                    "",
-          ),
-
-          const Divider(),
-
-          InfoTile(
-
-            icon: Icons.flag,
-
-            title:
-                "Nacionalidad",
-
-            value:
-                controller
-                        .user
-                        .value
-                        ?.nationality ??
-                    "",
-          ),
-        ],
+              value: user.nationality,
+            ),
+          ],
+        ),
       ),
-    ));
+    );
   }
 }
