@@ -1,21 +1,26 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotel_ya/cubits/home_state.dart';
 import 'package:hotel_ya/models/hotel_model.dart';
+import 'package:hotel_ya/services/hotel_service.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitial());
+
+  final HotelService _hotelService = HotelService();
 
   List<HotelModel> _allNearby = [];
 
   Future<void> loadHome() async {
     emit(HomeLoading());
     try {
-      await Future.delayed(const Duration(milliseconds: 800));
-      _allNearby = HotelModel.mockList();
-      emit(HomeLoaded(
-        nearbyHotels: _allNearby,
-        trendingHotels: HotelModel.mockTrendingList(),
-      ));
+      final hotels = await _hotelService.getHotels();
+      _allNearby = hotels;
+      emit(
+        HomeLoaded(
+          nearbyHotels: hotels,
+          trendingHotels: hotels.take(3).toList(),
+        ),
+      );
     } catch (e) {
       emit(HomeError(error: e.toString()));
     }
@@ -27,8 +32,8 @@ class HomeCubit extends Cubit<HomeState> {
     final filtered = query.trim().isEmpty
         ? _allNearby
         : _allNearby
-            .where((h) => h.name.toLowerCase().contains(query.toLowerCase()))
-            .toList();
+              .where((h) => h.name.toLowerCase().contains(query.toLowerCase()))
+              .toList();
     emit(current.copyWith(nearbyHotels: filtered));
   }
 }

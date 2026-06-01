@@ -1,19 +1,22 @@
 import 'package:bloc/bloc.dart';
+import 'package:get/get.dart';
 import 'package:hotel_ya/cubits/login_state.dart';
+import 'package:hotel_ya/services/auth_service.dart';
 
 class AuthCubit extends Cubit<AuthState> {
+  final AuthService _authService = AuthService();
   AuthCubit() : super(AuthInitial());
   bool get isLoading => state is AuthLoading;
 
   Future<void> login(String email, String password) async {
     emit(AuthLoading());
     try {
-      await Future.delayed(const Duration(seconds: 2));
+      final response = await _authService.loginWithEmail(email, password);
 
-      if (email.isNotEmpty && password.isNotEmpty) {
-        emit(AuthLoggedIn(token: 'token_aqui'));
+      if (response.success) {
+        emit(AuthLoggedIn(token: response.data!.id));
       } else {
-        emit(AuthError(error: 'Usuario y contraseña son obligatorios'));
+        emit(AuthError(error: response.message));
       }
     } catch (e) {
       emit(AuthError(error: e.toString()));
@@ -29,16 +32,11 @@ class AuthCubit extends Cubit<AuthState> {
   ) async {
     emit(AuthLoading());
     try {
-      await Future.delayed(const Duration(seconds: 2));
-
-      if (name.isNotEmpty &&
-          phone.isNotEmpty &&
-          birthdate.isNotEmpty &&
-          email.isNotEmpty &&
-          password.isNotEmpty) {
-        emit(AuthLoggedIn(token: 'token_aqui'));
+      final response = await _authService.registerWithEmail(email, password);
+      if (response.success) {
+        emit(AuthLoggedIn(token: response.data!.id));
       } else {
-        emit(AuthError(error: 'Completa todos los campos'));
+        emit(AuthError(error: response.message));
       }
     } catch (e) {
       emit(AuthError(error: e.toString()));
