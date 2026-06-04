@@ -40,11 +40,7 @@ class QRRewardController extends GetxController {
 
   /// REMAINING STARS
   int get remainingStars {
-    if (selectedReward == null) {
-      return userStars;
-    }
-
-    return userStars - selectedReward!.starsCost;
+    return userStars;
   }
 
   @override
