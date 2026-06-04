@@ -15,9 +15,6 @@ import '../../components/rewards/rewards_footer.dart';
 /// NAVBAR
 import '../../components/custom_bottom_nav.dart';
 
-
-
-
 class RewardsShopPage extends StatelessWidget {
   RewardsShopPage({super.key});
 
@@ -108,6 +105,8 @@ class RewardsShopPage extends StatelessWidget {
                     selectedCost: controller.selectedCost,
                     hasSelection: controller.selectedReward != null,
                     onContinue: () {
+                      controller.redeemSelectedReward();
+
                       context.push('/qr');
                     },
                   ),

@@ -85,16 +85,20 @@ class QRRewardController extends GetxController {
   }
 
   /// GENERATE QR
+
   void generateQR() {
+    print("USER STARS: $userStars");
+    print("REWARD: ${selectedReward?.name}");
+    print("COST: ${selectedReward?.starsCost}");
+    print("REMAINING: $remainingStars");
+
     if (selectedReward == null) {
       return;
     }
 
     qrData.value = qrRewardService.generateQRData(
       userId: user["id"],
-
       reward: selectedReward!,
-
       remainingStars: remainingStars,
     );
   }

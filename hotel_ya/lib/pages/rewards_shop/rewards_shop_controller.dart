@@ -148,4 +148,17 @@ class RewardsShopController extends GetxController {
         return Icons.card_giftcard;
     }
   }
+
+  /// REDEEM SELECTED REWARD
+  void redeemSelectedReward() {
+    if (user.value == null || selectedReward == null) {
+      return;
+    }
+
+    user.value = user.value!.copyWith(
+      starsAvailable: user.value!.starsAvailable - selectedReward!.starsCost,
+    );
+
+    user.refresh();
+  }
 }

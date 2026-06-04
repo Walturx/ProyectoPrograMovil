@@ -46,6 +46,7 @@ class QRRewardPage extends StatelessWidget {
             icon: const Icon(Icons.arrow_back),
 
             onPressed: () {
+              controller.rewardsShopController.selectedIndex.value = -1;
               Navigator.pop(context);
             },
           ),
