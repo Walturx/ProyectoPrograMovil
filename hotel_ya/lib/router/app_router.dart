@@ -83,19 +83,13 @@ final appRouter = GoRouter(
 
         return ReservationDetailsPage(
           hotelName: extra['hotelName'],
-
+          roomType:  extra['roomType'],
           roomNumber: extra['roomNumber'],
-
           guests: extra['guests'],
-
           checkIn: extra['checkIn'],
-
           checkInHour: extra['checkInHour'],
-
           checkOut: extra['checkOut'],
-
           checkOutHour: extra['checkOutHour'],
-
           pricePerNight: extra['pricePerNight'],
         );
       },

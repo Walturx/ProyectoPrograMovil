@@ -6,6 +6,7 @@ import '../../components/wallet_bottom_nav.dart';
 class ReservationDetailsPage extends StatelessWidget {
   final String hotelName;
   final int roomNumber;
+  final String roomType;
   final List<Map<String, dynamic>> guests;
   final DateTime checkIn;
   final int checkInHour;
@@ -17,6 +18,7 @@ class ReservationDetailsPage extends StatelessWidget {
     super.key,
     required this.hotelName,
     required this.roomNumber,
+    required this.roomType,
     required this.guests,
     required this.checkIn,
     required this.checkInHour,
@@ -77,7 +79,7 @@ class ReservationDetailsPage extends StatelessWidget {
                 onPressed: () {
                   final qrData = ReservationQRService().generateReservationQR(
                     hotelName:   hotelName,
-                    roomType:    "Suite", // FALTA CAMBIAR EL TIPO DE CUARTO
+                    roomType:    roomType, // FALTA CAMBIAR EL TIPO DE CUARTO
                     roomNumber:  roomNumber,
                     checkIn:     checkIn,
                     checkOut:    checkOut,
