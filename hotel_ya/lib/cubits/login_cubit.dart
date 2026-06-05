@@ -23,6 +23,11 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  void logout() {
+    _authService.logout();
+    emit(AuthLoggedOut());
+  }
+
   Future<void> register(
     String name,
     String phone,

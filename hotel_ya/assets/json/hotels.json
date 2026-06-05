@@ -10,7 +10,13 @@
       "phone": "+51 1 234 5678",
       "email": "contacto@hotelparadise.com",
       "cover_image_url": "https://images.unsplash.com/photo-1566073771259-6a8506099945",
-      "is_active": true
+      "is_active": true,
+      "rating": 4.8,
+      "distance_miles": 1.2,
+      "available_rooms": 6,
+      "tags": ["Pet Friendly", "Piscina"],
+      "lat": -12.1092,
+      "lng": -77.0353
     },
     {
       "id": "h2",
@@ -21,7 +27,13 @@
       "phone": "+51 1 345 6789",
       "email": "reservas@oceanview.com",
       "cover_image_url": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa",
-      "is_active": true
+      "is_active": true,
+      "rating": 4.5,
+      "distance_miles": 2.1,
+      "available_rooms": 4,
+      "tags": ["Vista al Mar", "Spa"],
+      "lat": -12.1211,
+      "lng": -77.0280
     },
     {
       "id": "h3",
@@ -32,7 +44,13 @@
       "phone": "+51 1 456 7890",
       "email": "info@grandlima.com",
       "cover_image_url": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb",
-      "is_active": true
+      "is_active": true,
+      "rating": 4.3,
+      "distance_miles": 2.5,
+      "available_rooms": 8,
+      "tags": ["Negocios", "Centro"],
+      "lat": -12.1310,
+      "lng": -77.0281
     },
     {
       "id": "h4",
@@ -43,7 +61,13 @@
       "phone": "+51 84 567 890",
       "email": "reservas@cuscoimperial.com",
       "cover_image_url": "https://images.unsplash.com/photo-1445019980597-93fa8acb246c",
-      "is_active": true
+      "is_active": true,
+      "rating": 4.7,
+      "distance_miles": 3.8,
+      "available_rooms": 3,
+      "tags": ["Colonial", "Spa Andino"],
+      "lat": -13.5319,
+      "lng": -71.9675
     },
     {
       "id": "h5",
@@ -54,7 +78,13 @@
       "phone": "+51 54 678 901",
       "email": "contacto@arequipaplaza.com",
       "cover_image_url": "https://images.unsplash.com/photo-1564501049412-61c2a3083791",
-      "is_active": true
+      "is_active": true,
+      "rating": 4.1,
+      "distance_miles": 5.0,
+      "available_rooms": 10,
+      "tags": ["Familiar", "Piscina"],
+      "lat": -16.4090,
+      "lng": -71.5375
     },
     {
       "id": "h6",
@@ -65,7 +95,13 @@
       "phone": "+51 1 789 0123",
       "email": "info@sunsetbeach.com",
       "cover_image_url": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4",
-      "is_active": false
+      "is_active": false,
+      "rating": 4.4,
+      "distance_miles": 4.2,
+      "available_rooms": 0,
+      "tags": ["Todo Incluido", "Resort"],
+      "lat": -12.0800,
+      "lng": -77.0400
     }
   ]
 }
