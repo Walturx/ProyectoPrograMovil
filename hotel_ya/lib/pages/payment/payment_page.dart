@@ -86,23 +86,19 @@ class _PaymentPageState extends State<PaymentPage> {
       return;
     }
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => PaymentQRPage(
-          qrData: widget.qrData,
-          stars: widget.stars,
-          hotelName: widget.hotelName,
-          roomNumber: widget.roomNumber,
-          adults: widget.adults,
-          children: widget.children,
-          checkIn: widget.checkIn,
-          checkOut: widget.checkOut,
-          pricePerNight: widget.pricePerNight,
-          guests: widget.guests,
-        ),
-      ),
-    );
+    context.push('/payment/qr', extra: {
+      'qrData':        widget.qrData,
+      'stars':         widget.stars,
+      'hotelName':     widget.hotelName,
+      'roomNumber':    widget.roomNumber,
+      'adults':        widget.adults,
+      'children':      widget.children,
+      'checkIn':       widget.checkIn,
+      'checkOut':      widget.checkOut,
+      'pricePerNight': widget.pricePerNight,
+      'guests':        widget.guests,
+    })
+    ;
   }
 
   // ─── Build ────────────────────────────────────────────────────────────────
@@ -118,7 +114,7 @@ class _PaymentPageState extends State<PaymentPage> {
         title: const Text("Método de pago"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: context.pop,
+          onPressed: () => context.pop(),
         ),
       ),
       bottomNavigationBar: const WalletBottomNav(),

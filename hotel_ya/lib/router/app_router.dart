@@ -17,6 +17,8 @@ import 'package:hotel_ya/models/hotel_model.dart';
 import 'package:hotel_ya/pages/search/search_page.dart';
 import 'package:hotel_ya/pages/splash_screen/splash_screen_page.dart';
 
+import '../pages/payment/payment_page.dart';
+import '../pages/payment_details/payment_qr_page.dart';
 import '../pages/reservation_details/reservation_details_page.dart';
 
 final appRouter = GoRouter(
@@ -91,6 +93,43 @@ final appRouter = GoRouter(
           checkOut: extra['checkOut'],
           checkOutHour: extra['checkOutHour'],
           pricePerNight: extra['pricePerNight'],
+        );
+      },
+    ),
+
+    GoRoute(
+      path: '/payment',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        return PaymentPage(
+          qrData:        extra['qrData'],
+          stars:         extra['stars'],
+          hotelName:     extra['hotelName'],
+          roomNumber:    extra['roomNumber'],
+          adults:        extra['adults'],
+          children:      extra['children'],
+          checkIn:       extra['checkIn'],
+          checkOut:      extra['checkOut'],
+          pricePerNight: extra['pricePerNight'],
+          guests:        extra['guests'],
+        );
+      },
+    ),
+    GoRoute(
+      path: '/payment/qr',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        return PaymentQRPage(
+          qrData:        extra['qrData'],
+          stars:         extra['stars'],
+          hotelName:     extra['hotelName'],
+          roomNumber:    extra['roomNumber'],
+          adults:        extra['adults'],
+          children:      extra['children'],
+          checkIn:       extra['checkIn'],
+          checkOut:      extra['checkOut'],
+          pricePerNight: extra['pricePerNight'],
+          guests:        extra['guests'],
         );
       },
     ),

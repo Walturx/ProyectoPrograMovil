@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../services/reservation_qr_service.dart';
 import '../payment/payment_page.dart';
 import '../../components/wallet_bottom_nav.dart';
@@ -79,7 +80,7 @@ class ReservationDetailsPage extends StatelessWidget {
                 onPressed: () {
                   final qrData = ReservationQRService().generateReservationQR(
                     hotelName:   hotelName,
-                    roomType:    roomType, // FALTA CAMBIAR EL TIPO DE CUARTO
+                    roomType:    roomType,
                     roomNumber:  roomNumber,
                     checkIn:     checkIn,
                     checkOut:    checkOut,
@@ -88,23 +89,18 @@ class ReservationDetailsPage extends StatelessWidget {
                     guests:      guests,
                   );
 
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => PaymentPage(
-                        qrData:        qrData,
-                        stars:         stars,
-                        hotelName:     hotelName,
-                        roomNumber:    roomNumber,
-                        adults:        adults,
-                        children:      children,
-                        checkIn:       checkIn,
-                        checkOut:      checkOut,
-                        pricePerNight: pricePerNight,
-                        guests:        guests,
-                      ),
-                    ),
-                  );
+                  context.push('/payment', extra: {
+                    'qrData':        qrData,
+                    'stars':         stars,
+                    'hotelName':     hotelName,
+                    'roomNumber':    roomNumber,
+                    'adults':        adults,
+                    'children':      children,
+                    'checkIn':       checkIn,
+                    'checkOut':      checkOut,
+                    'pricePerNight': pricePerNight,
+                    'guests':        guests,
+                  });
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
