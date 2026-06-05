@@ -67,7 +67,7 @@ class ReservationDetailsPage extends StatelessWidget {
               const Text("INFORMACIÓN INVITADOS", style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
               ...guests.asMap().entries.map(
-                    (e) => Text("Inv. ${e.key + 1}: ${e.value['name']} (${e.value['age']} años)"),
+                    (e) => Text("Inv. ${e.key + 1}: ${e.value['name']} ${e.value['lastName'] ?? ''} (${e.value['age']} años)"),
               ),
             ]),
             const SizedBox(height: 24),

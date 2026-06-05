@@ -1,29 +1,7 @@
 // lib/pages/reservation/reservation_controller.dart
 
 import 'package:get/get.dart';
-
-class Guest {
-  String name;
-  String lastName;
-  String dni;
-  String relation;
-  int age;
-
-  Guest({
-    this.name = '',
-    this.lastName = '',
-    this.dni = '',
-    this.relation = '',
-    this.age = 0,
-  });
-
-  Map<String, dynamic> toMap() => {
-    "name": "$name $lastName",
-    "age": age,
-    "dni": dni,
-    "relation": relation,
-  };
-}
+import '../../models/guest_model.dart';
 
 class ReservationController extends GetxController {
   Rx<DateTime?> checkIn  = Rx<DateTime?>(null);
@@ -31,11 +9,17 @@ class ReservationController extends GetxController {
   RxInt checkInHour  = 12.obs;
   RxInt checkOutHour = 12.obs;
   RxInt numberOfGuests = 0.obs;
-  RxList<Guest> guests = <Guest>[].obs;
+
+  /// Usa GuestModel directamente
+  RxList<GuestModel> guests = <GuestModel>[].obs;
 
   void addGuest(int maxCompanions) {
     if (numberOfGuests.value >= maxCompanions) return;
-    guests.add(Guest());
+    guests.add(GuestModel(
+      name:           '',
+      lastname:       '',
+      documentNumber: '',
+    ));
     numberOfGuests.value = guests.length;
   }
 
@@ -53,24 +37,26 @@ class ReservationController extends GetxController {
     int? age,
   }) {
     if (index < 0 || index >= guests.length) return;
-    final g = guests[index];
-    if (name != null)     g.name     = name;
-    if (lastName != null) g.lastName = lastName;
-    if (dni != null)      g.dni      = dni;
-    if (relation != null) g.relation = relation;
-    if (age != null)      g.age      = age;
+    guests[index] = guests[index].copyWith(
+      name:           name,
+      lastname:       lastName,
+      documentNumber: dni,
+      relation:       relation,
+      age:            age,
+    );
     guests.refresh();
   }
 
+  /// Devuelve la lista de mapas que esperan ReservationDetailsPage, PDF y QR
   List<Map<String, dynamic>> getGuestData() =>
       guests.map((g) => g.toMap()).toList();
 
   void resetReservation() {
-    checkIn.value  = null;
-    checkOut.value = null;
-    checkInHour.value  = 12;
-    checkOutHour.value = 12;
-    numberOfGuests.value = 0;
+    checkIn.value        = null;
+    checkOut.value       = null;
+    checkInHour.value    = 12;
+    checkOutHour.value   = 12;
+    numberOfGuests. value = 0;
     guests.clear();
   }
 }

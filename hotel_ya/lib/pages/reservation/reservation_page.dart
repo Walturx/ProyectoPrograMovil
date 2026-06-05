@@ -106,14 +106,14 @@ class _ReservationPageState extends State<ReservationPage> {
     }
     for (final g in control.guests) {
       if (g.name.trim().isEmpty ||
-          g.lastName.trim().isEmpty ||
-          g.dni.trim().isEmpty ||
+          g.lastname.trim().isEmpty ||
+          g.documentNumber.trim().isEmpty ||
           g.relation.trim().isEmpty ||
           g.age <= 0) {
         _showSnack("Complete todos los datos de los acompañantes");
         return;
       }
-      if (g.dni.length != 8) {
+      if (g.documentNumber.length != 8) {
         _showSnack("El DNI debe tener 8 dígitos");
         return;
       }
@@ -446,7 +446,7 @@ class _GuestForm extends StatelessWidget {
             Expanded(child: _field(
               label: "Apellidos",
               icon: Icons.badge,
-              initial: guest.lastName,
+              initial: guest.lastname,
               formatters: [_lettersOnly],
               onChanged: (v) => control.updateGuest(index, lastName: v),
             )),
@@ -458,7 +458,7 @@ class _GuestForm extends StatelessWidget {
             Expanded(child: _field(
               label: "DNI",
               icon: Icons.credit_card,
-              initial: guest.dni,
+              initial: guest.documentNumber,
               keyboard: TextInputType.number,
               maxLength: 8,
               formatters: [_digitsOnly, LengthLimitingTextInputFormatter(8)],

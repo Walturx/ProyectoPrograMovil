@@ -75,11 +75,8 @@ class _PaymentQRPageState extends State<PaymentQRPage> {
         backgroundColor: const Color(0xFFDDBE5C),
         elevation: 0,
         centerTitle: true,
-        title: const Text("QR Reserva"),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
-        ),
+        title: const Text("Detalles Reserva"),
+        automaticallyImplyLeading: false,
       ),
       bottomNavigationBar: const WalletBottomNav(),
       body: SafeArea(
