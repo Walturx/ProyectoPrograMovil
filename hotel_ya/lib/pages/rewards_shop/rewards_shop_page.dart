@@ -47,7 +47,7 @@ class RewardsShopPage extends StatelessWidget {
 
                   /// TITLE
                   const Text(
-                    "Rewards Shop",
+                    "Tienda de Recompensas",
 
                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                   ),
@@ -55,7 +55,7 @@ class RewardsShopPage extends StatelessWidget {
                   const SizedBox(height: 10),
 
                   Text(
-                    "Redeem your stars for rewards",
+                    "Canjea tus estrellas por recompensas",
 
                     style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
                   ),
