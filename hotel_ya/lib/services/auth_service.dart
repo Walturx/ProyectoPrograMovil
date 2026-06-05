@@ -6,6 +6,9 @@ import 'package:hotel_ya/models/user_model.dart';
 import 'package:hotel_ya/services/session_service.dart';
 
 class AuthService {
+  // Usuarios registrados en sesión (no persisten al cerrar la app)
+  static final List<UserModel> _registeredUsers = [];
+
   Future<GenericResponse<UserModel>> loginWithEmail(
     String email,
     String password,
@@ -16,6 +19,21 @@ class AuthService {
       );
       final List<dynamic> jsonList = json.decode(jsonString);
 
+      // Primero busca en usuarios registrados en sesión
+      final inMemory = _registeredUsers.where(
+        (u) => u.email == email && u.passwordHash == password,
+      ).toList();
+
+      if (inMemory.isNotEmpty) {
+        SessionService.currentUserId = "u1";
+        return GenericResponse(
+          success: true,
+          data: inMemory.first,
+          message: "Inicio de sesión exitoso",
+        );
+      }
+
+      // Si no, busca en el JSON
       final userJson = jsonList.firstWhere(
         (u) => u['email'] == email && u['password_hash'] == password,
       );
@@ -70,9 +88,11 @@ class AuthService {
         starsAvailable: 0,
       );
 
-      jsonList.add(newUser.toJson());
+      // Guarda en memoria (assets son de solo lectura en Flutter)
+      _registeredUsers.add(newUser);
 
-      SessionService.currentUserId = newUser.id;
+      // Apunta al usuario mock del JSON para que el perfil no rompa
+      SessionService.currentUserId = "u1";
 
       return GenericResponse(
         success: true,

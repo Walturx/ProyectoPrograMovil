@@ -34,7 +34,7 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       final response = await _authService.registerWithEmail(email, password);
       if (response.success) {
-        emit(AuthLoggedIn(token: response.data!.id));
+        emit(AuthRegistered());
       } else {
         emit(AuthError(error: response.message));
       }

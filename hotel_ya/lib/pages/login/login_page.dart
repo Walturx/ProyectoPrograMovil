@@ -53,6 +53,14 @@ class _LoginPageState extends State<LoginPage> {
             context,
           ).showSnackBar(const SnackBar(content: Text('¡Bienvenido!')));
           context.go('/home');
+        } else if (state is AuthRegistered) {
+          setState(() => isLogin = true);
+          _clearFields();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Cuenta creada. Inicia sesión para continuar.'),
+            ),
+          );
         } else if (state is AuthError) {
           ScaffoldMessenger.of(
             context,
